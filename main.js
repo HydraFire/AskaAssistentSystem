@@ -8,23 +8,14 @@ app.on('window-all-closed', () => {
 const BrowserWindow = electron.BrowserWindow;
 const jetpack = require('fs-jetpack');
 const windowManager = require('electron-window-manager');
-
-const debug = function(e){
-  jetpack.write('debag.txt',e)
-}
-exports.debug = debug;
-debug('проверка')
-
-
-
 //Обявление Mesengera //////////////////////////////////////////
 const sendToAska = function (message,ws){
   ws.send(message)
 }
 exports.sendToAska = sendToAska;
 //Подключение функции работаюшей с нейросетью ////////////////////
-const set_to_run = require('./neural_network').set_to_run;
-const calc_layers = require('./neural_network').calc_layers;
+const set_to_run = require('./aska_script/neural_network').set_to_run;
+const calc_layers = require('./aska_script/neural_network').calc_layers;
 //////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
@@ -34,7 +25,7 @@ function somebodyConnected(ws){
   message += userInfo+'<br><br>'
   let version = 'Текущая версия программы 0.301<br>'
   message += version+'<br>'
-  let brainSize = jetpack.inspect('NN_train_buffer.json').size
+  let brainSize = jetpack.inspect('JSON/NN_train_buffer.json').size
   let arrL = calc_layers()
   message += '<br>'
   message += '[ входящий слой:  '+arrL[0]+'  ]<br>'
@@ -53,14 +44,14 @@ var WebSocketServer = require("ws").Server,
 
 exp.use(express.static(__dirname + '/public'));
 server.listen(8080);
+
 function somebodyConnected_log(ws,id,message){
   let message2 = 'SYSTEM';
-  
   message2 += JSON.stringify(id)+'  '+message;
   ws.send(message2)
 }
-var wss = new WebSocketServer({server: server});
 
+var wss = new WebSocketServer({server: server});
 wss.on("connection", function(ws){
   ws.on('message', function(message,id) {
     let data = message.toString()

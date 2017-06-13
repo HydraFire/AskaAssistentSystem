@@ -269,9 +269,9 @@ exports.commands = function(strx,ws){
   if(strx.includes('потихоньку')){
     let htmlx = `SYSTEM<video class="player__video viewer" src="tracks/video.mp4" autoplay></video>`
     let stopin = `SYSTEM<p>Like</p>`;
-    nervMessage(htmlx,ws);
+    //nervMessage(htmlx,ws);
     setTimeout(()=>{
-      nervMessage(stopin,ws)
+      //nervMessage(stopin,ws)
     },5500)
   }
 
@@ -279,9 +279,9 @@ exports.commands = function(strx,ws){
   if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
     let htmlx = `SYSTEM<iframe src="//coub.com/embed/t26on?muted=false&autostart=true&originalSize=true&startWithHD=true" allowfullscreen="false" frameborder="0" width="1280" height="720"></iframe>`
     let stopin = `SYSTEM<p>Like</p>`;
-    nervMessage(htmlx,ws);
+    //nervMessage(htmlx,ws);
     setTimeout(()=>{
-      nervMessage(stopin,ws)
+      //nervMessage(stopin,ws)
     },15500)
   }
 /*

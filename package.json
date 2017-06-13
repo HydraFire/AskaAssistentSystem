@@ -1,15 +1,16 @@
 {
-  "name": "aska",
+  "name": "AskaAssistent",
   "version": "1.0.0",
   "main": "main.js",
   "dependencies": {
-    "d3": "^3.5.16",
     "electron-prebuilt": "^1.2.6",
     "electron-rebuild": "^1.0.2",
     "fs-jetpack": "^0.8.0",
-    "p5": "^0.5.2",
-    "robotjs": "^0.4.4",
-    "x-ray": "^2.0.2"
+    "electron": "^1.6.11",
+    "ws": "^3.0.0",
+    "express": "^4.15.3",
+    "electron-window-manager": "^1.0.4",
+    "brain": "^0.7.0"
   },
   "devDependencies": {
 
@@ -19,7 +20,7 @@
     "build": "./node_modules/.bin/electron-rebuild",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Koval_Yaroslav_Vasilevich",
   "license": "ISC",
   "keywords": [],
   "description": ""
