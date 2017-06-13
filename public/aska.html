@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Speech Detection</title>
+    <style>
+      body {
+        background:
+          radial-gradient(black 15%, transparent 16%) 0 0,
+
+          radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px;
+
+        background-color:#282828;
+        background-size:48px 48px;
+        background-attachment: fixed;
+      }
+      .mic {
+        width: 75em;
+        background:rgba(60,60,60,0.2);
+        height: 50em;
+        position: fixed;
+        z-index: 20;
+      }
+      .voice {
+        margin-top: 700px;
+        background:rgba(30,30,30,0.2);
+        width: 75em;
+        height: 50em;
+        position: fixed;
+        z-index: 20;
+      }
+      .words {
+        position: absolute;
+        width:100%;
+        z-index: 10;
+        font-size: 64px;
+        color: #5F5F5F;
+        text-align: left;
+        font-family: 'Exo 2', sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main_container">
+      <div id="inter">ASKA</div>
+    </div>
+
+    <div class="info"></div>
+    <div class="words" contenteditable></div>
+
+    <audio src="" id="audio"></audio>
+  </body>
+
+  <script>
+    const words = document.querySelector('.words');
+    const words_p = words.querySelectorAll('p')
+    
+    /////////////////////////////////////////////////////////////////////////
+    function voice(e){
+      
+      let promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('go');
+        }, 500);
+      });
+      promise.then(
+        result => {
+         // window.getSelection().removeAllRanges();
+        },
+        error => {
+          console.log("Rejected: " + error);
+        }
+      );
+      var audio = document.querySelector('audio');
+      aska(e.target.outerText)
+      //setInterval(asd,2000)
+      //setTimeout(asd,5000)
+
+      recognition.stop();
+
+      //recognition.removeEventListener('end', recognition.start)
+      audio.play();
+      // e.preventDefault();
+    }
+    function mic(){
+      socket.send('SHUT_UP')
+      let p = document.createElement('p');
+      p.textContent = `***`;
+      words.insertBefore(p,words.children[0]);
+      words.children[0].addEventListener('click',mic)
+      recognition.start()
+      //recognition.addEventListener('end',()=>{ audio.play()})
+    }
+    /////////////////////////////////////////////////////////////////////////////    
+    //SPEECH RECOGNITION
+    /////////////////////////////////////////////////////////////////////////////    
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.lang = 'ru-RU';
+    //console.log(recognition)
+
+    let p = document.createElement('p');
+    p.textContent = `***`;
+    words.appendChild(p);
+    words.children[0].addEventListener('click',mic)
+
+    recognition.addEventListener('result', e => {
+
+      const transcript = Array.from(e.results)
+      .map(v => v[0])
+      .map(v => v.transcript)
+      .join('')
+
+      p.textContent = transcript;
+      if(e.results[0].isFinal){
+        socket.send(transcript.toLowerCase())
+        p = document.createElement('p');
+        words.insertBefore(p,words.children[0]);
+      }
+    });
+    ////////////////////////////////////////////////////////////////////////////// 
+    //voice synthesizer
+    //////////////////////////////////////////////////////////////////////////////
+    function aska(text){
+      var audio = document.querySelector('audio');
+      var url = 'https://tts.voicetech.yandex.net/generate?'+
+          'key=222499e2-1e45-4b6d-aaaa-70b53b87c2ec'+
+          '&text='+encodeURI(text)+
+          '&format=mp3'+
+          '&lang=ru-RU'+
+          '&topic=queries'+
+          '&speaker=oksana'+
+          '&speed=1'+
+          '&robot=1'+
+          '&emotion=evil';//evil
+
+      audio.src = url;
+
+      audio.load();
+
+      audio.onloadeddata = function () {
+        //  alert(text)
+        //audio.play();
+        // recognition.stop();
+        //  recognition.removeEventListener('end', recognition.start)
+      }
+    }
+
+    ///////////////////////// WebSocket /////////////////////////////////////
+    function test(e){
+      console.log(e)
+      socket.send(e);
+    }
+    var socket = new WebSocket("ws://159.224.183.122:8080/aska.html");
+    socket.onopen = function() {
+      socket.send('USER159.224.183.122')//+ userip)
+      //  alert("Соединение установлено.");
+    };
+    socket.onclose = function(event) {
+      if (event.wasClean) {
+        //alert('Соединение закрыто чисто');
+      } else {
+        //alert('Обрыв соединения'); // например, "убит" процесс сервера
+      }
+      //alert('Код: ' + event.code + ' причина: ' + event.reason);
+    };
+
+    socket.onmessage = function(event) {
+      //console.log("Получены данные " + event.data);
+      if(event.data.includes('NERV')){
+        //aska(displayit(event.data))
+      }else if(event.data.includes('SYSTEM')){
+        //displayit(event.data)
+      }else{
+        let p = document.createElement('p');
+        p.textContent = event.data.toString();
+        words.insertBefore(p,words.children[1]);
+        words.children[1].style.color = '#97FFFF';
+        words.children[1].addEventListener('click',voice)
+        socket.send('SPEECH')
+        //aska(event.data.toString());
+      }
+    };
+
+    socket.onerror = function(error) {
+      // alert("Ошибка " + error.message);
+    };
+    //localStorage.wait = 'wait';
+    /////////////////////////////////////////////////////////////////////////////    
+    /////////////////////////////////////////////////////////////////////////////     
+    //words = document.querySelector('.words');
+    function clearSelection(){
+     window.getSelection().removeAllRanges();
+    }
+    words.addEventListener('click',clearSelection)
+    /////////////////////////////////////////////////////////////////////////////      
+  </script>
+
+
+</html>
