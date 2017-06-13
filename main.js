@@ -2,7 +2,7 @@
 //const electron = require('electron');
 //const jetpack = require('fs-jetpack');
 const express = require("express")
-const app = express()//electron.app;  // Module to control application life.
+//const app = express()//electron.app;  // Module to control application life.
 //app.on('window-all-closed', () => {
 //  console.log('не закрывает сервер после закрытия окна')
 //})
@@ -68,23 +68,19 @@ wss.on("connection", function(ws){
      })
      ws['x_user'] = message;
      somebodyConnected(ws)
-     windowManager.sharedData.set('playing_music','none');
+     //windowManager.sharedData.set('playing_music','none');
     }
     somebodyConnected_log(ws,id,message)
     
     
     if(message.toString().includes('SHUT_UP')){
-      windowManager.sharedData.set('SHUT_UP','true');
+     // windowManager.sharedData.set('SHUT_UP','true');
     }else if(message.toString().includes('SPEECH')){
-      windowManager.sharedData.set('SHUT_UP','false');
+     // windowManager.sharedData.set('SHUT_UP','false');
     }else{
-      set_to_run(message.toString(),ws);
+     // set_to_run(message.toString(),ws);
     }
     
   });
 });
 ///////////////////////////////////////////////////////////////////////
-app.on('ready', () => {
-  console.log('server start')
-  ////////////////////////////////////////////////////////////////////////  
-})
