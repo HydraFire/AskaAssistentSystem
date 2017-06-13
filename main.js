@@ -1,13 +1,15 @@
 
-const electron = require('electron');
+//const electron = require('electron');
 //const jetpack = require('fs-jetpack');
-const app = electron.app;  // Module to control application life.
-app.on('window-all-closed', () => {
-  console.log('не закрывает сервер после закрытия окна')
-})
-const BrowserWindow = electron.BrowserWindow;
+const express = require("express")
+const app = express()//electron.app;  // Module to control application life.
+//app.on('window-all-closed', () => {
+//  console.log('не закрывает сервер после закрытия окна')
+//})
+//const BrowserWindow = electron.BrowserWindow;
 const jetpack = require('fs-jetpack');
-const windowManager = require('electron-window-manager');
+//const windowManager = require('electron-window-manager');
+
 //Обявление Mesengera //////////////////////////////////////////
 const sendToAska = function (message,ws){
   ws.send(message)
@@ -37,7 +39,6 @@ function somebodyConnected(ws){
 }
 //// WebSocketServer ///////////////////////////////////////////////
 var WebSocketServer = require("ws").Server,
-    express = require("express"),
     http = require("http"),
     exp = express(),
     server = http.createServer(exp);
