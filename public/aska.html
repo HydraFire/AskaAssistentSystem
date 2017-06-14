@@ -83,7 +83,7 @@
       // e.preventDefault();
     }
     function mic(){
-      socket.send('SHUT_UP')
+      //socket.send('SHUT_UP')
       let p = document.createElement('p');
       p.textContent = `***`;
       words.insertBefore(p,words.children[0]);
@@ -152,7 +152,8 @@
       console.log(e)
       socket.send(e);
     }
-    var socket = new WebSocket("ws://159.224.183.122:8080/aska.html");
+    //var socket = new WebSocket("ws://159.224.183.122:8080/aska.html");
+    var socket = new WebSocket("ws://185.25.119.59:8080/aska.html");
     socket.onopen = function() {
       socket.send('USER159.224.183.122')//+ userip)
       //  alert("Соединение установлено.");
@@ -178,7 +179,7 @@
         words.insertBefore(p,words.children[1]);
         words.children[1].style.color = '#97FFFF';
         words.children[1].addEventListener('click',voice)
-        socket.send('SPEECH')
+        //socket.send('SPEECH')
         //aska(event.data.toString());
       }
     };
