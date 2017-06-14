@@ -356,7 +356,7 @@
           audio.play();
           recognition.stop();
           recognition.removeEventListener('end', recognition.start)
-          socket.send('SPEECH')
+         // socket.send('SPEECH')
           console.log('SPEECH')
         }
       }else{
@@ -364,7 +364,7 @@
         audio2.load();
         audio2.onloadeddata = function () {
           audio2.play();
-          socket.send('SPEECH')
+          //socket.send('SPEECH')
           console.log('SPEECH')
         }
       }
@@ -374,6 +374,7 @@
       console.log(e)
       socket.send(e);
     }
+    //var socket = new WebSocket("ws://159.224.183.122:8080/index.html");
     var socket = new WebSocket("ws://185.25.119.59:8080/index.html");
     socket.onopen = function() {
       socket.send('USER'+ userip)
@@ -400,7 +401,7 @@
         let calc_hue = (new Date().getHours()*15)+0
         displayit(event.data,`hsl(${calc_hue},100%,55%)`)
       }else{
-        aska(event.data.toString());
+        aska(event.data);
       }
     };
 
@@ -412,7 +413,7 @@
       audioTag.addEventListener('pause',()=>{
         console.log('wait')
         console.log('start')
-        socket.send('SHUT_UP')
+        //socket.send('SHUT_UP')
         console.log('SHUT_UP')
         recognition.start()
         recognition.addEventListener('end', recognition.start)

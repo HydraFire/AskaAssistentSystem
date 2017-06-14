@@ -78,7 +78,7 @@ wss.on("connection", function(ws){
     }else if(message.toString().includes('SPEECH')){
      // windowManager.sharedData.set('SHUT_UP','false');
     }else{
-     // set_to_run(message.toString(),ws);
+      set_to_run(message.toString(),ws);
     }
     
   });
