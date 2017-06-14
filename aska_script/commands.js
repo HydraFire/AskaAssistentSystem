@@ -14,10 +14,12 @@ const webSearchYouTube = require('./aska_script/webSearchYouTube');
 /////////
 const webPerexod = require('./aska_script/webSearch').webPerexod;
 const nervMessage = require('./aska_script/webSearch').nervMessage;
-const when_watered = require('./aska_script/polival_kystu').when_watered;
-const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
-const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 */
+const polival_kystu = require('./polival_kystu');
+//const when_watered = require('./aska_script/polival_kystu').when_watered;
+//const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
+//const this_real_time = require('./aska_script/polival_kystu').this_real_time;
+
 exports.commands = function(strx,ws){
 
   //////////////////////////////// USERS /////////////////////////////////////
@@ -79,19 +81,23 @@ exports.commands = function(strx,ws){
     strx = 'Сохранено'
   }
   ///////////////////////////////////////////////////////////////////////////////
-  if(windowManager.sharedData.fetch('buffer_text').includes('когда поливал') && ws.x_user == 'HydraFire'){
-    strx = when_watered('Поливал_кусты','Последний раз поливал ')
+  */
+  console.log('работает0')
+  if(strx.includes('когда поливал') && ws.x_user == 'HydraFire'){
+    console.log('работает')
+    strx = polival_kystu.when_watered('Поливал_кусты','Последний раз поливал ')
+    console.log('работает2')
   }else
-    if(windowManager.sharedData.fetch('buffer_text').includes('полил') && ws.x_user == 'HydraFire'){
-      strx = poured_flowers('Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
+    if(strx.includes('полил') && ws.x_user == 'HydraFire'){
+      strx = polival_kystu.poured_flowers('Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
     }else
-      if(windowManager.sharedData.fetch('buffer_text').includes('когда чистил') && ws.x_user == 'HydraFire'){
-        strx = when_watered('Когда_чистил_зубы','Последний раз чистил зубы ')
+      if(strx.includes('когда чистил') && ws.x_user == 'HydraFire'){
+        strx = polival_kystu.when_watered('Когда_чистил_зубы','Последний раз чистил зубы ')
       }else
-        if(windowManager.sharedData.fetch('buffer_text').includes('почистил зубы') && ws.x_user == 'HydraFire'){
-          strx = poured_flowers('Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
+        if(strx.includes('почистил зубы') && ws.x_user == 'HydraFire'){
+          strx = polival_kystu.poured_flowers('Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
         }
-
+/*
 
   ////////////////ПЕРЕЙТИ ПО СЫЛКЕ И ПРОЧИТАТЬ С ЛЮБОГО ТЕГА///////////////////
   if(strx.includes('температура киев')){
