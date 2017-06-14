@@ -2,7 +2,7 @@
 const _ = require('underscore');
 const brain = require('brain');
 const jetpack = require('fs-jetpack');
-const windowManager = require('electron-window-manager');
+//const windowManager = require('electron-window-manager');
 const trainFile = './JSON/NN_Train.json';
 const adrees = './JSON/NN_train_buffer.json';
 
@@ -29,7 +29,7 @@ const net = new brain.NeuralNetwork({
 
 const set_to_run = function(text,ws){
   net.fromJSON(jetpack.read(adrees,'json'));
-  windowManager.sharedData.set('buffer_text', text);
+  //windowManager.sharedData.set('buffer_text', text);
 
 
   var yui = {};

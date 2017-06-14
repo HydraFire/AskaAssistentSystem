@@ -1,6 +1,6 @@
 
 const jetpack = require('fs-jetpack');
-const windowManager = require('electron-window-manager');
+//const windowManager = require('electron-window-manager');
 /*
 const webSearch = require('./aska_script/webSearch').webSearch;
 ///////////
@@ -21,12 +21,12 @@ const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 exports.commands = function(strx,ws){
 
   //////////////////////////////// USERS /////////////////////////////////////
-  if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
-    strx = 'Хозяин, желаешь чего?'
-  }
-  if(windowManager.sharedData.fetch('buffer_text').includes('unidentified')){
-    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
-  }
+ // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
+ //   strx = 'Хозяин, желаешь чего?'
+ // }
+ // if(windowManager.sharedData.fetch('buffer_text').includes('unidentified')){
+//    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
+  //}
 /*
   //////////////////////////////////////////////////////////////////////////
   let arr_max = jetpack.read('C:/Users/NERV/Desktop/AskaWebServer/JSON/five_buffer.json','json')
@@ -276,14 +276,14 @@ exports.commands = function(strx,ws){
   }
 
 
-  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
+/*  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
     let htmlx = `SYSTEM<iframe src="//coub.com/embed/t26on?muted=false&autostart=true&originalSize=true&startWithHD=true" allowfullscreen="false" frameborder="0" width="1280" height="720"></iframe>`
     let stopin = `SYSTEM<p>Like</p>`;
     //nervMessage(htmlx,ws);
     setTimeout(()=>{
       //nervMessage(stopin,ws)
     },15500)
-  }
+ }*/ 
 /*
   if(windowManager.sharedData.fetch('buffer_text').includes('видео')){
     let htmlx = `EVALlet contentt = document.querySelector('.info');
