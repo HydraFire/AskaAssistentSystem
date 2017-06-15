@@ -529,7 +529,7 @@
       //ctx.fillStyle='#FFFFFF';
       let calc_hue
       waveform.forEach((v,index)=>{
-        calc_hue = (new Date().getMinutes()*15)+(waveform[index]/4)
+        calc_hue = (new Date().getSeconds()*6)+(waveform[index]/4)
         //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
         //(120, 100%, 75%);
         ctx.fillStyle=`hsl(${calc_hue},100%,55%)`;
