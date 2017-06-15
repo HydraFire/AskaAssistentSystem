@@ -86,7 +86,7 @@ exports.commands = function(strx,ws){
   if(global.aska_state_00.includes('файл')){
     let htmlx = ''
     let arr = jetpack.list('./public/files')
-    arr.forEach(v=>htmlx+=`<p><a href="${v}" download>${v}</a></p>`)
+    arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
     strx = 'SYSTEM'+htmlx
   }
   if(global.aska_state_00.includes('папка')){
@@ -158,7 +158,10 @@ exports.commands = function(strx,ws){
   }else if(first_buffer.includes('включи музыку')||
            first_buffer.includes('музыку включи')||
            first_buffer.includes('музыка')
-          ){strx = aska_DJ.start('new')}
+          ){
+    ws.send('SYSTEM ORR')
+    strx = aska_DJ.start('new')
+  }
   /////////////////////////////////////////////////////////////////////////
   if(first_buffer.includes('следующий трек')||
      first_buffer.includes('следующий')||
