@@ -160,7 +160,7 @@ exports.commands = function(strx,ws){
            first_buffer.includes('музыка')
           ){
     ws.send('SYSTEM ORR')
-    strx = aska_DJ.start('new')
+    strx = aska_DJ.start(ws,'new')
   }
   /////////////////////////////////////////////////////////////////////////
   if(first_buffer.includes('следующий трек')||

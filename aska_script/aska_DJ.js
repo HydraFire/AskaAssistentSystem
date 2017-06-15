@@ -2,8 +2,9 @@
 
 const jetpack = require('fs-jetpack');
 
-function get_new_tracks(){
+function get_new_tracks(ws){
   let aska_dj = jetpack.read('./JSON/aska_dj.json','json')
+  ws.send('SYSTEM'+JSON.stringify(aska_dj))
   if(!aska_dj){
     aska_dj = [
       [
@@ -55,9 +56,9 @@ function track_played_plus1(track,arr,num){
 
 
 
-const start = function(par,track){
+const start = function(ws,par,track){
   if(par == 'new'){
-    var aska_dj2 = get_new_tracks()
+    var aska_dj2 = get_new_tracks(ws)
     }else{
       var aska_dj2 = jetpack.read('./JSON/aska_dj.json','json')
       }
