@@ -16,6 +16,7 @@ const webPerexod = require('./aska_script/webSearch').webPerexod;
 const nervMessage = require('./aska_script/webSearch').nervMessage;
 */
 const polival_kystu = require('./polival_kystu');
+const aska_DJ = require('./aska_DJ');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
@@ -82,6 +83,19 @@ exports.commands = function(strx,ws){
   }
   ///////////////////////////////////////////////////////////////////////////////
   */
+  if(global.aska_state_00.includes('файл')){
+    let htmlx = ''
+    let arr = jetpack.list('./public/files')
+    arr.forEach(v=>htmlx+=`<p><a href="${v}" download>${v}</a></p>`)
+    strx = 'SYSTEM'+htmlx
+  }
+  if(global.aska_state_00.includes('папка')){
+    let htmlx = ''
+    let arr = jetpack.list('./public/files/music')
+    arr.forEach(v=>htmlx+=`<p><a href="${v}" download>${v}</a></p>`)
+    strx = 'SYSTEM'+htmlx
+  }
+  
   console.log('работает0')
   if(strx.includes('когда поливал') && ws.x_user == 'HydraFire'){
     console.log('работает')
@@ -135,7 +149,8 @@ exports.commands = function(strx,ws){
   ///////////////////////////////////////////////////////////////////////////////
   //                  МУЗЫКАЛЬНЫЙ ПЛЕЕР
   //////////////////////////////////////////////////////////////////////////////
-  let first_buffer = windowManager.sharedData.fetch('buffer_text')
+  */
+  let first_buffer = global.aska_state_00
   if(first_buffer.includes('выключи музыку')||
      first_buffer.includes('выключи')
     ){
@@ -174,6 +189,7 @@ exports.commands = function(strx,ws){
   if(first_buffer.includes('надоело') && ws.x_user == 'HydraFire'){
     strx = aska_DJ.next(5,true)
   }
+  /*
   ///////////////////////////////////////////////////////////////////
   ////ПЕРЕЙТИ ПОСЫЛКЕ НАПИСАТЬ ЧТОТО В ПОИСК И ВЗЯТЬ РЕЗУЛЬТАТ////////////////
   ///////////////////////////////////////////////////////////////////////

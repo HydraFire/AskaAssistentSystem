@@ -29,6 +29,7 @@ const net = new brain.NeuralNetwork({
 
 const set_to_run = function(text,ws){
   net.fromJSON(jetpack.read(adrees,'json'));
+  
   //windowManager.sharedData.set('buffer_text', text);
 
 

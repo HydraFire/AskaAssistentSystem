@@ -118,21 +118,25 @@ exports.poured_flowers = function(this_name,textik,ws){
 
   let b = A4DName_json(this_name,a)
   let c = jetpack.read('./JSON/data/Hydrafire/'+this_name+'.json','json');
-  /*
+ 
+  
   
   interval_01 = setInterval(()=>{
-    if(windowManager.sharedData.fetch('SHUT_UP') == 'false'){
+    if(global.aska_state_01 == false){
+      console.log('первый этап')
       clearInterval(interval_01)
       
       interval_02 = setInterval(()=>{
-        if(windowManager.sharedData.fetch('SHUT_UP') == 'true'){
+        if(global.aska_state_01 == true){
+          console.log('второй этап')
           clearInterval(interval_02)
           let interval_03;
           clearInterval(interval_03);
           let time = 0
           interval_03 = setInterval(()=>{
             time += 1
-            if(windowManager.sharedData.fetch('buffer_text').includes('не говорил')){
+            if(global.aska_state_00.includes('не говорил')){
+              console.log('третий этап')
               clearInterval(interval_03)
               sendToAska('прости, сейчас всё исправлю',ws)
               delete_last_rec(this_name)
@@ -145,7 +149,7 @@ exports.poured_flowers = function(this_name,textik,ws){
       },1000)
     }
   },1000)
-  */
+  
   
   
   

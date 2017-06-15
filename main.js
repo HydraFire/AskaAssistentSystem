@@ -47,10 +47,17 @@ exp.use(express.static(__dirname + '/public'));
 server.listen(8080);
 
 function somebodyConnected_log(ws,id,message){
+  if(message.length > 2000){
+    let message2 = 'SYSTEM слишком большой ФАЙЛ';
+    ws.send(message2)
+  }else{
+  
   let message2 = 'SYSTEM';
   message2 += JSON.stringify(id)+'  '+message;
   ws.send(message2)
+  }
 }
+
 
 var wss = new WebSocketServer({server: server});
 wss.on("connection", function(ws){
@@ -72,15 +79,30 @@ wss.on("connection", function(ws){
     }
     somebodyConnected_log(ws,id,message)
     
-    
-    if(message.toString().includes('SHUT_UP')){
-     // windowManager.sharedData.set('SHUT_UP','true');
-    }else if(message.toString().includes('SPEECH')){
-     // windowManager.sharedData.set('SHUT_UP','false');
+    if(message.length > 2000){
+      let type = global.save_file_name
+      type = type.substring(type.length-3,type.length)
+      let adres = 'public/files/'+global.save_file_name
+      if(type == 'mp3'){
+      adres = 'public/files/music/'+global.save_file_name
+      }
+      console.log(adres)
+      jetpack.write(adres,message)
+      ws.send('SYSTEMFile UPLOAD "'+adres+'"')
     }else{
+    if(message.toString().includes('SHUT_UP')){
+      global.aska_state_01 = true
+    }else if(message.toString().includes('SPEECH')){
+      global.aska_state_01 = false
+     }else if(message.toString().includes('FILE')){
+       message = message.substring(4,message.length)
+       console.log(message)
+      global.save_file_name = message
+    }else{
+      global.aska_state_00 = message.toString()
       set_to_run(message.toString(),ws);
     }
-    
+    }
   });
 });
 ///////////////////////////////////////////////////////////////////////

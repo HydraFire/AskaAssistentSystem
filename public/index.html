@@ -2,11 +2,11 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
     <title>Speech Detection</title>
-    
-    
+
+
 
     <script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
@@ -21,7 +21,10 @@
         <div class="speed-bar">0.2</div>
       </div>
     </div>
-    <div class="info"></div>
+    <div class="info">
+      <div id="drop_zone">Drop files here</div>
+      <output id="list"></output>
+    </div>
 
 
 
@@ -29,7 +32,6 @@
     <canvas id="myChart" width="400" height="400"></canvas>
     <audio src="" id="audio"></audio>
     <audio src="" id="audio2"></audio>
-
 
     <style>
       ::-webkit-scrollbar { width: 0 !important }
@@ -50,6 +52,53 @@
         font-weight: 200;
         font-size: 30px;
       }
+      #list li {
+        margin-left:200px;
+      }
+      a {
+       color:#fff;
+      }
+      #drop_zone {
+        border-bottom-color:rgb(187, 187, 187);
+        border-bottom-left-radius:5px;
+        border-bottom-right-radius:5px;
+        border-bottom-style:dashed;
+        border-bottom-width:2px;
+        border-image-outset:0px;
+        border-image-repeat:stretch;
+        border-image-slice:100%;
+        border-image-source:none;
+        border-image-width:1;
+        border-left-color:rgb(187, 187, 187);
+        border-left-style:dashed;
+        border-left-width:2px;
+        border-right-color:rgb(187, 187, 187);
+        border-right-style:dashed;
+        border-right-width:2px;
+        border-top-color:rgb(187, 187, 187);
+        border-top-left-radius:5px;
+        border-top-right-radius:5px;
+        border-top-style:dashed;
+        border-top-width:2px;
+        color:rgb(187, 187, 187);
+        display:block;
+        font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size:12px;
+        height:25px;
+        line-height:25.5px;
+        padding-bottom:25px;
+        padding-left:25px;
+        padding-right:25px;
+        padding-top:25px;
+        text-align:center;
+        text-size-adjust:100%;
+        width:155px;
+        word-wrap:break-word;
+        position: absolute;
+        z-index: 100;
+        -webkit-font-smoothing:antialiased;
+      } 
+
       #main_container{
         text-align: center;
         width: 100%;
@@ -133,6 +182,48 @@
   </body>
 
   <script>
+    function FileSelectHandler(file){
+      //e.preventDefault()
+      
+      socket.send('FILE'+file.name)
+      socket.send(file)
+    }
+    function init(){
+
+      function handleDragOver(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+      }
+
+      function handleFileSelect(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+
+        var files = evt.dataTransfer.files; // FileList object.
+        console.log(files)
+        // files is a FileList of File objects. List some properties.
+         
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+          output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                      f.size, ' bytes, last modified: ',
+                      f.lastModifiedDate.toLocaleDateString(), '</li>');
+          FileSelectHandler(f)
+        }
+        
+        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+         
+      }
+      
+      var dropZone = document.getElementById('drop_zone');
+      dropZone.addEventListener('dragover', handleDragOver, false);
+      dropZone.addEventListener('drop', handleFileSelect, false);
+      //if (window.File && window.FileList && window.FileReader) {
+      //document.querySelector("#fileselect").addEventListener("change",FileSelectHandler);
+      //document.querySelector("#myForm").addEventListener("submit",FileSelectHandler);
+      //}
+    }
     function run_code(xcode){
       try{
         window.eval(xcode.substring(4,xcode.length))
@@ -144,7 +235,7 @@
 
     function displayit(data,color){
       let dataUpdate = data;
-    
+
       const info = document.querySelector('.info')
 
       data.toString();
@@ -356,7 +447,7 @@
           audio.play();
           recognition.stop();
           recognition.removeEventListener('end', recognition.start)
-         // socket.send('SPEECH')
+          socket.send('SPEECH')
           console.log('SPEECH')
         }
       }else{
@@ -364,7 +455,7 @@
         audio2.load();
         audio2.onloadeddata = function () {
           audio2.play();
-          //socket.send('SPEECH')
+          socket.send('SPEECH')
           console.log('SPEECH')
         }
       }
@@ -374,8 +465,8 @@
       console.log(e)
       socket.send(e);
     }
-    //var socket = new WebSocket("ws://159.224.183.122:8080/index.html");
-    var socket = new WebSocket("ws://185.25.119.59:8080/index.html");
+    var socket = new WebSocket("ws://159.224.183.122:8080/index.html");
+    //var socket = new WebSocket("ws://185.25.119.59:8080/index.html");
     socket.onopen = function() {
       socket.send('USER'+ userip)
       console.log("Соединение установлено.");
@@ -397,7 +488,7 @@
         displayit(event.data)
       }else if(event.data.includes('EVAL')){
         run_code(event.data)
-        
+
         let calc_hue = (new Date().getHours()*15)+0
         displayit(event.data,`hsl(${calc_hue},100%,55%)`)
       }else{
@@ -413,7 +504,7 @@
       audioTag.addEventListener('pause',()=>{
         console.log('wait')
         console.log('start')
-        //socket.send('SHUT_UP')
+        socket.send('SHUT_UP')
         console.log('SHUT_UP')
         recognition.start()
         recognition.addEventListener('end', recognition.start)
@@ -426,6 +517,7 @@
     const ctx = canvas.getContext('2d')
     canvas.width = 1920;
     canvas.height = 1080;
+    init()
     //var colorDate = new Date();
 
     function draw(waveform,frequencies){
@@ -455,5 +547,5 @@
 
   </script>
   <script type="text/javascript" src="cg.js"></script>
-  
+
 </html>
