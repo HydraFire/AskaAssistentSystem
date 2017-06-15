@@ -158,10 +158,7 @@ exports.commands = function(strx,ws){
   }else if(first_buffer.includes('включи музыку')||
            first_buffer.includes('музыку включи')||
            first_buffer.includes('музыка')
-          ){
-    ws.send('SYSTEM ORR')
-    strx = aska_DJ.start(ws,'new')
-  }
+          ){strx = aska_DJ.start('new')}
   /////////////////////////////////////////////////////////////////////////
   if(first_buffer.includes('следующий трек')||
      first_buffer.includes('следующий')||

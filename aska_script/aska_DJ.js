@@ -2,9 +2,8 @@
 
 const jetpack = require('fs-jetpack');
 
-function get_new_tracks(ws){
+function get_new_tracks(){
   let aska_dj = jetpack.read('./JSON/aska_dj.json','json')
-  ws.send('SYSTEM'+JSON.stringify(aska_dj))
   if(!aska_dj){
     aska_dj = [
       [
@@ -14,7 +13,6 @@ function get_new_tracks(ws){
     ]
   }
   let track_list = jetpack.list('./public/files/music')
-  ws.send('SYSTEM'+JSON.stringify(track_list))
   let arr_list = []
   track_list.forEach(v=>{if(v.includes('mp3')){arr_list.push(v)}})
 
@@ -31,7 +29,6 @@ function get_new_tracks(ws){
     })                        
   })
   jetpack.write('./JSON/aska_dj.json',aska_dj)
-  ws.send('SYSTEMAll is OK')
   return aska_dj
 }
 function track_played_plus1(track,arr,num){
@@ -58,9 +55,9 @@ function track_played_plus1(track,arr,num){
 
 
 
-const start = function(ws,par,track){
+const start = function(par,track){
   if(par == 'new'){
-    var aska_dj2 = get_new_tracks(ws)
+    var aska_dj2 = get_new_tracks()
     }else{
       var aska_dj2 = jetpack.read('./JSON/aska_dj.json','json')
       }
