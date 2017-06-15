@@ -92,7 +92,7 @@ exports.commands = function(strx,ws){
   if(global.aska_state_00.includes('папка')){
     let htmlx = ''
     let arr = jetpack.list('./public/files/music')
-    arr.forEach(v=>htmlx+=`<p><a href="${v}" download>${v}</a></p>`)
+    arr.forEach(v=>htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`)
     strx = 'SYSTEM'+htmlx
   }
   
