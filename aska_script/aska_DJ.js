@@ -9,11 +9,12 @@ function get_new_tracks(ws){
     aska_dj = [
       [
         1,
-        "aska.mp3"
+        "анимешка.mp3.mp3"
       ]
     ]
   }
   let track_list = jetpack.list('./public/files/music')
+  ws.send('SYSTEM'+JSON.stringify(track_list))
   let arr_list = []
   track_list.forEach(v=>{if(v.includes('mp3')){arr_list.push(v)}})
 
@@ -30,6 +31,7 @@ function get_new_tracks(ws){
     })                        
   })
   jetpack.write('./JSON/aska_dj.json',aska_dj)
+  ws.send('SYSTEMAll is OK')
   return aska_dj
 }
 function track_played_plus1(track,arr,num){
