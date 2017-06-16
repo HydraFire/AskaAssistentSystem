@@ -227,7 +227,7 @@ exports.list_quest = list_quest;
 const finished_quest = function(ws){
   let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/quest_finished.json','json').join(' ,');
     console.log('create new file quest_finished.json')
-  }
+  
   return arrx;
 }
 exports.finished_quest = finished_quest;
