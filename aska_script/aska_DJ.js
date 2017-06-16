@@ -33,17 +33,19 @@ function get_new_tracks(){
 }
 function track_played_plus1(track,arr,num){
   let r
-  arr.forEach((v,index)=>{
-    if(v.indexOf(track) > 0){
-      r = index
-    }
-  })
-  let arr_statistic = parseFloat(arr[r][0])+num
-  arr[r].splice(0,1,arr_statistic)
-  arr.sort(function(a, b) {
-    return a[0] - b[0];
-  });
-  jetpack.write('./JSON/aska_dj.json',arr)
+  if(!global.silence){
+    arr.forEach((v,index)=>{
+      if(v.indexOf(track) > 0){
+        r = index
+      }
+    })
+    let arr_statistic = parseFloat(arr[r][0])+num
+    arr[r].splice(0,1,arr_statistic)
+    arr.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    jetpack.write('./JSON/aska_dj.json',arr)
+  }
 }
 /////////////////////////////////////////////////////////////////
 
@@ -56,25 +58,26 @@ function track_played_plus1(track,arr,num){
 
 
 const start = function(par,track){
-  if(par == 'new'){
-    var aska_dj2 = get_new_tracks()
-    }else{
-      var aska_dj2 = jetpack.read('./JSON/aska_dj.json','json')
-      }
+  if(!global.silence){
+    if(par == 'new'){
+      var aska_dj2 = get_new_tracks()
+      }else{
+        var aska_dj2 = jetpack.read('./JSON/aska_dj.json','json')
+        }
 
-  let arr_x5 = []
-  let sym = (aska_dj2.length/10)|0;
-  for(i=0;i<sym;i++){
-    arr_x5.push(aska_dj2[i])
-  }
-  track == undefined ? track = arr_x5[(Math.random()*arr_x5.length)|0][1]:'';
-  global.playing_music = track
-  //windowManager.sharedData.set('playing_music', track);
-  ///////////////////////////////////////////////////////
+    let arr_x5 = []
+    let sym = (aska_dj2.length/10)|0;
+    for(i=0;i<sym;i++){
+      arr_x5.push(aska_dj2[i])
+    }
+    track == undefined ? track = arr_x5[(Math.random()*arr_x5.length)|0][1]:'';
+    global.playing_music = track
+    //windowManager.sharedData.set('playing_music', track);
+    ///////////////////////////////////////////////////////
 
-  track_played_plus1(track,aska_dj2,1)
-  ///////////////////////////////////////////////////////////////
-  return `EVAL
+    track_played_plus1(track,aska_dj2,1)
+    ///////////////////////////////////////////////////////////////
+    return `EVAL
 audio.src = "./files/music/${track}";
 if(localStorage.music_volume == undefined){localStorage.music_volume = 0.2;}
 audio.volume = localStorage.music_volume;
@@ -94,27 +97,28 @@ console.log('Удаляет или нет')
 
 audio.addEventListener('pause',once_replay)
 `;
+  }
 }
 ////////////////////////////////////////////////////////////////////////
 
 const next = function(num,letplay){
-  
-  if(global.playing_music != 'none'){
-    let arr = jetpack.read('./JSON/aska_dj.json','json')
-    let playing = global.playing_music
-    track_played_plus1(playing,arr,num)
-    let ryr = start()
-    let xdx = ryr.split('//')
-    if(letplay == true){
-      // return `EVALaudio2.removeEventListener('pause',once_replay);`+ xdx[0].substring(4,xdx[0].length)
-      return xdx[0]
+  if(!global.silence){
+    if(global.playing_music != 'none'){
+      let arr = jetpack.read('./JSON/aska_dj.json','json')
+      let playing = global.playing_music
+      track_played_plus1(playing,arr,num)
+      let ryr = start()
+      let xdx = ryr.split('//')
+      if(letplay == true){
+        // return `EVALaudio2.removeEventListener('pause',once_replay);`+ xdx[0].substring(4,xdx[0].length)
+        return xdx[0]
+      }else{
+        return 'Хорошо, тогда, я сделаю чтоб этот трек играл чаще'
+      }
     }else{
-      return 'Хорошо, тогда, я сделаю чтоб этот трек играл чаще'
+      return 'Сейчас не играет никакая музыка'
     }
-  }else{
-    return 'Сейчас не играет никакая музыка'
   }
-  
 }
 //////////////////////////////////////////////////////////////////////////////
 const searchTrack = function(text){

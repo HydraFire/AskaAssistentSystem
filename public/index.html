@@ -12,6 +12,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   </head>
   <body>
+    <!--<video id="video" src="files/Evangelion - MusicMix - Numinous AMV.mp4"></video>
+-->
     <div id="main_container">
       <div id="inter">ASKA</div>
       <div class="words" contenteditable></div>
@@ -56,7 +58,12 @@
         margin-left:200px;
       }
       a {
-       color:#fff;
+        color:#fff;
+      }
+      video {
+        padding-top:0px;
+        z-index: -5;
+        position: absolute;
       }
       #drop_zone {
         border-bottom-color:rgb(187, 187, 187);
@@ -182,9 +189,25 @@
   </body>
 
   <script>
+    function video_animation(){
+      var video = document.querySelector('#video');
+      video.volume = 0
+      setInterval(()=>{
+        if(window.animation == true){
+          video.play()
+          if(video.currentTime > 64.8){
+            video.currentTime = 64.3
+          }
+        }else{
+          video.currentTime = 61.5
+        }
+      },1000)
+
+
+    }
     function FileSelectHandler(file){
       //e.preventDefault()
-      
+
       socket.send('FILE'+file.name)
       socket.send(file)
     }
@@ -203,7 +226,7 @@
         var files = evt.dataTransfer.files; // FileList object.
         console.log(files)
         // files is a FileList of File objects. List some properties.
-         
+
         var output = [];
         for (var i = 0, f; f = files[i]; i++) {
           output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
@@ -211,11 +234,11 @@
                       f.lastModifiedDate.toLocaleDateString(), '</li>');
           FileSelectHandler(f)
         }
-        
+
         document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-         
+
       }
-      
+
       var dropZone = document.getElementById('drop_zone');
       dropZone.addEventListener('dragover', handleDragOver, false);
       dropZone.addEventListener('drop', handleFileSelect, false);
@@ -331,7 +354,7 @@
     words.appendChild(p);
 
     recognition.addEventListener('result', e => {
-
+      window.animation = true
       const transcript = Array.from(e.results)
       .map(v => v[0])
       .map(v => v.transcript)
@@ -504,6 +527,7 @@
       audioTag.addEventListener('pause',()=>{
         console.log('wait')
         console.log('start')
+        window.animation = false
         socket.send('SHUT_UP')
         console.log('SHUT_UP')
         recognition.start()
@@ -518,6 +542,7 @@
     canvas.width = 1920;
     canvas.height = 1080;
     init()
+    //video_animation()
     //var colorDate = new Date();
 
     function draw(waveform,frequencies){

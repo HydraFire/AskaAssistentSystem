@@ -12,7 +12,9 @@ const jetpack = require('fs-jetpack');
 
 //Обявление Mesengera //////////////////////////////////////////
 const sendToAska = function (message,ws){
+  if(message != ''){
   ws.send(message)
+  }
 }
 exports.sendToAska = sendToAska;
 //Подключение функции работаюшей с нейросетью ////////////////////
@@ -51,58 +53,70 @@ function somebodyConnected_log(ws,id,message){
     let message2 = 'SYSTEM слишком большой ФАЙЛ';
     ws.send(message2)
   }else{
-  
-  let message2 = 'SYSTEM';
-  message2 += JSON.stringify(id)+'  '+message;
-  ws.send(message2)
+
+    let message2 = 'SYSTEM';
+    message2 += JSON.stringify(id)+'  '+message;
+    ws.send(message2)
   }
 }
 
 
 var wss = new WebSocketServer({server: server});
 wss.on("connection", function(ws){
+ 
+  global.close_all_intervals = 0
+  ws.addEventListener("close",()=>{
+    global.close_all_intervals = 100000
+    console.log('CLOSE')
+  })
   ws.on('message', function(message,id) {
     let data = message.toString()
     if(data.substring(0,4) == 'USER'){
-     message = message.toString().substring(4,message.length);
-     let arr_ip_id = [
-     ['HydraFire','159.224.183.122'],
-     ['HydraFire','159.224.183.122'],
-     ['HydraFire','46.30.41.26']
-     ]
-     arr_ip_id.some(v=>{
-       if(v[1] == message){ return message = v[0]}else{message = message}
-     })
-     ws['x_user'] = message;
-     somebodyConnected(ws)
-     //windowManager.sharedData.set('playing_music','none');
+      message = message.toString().substring(4,message.length);
+      
+      let arr_ip_id = [
+        ['HydraFire','159.224.183.122'],
+        ['HydraFire','159.224.183.122'],
+        ['Noir','46.30.41.26']
+      ]
+      arr_ip_id.some(v=>{
+        if(v[1] == message){ return message = v[0]}else{message = message}
+      })
+      ws['x_user'] = message;
+      console.log('CONECTION '+ws.x_user)
+      somebodyConnected(ws)
+      global.silence = false
+      global.playing_music = 'none'
     }
     somebodyConnected_log(ws,id,message)
-    
+
     if(message.length > 2000){
       let type = global.save_file_name
       type = type.substring(type.length-3,type.length)
       let adres = 'public/files/'+global.save_file_name
       if(type == 'mp3'){
-      adres = 'public/files/music/'+global.save_file_name
+        adres = 'public/files/music/'+global.save_file_name
       }
       console.log(adres)
       jetpack.write(adres,message)
       ws.send('SYSTEMFile UPLOAD "'+adres+'"')
     }else{
-    if(message.toString().includes('SHUT_UP')){
-      global.aska_state_01 = true
-    }else if(message.toString().includes('SPEECH')){
-      global.aska_state_01 = false
-     }else if(message.toString().includes('FILE')){
-       message = message.substring(4,message.length)
-       console.log(message)
-      global.save_file_name = message
-    }else{
-      global.aska_state_00 = message.toString()
-      set_to_run(message.toString(),ws);
-    }
+      if(message.toString().includes('SHUT_UP')){
+        global.aska_state_01 = true
+      }else if(message.toString().includes('SPEECH')){
+        global.aska_state_01 = false
+      }else if(message.toString().includes('FILE')){
+        message = message.substring(4,message.length)
+        console.log(message)
+        global.save_file_name = message
+      }else{
+        global[ws.x_user] = message.toString()
+        global.aska_state_00 = message.toString()
+        set_to_run(message.toString(),ws);
+      }
     }
   });
 });
+
+
 ///////////////////////////////////////////////////////////////////////

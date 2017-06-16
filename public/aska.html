@@ -152,7 +152,7 @@
       console.log(e)
       socket.send(e);
     }
-    //var socket = new WebSocket("ws://159.224.183.122:8080/aska.html");
+   // var socket = new WebSocket("ws://159.224.183.122:8080/aska.html");
     var socket = new WebSocket("ws://185.25.119.59:8080/aska.html");
     socket.onopen = function() {
       socket.send('USER159.224.183.122')//+ userip)

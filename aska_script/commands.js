@@ -17,12 +17,13 @@ const nervMessage = require('./aska_script/webSearch').nervMessage;
 */
 const polival_kystu = require('./polival_kystu');
 const aska_DJ = require('./aska_DJ');
+const quest = require('./quest');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 
 exports.commands = function(strx,ws){
-
+    
   //////////////////////////////// USERS /////////////////////////////////////
  // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
  //   strx = 'Хозяин, желаешь чего?'
@@ -83,13 +84,13 @@ exports.commands = function(strx,ws){
   }
   ///////////////////////////////////////////////////////////////////////////////
   */
-  if(global.aska_state_00.includes('файл')){
+  if(global[ws.x_user].includes('файл')){
     let htmlx = ''
     let arr = jetpack.list('./public/files')
     arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
     strx = 'SYSTEM'+htmlx
   }
-  if(global.aska_state_00.includes('папка')){
+  if(global[ws.x_user].includes('папка')){
     let htmlx = ''
     let arr = jetpack.list('./public/files/music')
     arr.forEach((v)=>{
@@ -156,7 +157,7 @@ exports.commands = function(strx,ws){
   //                  МУЗЫКАЛЬНЫЙ ПЛЕЕР
   //////////////////////////////////////////////////////////////////////////////
   */
-  let first_buffer = global.aska_state_00
+  let first_buffer = global[ws.x_user]
   if(first_buffer.includes('выключи музыку')||
      first_buffer.includes('выключи')
     ){
@@ -230,44 +231,59 @@ exports.commands = function(strx,ws){
   //       
   //        
   //
-  let text_do = windowManager.sharedData.fetch('buffer_text') 
-
-  if(text_do.includes('новое задание') && ws.x_user == 'HydraFire'){
+  */
+  let text_do = global[ws.x_user]
+  let x_x_access = false
+  let ip_arr = [
+        ['HydraFire','159.224.183.122'],
+        ['HydraFire','159.224.183.122'],
+        ['Noir','46.30.41.26']
+      ]
+  ip_arr.forEach((v)=>{
+    if(v[0] == ws.x_user){
+     x_x_access = true
+    }
+  })
+  
+  console.log(global[ws.x_user])
+  
+  if(text_do.includes('новое задание') && x_x_access ){
     strx = quest.add_quest(ws)
   }
 
-  if(text_do.includes('список заданий') && ws.x_user == 'HydraFire'){
-    let answer = jetpack.read('JSON/todo.json','json');
-    let effects = 'что мне с ним сзделать?'
-    strx = quest.list_quest('none',answer,effects,ws)
+  if(text_do.includes('список заданий') && x_x_access){
+    let effects = 'что с ней сделать?'
+    strx = quest.list_quest(effects,ws)
   }
-  if(text_do.includes('дай мне задание') && ws.x_user == 'HydraFire'){
+  if(text_do.includes('дай мне задание') && x_x_access){
     let arrx = jetpack.read('JSON/todo.json','json');
     strx = quest.start_quest(arrx.length-1,ws)
   }
-  if(text_do.includes('что мне делать') && ws.x_user == 'HydraFire'){
+  /*
+  if(text_do.includes('что мне делать')){
     //let arrx = jetpack.read('JSON/todo.json','json');
     //strx = quest.start_quest(arrx.length-1,ws)
     strx = NNQ.aska_give_quest((this_real_time()),ws)
   }
-  if(text_do.includes('обучение') && ws.x_user == 'HydraFire'){
+  if(text_do.includes('обучение')){
     strx = NNQ.aska_learn_quest()
   }
-  if(text_do.includes('задание выполнено') && ws.x_user == 'HydraFire'){
+  */
+  if(text_do.includes('задание выполнено') && x_x_access){
     strx = quest.finish_quest(ws)
   }
-  if(text_do.includes('выполненные задания') && ws.x_user == 'HydraFire'){
+  if(text_do.includes('выполненные задания') && x_x_access){
     strx = quest.finished_quest(ws)
   }
-  if(text_do.includes('текущее задание') && ws.x_user == 'HydraFire' ||
-     text_do.includes('текущее задания') && ws.x_user == 'HydraFire' ||
-     text_do.includes('текущая задание') && ws.x_user == 'HydraFire' 
+  if(text_do.includes('текущее задание') && x_x_access ||
+     text_do.includes('текущее задания') && x_x_access||
+     text_do.includes('текущая задание') && x_x_access
     ){
     strx = quest.ongoing(ws)
   }
 
-  if(text_do.includes('книга') && ws.x_user == 'HydraFire'){
-    let text0 = ['Доброе утро хозяин, самое интересное что ты сделал позавчера',
+  if(text_do.includes('книга') && x_x_access){
+    let text0 = ['самое интересное что ты сделал позавчера',
                  'made_yesterday()',
                  'а что интересного было вчера',
                  'remind()',
@@ -280,6 +296,7 @@ exports.commands = function(strx,ws){
 
     strx = quest.listener_of_end(text0,ws)
   }
+  /*
   //  if(text_do.includes('вчера')){
   //    quest.made_yesterday(ws)
   ///  }
@@ -293,7 +310,7 @@ exports.commands = function(strx,ws){
   //    quest.wanted_yesterday(ws)
   //  }  SYSTEM:Shutup
 
-*/
+
   if(strx.includes('потихоньку')){
     let htmlx = `SYSTEM<video class="player__video viewer" src="tracks/video.mp4" autoplay></video>`
     let stopin = `SYSTEM<p>Like</p>`;
@@ -302,7 +319,7 @@ exports.commands = function(strx,ws){
       //nervMessage(stopin,ws)
     },5500)
   }
-
+*/
 
 /*  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
     let htmlx = `SYSTEM<iframe src="//coub.com/embed/t26on?muted=false&autostart=true&originalSize=true&startWithHD=true" allowfullscreen="false" frameborder="0" width="1280" height="720"></iframe>`
@@ -479,5 +496,8 @@ grafics('Поливал_кусты',10)
   }
 
 */
+  if(global.silence){
+     strx = ''
+    }
   return strx
 }
