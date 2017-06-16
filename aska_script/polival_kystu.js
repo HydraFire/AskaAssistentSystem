@@ -3,7 +3,7 @@ const jetpack = require('fs-jetpack')
 const sendToAska = require('../main').sendToAska;
 
 A4DName_json = function(adress,v){
-  var arr_json = jetpack.read('./JSON/data/Hydrafire/'+adress+'.json','json');
+  var arr_json = jetpack.read('./JSON/data/HydraFire/'+adress+'.json','json');
   let arr_json_last
   if(v == undefined){
     if(arr_json == undefined || arr_json == ""){
@@ -11,7 +11,7 @@ A4DName_json = function(adress,v){
       let a = [2016,11,17,13,30]
       arr_json.push(a)
       arr_json_last = arr_json[arr_json.length-1]
-      jetpack.write('./JSON/data/Hydrafire/'+adress+'.json',arr_json);
+      jetpack.write('./JSON/data/HydraFire/'+adress+'.json',arr_json);
     }else{
       arr_json_last = arr_json[arr_json.length-1]
     }
@@ -24,7 +24,7 @@ A4DName_json = function(adress,v){
        arr_json_last[4] == v[4]
       ){}else{
       arr_json.push(v)
-      jetpack.write('./JSON/data/Hydrafire/'+adress+'.json',arr_json);
+      jetpack.write('./JSON/data/HydraFire/'+adress+'.json',arr_json);
     }
   }
   return arr_json_last
@@ -90,9 +90,9 @@ const calc_time = function(arr_time){
 exports.calc_time = calc_time;
 ////////////////////////////////////////////////////////////////////////
 const delete_last_rec = function(adress){
- var arr_json = jetpack.read('./JSON/data/Hydrafire/'+adress+'.json','json');
+ var arr_json = jetpack.read('./JSON/data/HydraFire/'+adress+'.json','json');
   arr_json.splice(arr_json.length-1,1)
-  jetpack.write('./JSON/data/Hydrafire/'+adress+'.json',arr_json);
+  jetpack.write('./JSON/data/HydraFire/'+adress+'.json',arr_json);
 }
 
 const this_real_time = function(){
@@ -117,7 +117,7 @@ exports.poured_flowers = function(this_name,textik,ws){
   a.push(this_name)
 
   let b = A4DName_json(this_name,a)
-  let c = jetpack.read('./JSON/data/Hydrafire/'+this_name+'.json','json');
+  let c = jetpack.read('./JSON/data/HydraFire/'+this_name+'.json','json');
  
   
   

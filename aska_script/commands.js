@@ -256,8 +256,7 @@ exports.commands = function(strx,ws){
     strx = quest.list_quest(effects,ws)
   }
   if(text_do.includes('дай мне задание') && x_x_access){
-    let arrx = jetpack.read('JSON/todo.json','json');
-    strx = quest.start_quest(arrx.length-1,ws)
+    strx = quest.start_quest(ws)
   }
   /*
   if(text_do.includes('что мне делать')){

@@ -232,9 +232,10 @@ const finished_quest = function(ws){
 }
 exports.finished_quest = finished_quest;
 
-const start_quest = function(one,ws){
+const start_quest = function(ws){
   //////////////////////////////////////////////////////////////////////
   let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
+  let one = arrx.length-1
   let arrs = [arrx[one],this_real_time()];
   //NNQ.NNQ_to_train(arrx[one].split(' ').join('_'),ws)
   jetpack.write('./JSON/data/'+ws.x_user+'/quest_ongoing.json',arrs);
