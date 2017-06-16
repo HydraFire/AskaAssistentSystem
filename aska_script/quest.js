@@ -226,13 +226,6 @@ exports.list_quest = list_quest;
 
 const finished_quest = function(ws){
   let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/quest_finished.json','json').join(' ,');
-  if(!arrx){
-    arrx = [
-      [
-        "открыл этот сайт",
-        " , ,  1 секунда"
-      ]
-    ]
     console.log('create new file quest_finished.json')
   }
   return arrx;
@@ -268,6 +261,14 @@ const finish_quest = function(ws){
     }
 
     let aaa = jetpack.read('./JSON/data/'+ws.x_user+'/quest_finished.json','json');
+    if(!aaa){
+     aaa = [
+       [
+         "открыл этот сайт",
+         " , ,  1 секунда"
+       ]
+     ]
+    }
     let timer = calc_time(arrf[1]);
     aaa.push([arrf[0],timer]);
     jetpack.write('./JSON/data/'+ws.x_user+'/quest_finished.json',aaa);
