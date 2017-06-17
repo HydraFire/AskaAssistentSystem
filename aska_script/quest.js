@@ -95,8 +95,8 @@ const reposition_up = function(answer,effects,onswer,ws){
                 console.log('interval close')
               }
               if(index == 2){
-                start_quest(i,ws)
                 sendToAska(onswer[index],ws)
+                start_quest(ws,i)
                 clearInterval(cycle_iid);
                 console.log('interval close')
               }
@@ -232,10 +232,13 @@ const finished_quest = function(ws){
 }
 exports.finished_quest = finished_quest;
 
-const start_quest = function(ws){
-  //////////////////////////////////////////////////////////////////////
+const start_quest = function(ws,one){
+  console.log('YRA')
   let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
-  let one = arrx.length-1
+  console.log(arrx)
+  if(!one){
+   one = arrx.length-1
+  }
   let arrs = [arrx[one],this_real_time()];
   //NNQ.NNQ_to_train(arrx[one].split(' ').join('_'),ws)
   jetpack.write('./JSON/data/'+ws.x_user+'/quest_ongoing.json',arrs);
@@ -440,7 +443,7 @@ const listener_of_end = function(arr_command,ws){
                     console.log(err)
                   }
                 }
-                if(k>100){
+                if(k>1000){
                   console.log('clear interval_03')
                   clearInterval(interval_03)
                 }
