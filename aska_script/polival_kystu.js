@@ -68,7 +68,7 @@ const calc_time = function(arr_time){
 
   if(date>1){date+=' дня,'}else
     if(date==1){date+=' день,'}else{date = ' ,'}
-  
+
   if(hours==0){hours =', '}else
     if(hours==1){hours+=' час,'}else
       if(hours>5){hours+=' часов,'}else{hours += ' часа,'}
@@ -90,7 +90,7 @@ const calc_time = function(arr_time){
 exports.calc_time = calc_time;
 ////////////////////////////////////////////////////////////////////////
 const delete_last_rec = function(adress){
- var arr_json = jetpack.read('./JSON/data/HydraFire/'+adress+'.json','json');
+  var arr_json = jetpack.read('./JSON/data/HydraFire/'+adress+'.json','json');
   arr_json.splice(arr_json.length-1,1)
   jetpack.write('./JSON/data/HydraFire/'+adress+'.json',arr_json);
 }
@@ -107,7 +107,7 @@ const this_real_time = function(){
 exports.this_real_time = this_real_time;
 
 exports.when_watered = function(this_name,textik){
-  
+
   let b = A4DName_json(this_name)
   return textik+calc_time(b)+' назад';
 }
@@ -118,14 +118,32 @@ exports.poured_flowers = function(this_name,textik,ws){
 
   let b = A4DName_json(this_name,a)
   let c = jetpack.read('./JSON/data/HydraFire/'+this_name+'.json','json');
- 
-  
-  
+  if(!c){
+    c = [
+      [
+        2016,
+        11,
+        17,
+        13,
+        30
+      ],
+      [
+        2017,
+        6,
+        11,
+        7,
+        34,
+        this_name
+      ]
+    ]
+  }
+
+
   interval_01 = setInterval(()=>{
     if(global.aska_state_01 == false){
       console.log('первый этап')
       clearInterval(interval_01)
-      
+
       interval_02 = setInterval(()=>{
         if(global.aska_state_01 == true){
           console.log('второй этап')
@@ -142,18 +160,18 @@ exports.poured_flowers = function(this_name,textik,ws){
               delete_last_rec(this_name)
             }
             if(time == 15){
-             clearInterval(interval_03)
+              clearInterval(interval_03)
             }
           },1000)
         }
       },1000)
     }
   },1000)
-  
-  
-  
-  
-  
+
+
+
+
+
   return textik+c.length+' раз';
 }
 
