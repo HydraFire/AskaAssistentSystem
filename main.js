@@ -46,7 +46,7 @@ var WebSocketServer = require("ws").Server,
     server = http.createServer(exp);
 
 exp.use(express.static(__dirname + '/public'));
-server.listen(8080);
+server.listen(80);
 
 function somebodyConnected_log(ws,id,message){
   if(message.length > 2000){
