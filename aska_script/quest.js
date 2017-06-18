@@ -148,7 +148,7 @@ const add_quest = function(ws){
     if(text != global[ws.x_user] ){
       let x_x
       try{
-        sendToAska('Добавила в список заданий',ws);
+        sendToAska(global[ws.x_user]+'. Добавила в список заданий',ws);
         x_x = true
       }catch(err){
         x_x = false
@@ -233,9 +233,9 @@ const finished_quest = function(ws){
 exports.finished_quest = finished_quest;
 
 const start_quest = function(ws,one){
-  console.log('YRA')
+  //console.log('YRA')
   let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
-  console.log(arrx)
+  //console.log(arrx)
   if(!one){
    one = arrx.length-1
   }
