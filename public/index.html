@@ -490,7 +490,7 @@
     }
     var socket = new WebSocket("ws://185.25.119.59:80/index.html");
     
-     //var socket = new WebSocket("ws://159.224.183.122:8080/index.html");
+    // var socket = new WebSocket("ws://159.224.183.122:80/index.html");
     
     //
     socket.onopen = function() {
@@ -516,7 +516,7 @@
         run_code(event.data)
 
         let calc_hue = (new Date().getHours()*15)+0
-        displayit(event.data,`hsl(${calc_hue},100%,55%)`)
+        displayit(event.data,`hsl(${170},100%,25%)`)
       }else{
         aska(event.data);
       }
@@ -557,11 +557,12 @@
       //ctx.fillStyle='#FFFFFF';
       let calc_hue
       waveform.forEach((v,index)=>{
-        calc_hue = (new Date().getSeconds()*6)+(waveform[index]/4)
+        calc_hue = 160+(waveform[index]/4)
         //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
         //(120, 100%, 75%);
-        //ctx.fillStyle=`hsl(${calc_hue},100%,55%)`;
-        ctx.fillStyle=`hsl(180,100%,55%)`;
+        ctx.fillStyle=`hsl(${calc_hue},100%,55%)`;
+        
+        //ctx.fillStyle=`hsl(220,100%,55%)`;
         ctx.fillRect(index*2,0,1,v*3)
       })
 

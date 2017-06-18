@@ -18,6 +18,7 @@ const nervMessage = require('./aska_script/webSearch').nervMessage;
 const polival_kystu = require('./polival_kystu');
 const aska_DJ = require('./aska_DJ');
 const quest = require('./quest');
+const circle = require('./circle')
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
@@ -102,6 +103,24 @@ exports.commands = function(strx,ws){
     })
     strx = 'SYSTEM'+htmlx
   }
+  
+  if(global[ws.x_user].includes('новая неделя')){
+    let rate = 60
+    strx = circle.sigi_remove(rate,ws)
+  }
+  if(global[ws.x_user].includes('когда')){
+    let rate = 60
+    //let arr = jetpack.list('./public/files')
+    
+    strx = circle.sigi(rate,ws)
+  }
+  if(global[ws.x_user].includes('сигарет')){
+    let rate = 60
+    strx = circle.sigi_minus(rate,ws)
+  }
+  
+  
+  
   
   console.log('работает0')
   if(strx.includes('когда поливал') && ws.x_user == 'HydraFire'){
