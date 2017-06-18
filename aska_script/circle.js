@@ -171,12 +171,12 @@ exports.sigi_minus = function(rate,ws){
   }
   jetpack.write('./JSON/data/'+ws.x_user+'/circle_arr.json',arr_ix)
   console.log(arr_ix)
-  
+
   console.log(sxx)
   if(sxx.includes('не курил')){
-   sxx = 'Спасибо что дождался, только так мы победим'
+    sxx = 'Спасибо что дождался, только так мы победим'
   }else{
-   sxx = 'Почему недождался?'
+    sxx = 'Почему недождался?'
   }
   return sxx
 }
@@ -194,7 +194,24 @@ const sigi = function(rate,ws){
     jetpack.write('./JSON/data/'+ws.x_user+'/circle_num.json',circle_num)
   }
   let circle_arr = jetpack.read('./JSON/data/'+ws.x_user+'/circle_arr.json','json')
-
+  if(!circle_arr){
+    circle_arr = [
+      [
+        2017,
+        6,
+        18,
+        22,
+        10
+      ],
+      [
+        2017,
+        6,
+        18,
+        22,
+        30
+      ]
+    ]
+  }
   let xhx = calc_math(circle_arr[0],'minutes')
   //xhx = parseFloat(xhx)
   console.log('dsfsdfsdf xhx '+xhx)
