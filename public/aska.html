@@ -72,6 +72,7 @@
         <div class="speed-bar">0.2</div>
       </div>
     </div>
+    <button onclick="siga()">сигарета</button>
     <div class="info"></div>
     <div class="words" contenteditable></div>
 
@@ -109,6 +110,9 @@
       //recognition.removeEventListener('end', recognition.start)
 
       // e.preventDefault();
+    }
+    function siga(){
+      socket.send('сигарета')
     }
     function mic(){
       socket.send('SHUT_UP')
