@@ -38,13 +38,40 @@
         text-align: left;
         font-family: 'Exo 2', sans-serif;
       }
+      .wrapper {
+        z-index: 100;
+        padding: 0px 0px 0px 0px;
+        margin: 460px 0px 0px 200px;
+        position:absolute;
+        width:735px;
+        height:400px;
+        display:flex;
+      }
+      .speed {
+        background:#666;
+        flex:1;
+        display:flex;
+        align-items:flex-start;
+        margin:10px;
+        border-radius:30px;
+        box-shadow:0 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+      }
+      .speed-bar {
+        font-size: 10px;
+
+      }
     </style>
   </head>
   <body>
     <div id="main_container">
       <div id="inter">ASKA</div>
     </div>
-
+    <div class="wrapper">
+      <div class="speed">
+        <div class="speed-bar">0.2</div>
+      </div>
+    </div>
     <div class="info"></div>
     <div class="words" contenteditable></div>
 
@@ -54,10 +81,10 @@
   <script>
     const words = document.querySelector('.words');
     const words_p = words.querySelectorAll('p')
-    
+
     /////////////////////////////////////////////////////////////////////////
-    function voice(e){
-      
+    function voice(text){
+      /*
       let promise = new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve('go');
@@ -65,21 +92,22 @@
       });
       promise.then(
         result => {
-         // window.getSelection().removeAllRanges();
+          // window.getSelection().removeAllRanges();
         },
         error => {
           console.log("Rejected: " + error);
         }
       );
-      var audio = document.querySelector('audio');
-      aska(e.target.outerText)
+      */
+
+
       //setInterval(asd,2000)
       //setTimeout(asd,5000)
 
-      recognition.stop();
+      //recognition.stop();
 
       //recognition.removeEventListener('end', recognition.start)
-      audio.play();
+
       // e.preventDefault();
     }
     function mic(){
@@ -103,7 +131,7 @@
     let p = document.createElement('p');
     p.textContent = `***`;
     words.appendChild(p);
-    words.children[0].addEventListener('click',mic)
+    //words.children[0].addEventListener('click',mic)
 
     recognition.addEventListener('result', e => {
 
@@ -152,7 +180,7 @@
       console.log(e)
       socket.send(e);
     }
-   // var socket = new WebSocket("ws://159.224.183.122:8080/aska.html");
+    //var socket = new WebSocket("ws://159.224.183.122:80/aska.html");
     var socket = new WebSocket("ws://185.25.119.59:80/aska.html");
     socket.onopen = function() {
       socket.send('USER159.224.183.122')//+ userip)
@@ -178,7 +206,8 @@
         p.textContent = event.data.toString();
         words.insertBefore(p,words.children[1]);
         words.children[1].style.color = '#97FFFF';
-        words.children[1].addEventListener('click',voice)
+        
+        //words.children[1].addEventListener('click',voice)
         socket.send('SPEECH')
         //aska(event.data.toString());
       }
@@ -191,10 +220,62 @@
     /////////////////////////////////////////////////////////////////////////////    
     /////////////////////////////////////////////////////////////////////////////     
     //words = document.querySelector('.words');
-    function clearSelection(){
-     window.getSelection().removeAllRanges();
+    const speed = document.querySelector('.speed');
+    const bar = speed.querySelector('.speed-bar');
+    const navCoords = speed.getBoundingClientRect();
+    let zzz = 100 - (0.3 * 100 |0)
+    bar.style.height = `${ zzz + '%'}`;
+    bar.textContent = zzz.toFixed(2);
+
+    window.f_y = 0
+    //const audio2 = document.querySelector('#audio2');
+
+    function handleMoveDown(e){
+      //const yx = e.pageY - this.offsetTop - navCoords.top +10;
+      window.s_f_y = true
+      console.log(e)
+      
     }
-    words.addEventListener('click',clearSelection)
+   
+    function handleMoveMove(e){
+      //const yx = e.pageY - this.offsetTop - navCoords.top +10;
+      //window.f_y = yx
+
+      if (e.targetTouches.length == 1) {
+        var touch = event.targetTouches[0];
+        window.f_y = touch.pageX;
+        if(window.s_f_y){
+          window.s_f_y_a = touch.pageX;
+          window.s_f_y= false
+        }
+      }
+      console.log(e)
+    }
+    function handleMoveUp(e){
+     let audio = document.querySelector('audio');
+      let met = window.s_f_y_a - window.f_y|0
+      //alert(met)
+      if(met <= -100){
+        //alert(met)
+        mic()
+        
+      }else{
+        
+        
+        audio.play();
+      }
+
+      console.log(y)
+    }
+    speed.addEventListener('touchstart',handleMoveDown)
+    speed.addEventListener('touchmove',handleMoveMove)
+    speed.addEventListener('touchend',handleMoveUp)
+    function clearSelection(){
+      window.getSelection().removeAllRanges();
+      aska(words.children[1].textContent)
+      audio.play();
+    }
+    speed.addEventListener('click',clearSelection)
     /////////////////////////////////////////////////////////////////////////////      
   </script>
 
