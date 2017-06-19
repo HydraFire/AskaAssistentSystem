@@ -24,15 +24,15 @@ const circle = require('./circle')
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 
 exports.commands = function(strx,ws){
-    
+
   //////////////////////////////// USERS /////////////////////////////////////
- // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
- //   strx = 'Хозяин, желаешь чего?'
- // }
- // if(windowManager.sharedData.fetch('buffer_text').includes('unidentified')){
-//    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
+  // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
+  //   strx = 'Хозяин, желаешь чего?'
+  // }
+  // if(windowManager.sharedData.fetch('buffer_text').includes('unidentified')){
+  //    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
   //}
-/*
+  /*
   //////////////////////////////////////////////////////////////////////////
   let arr_max = jetpack.read('C:/Users/NERV/Desktop/AskaWebServer/JSON/five_buffer.json','json')
   arr_max.push(windowManager.sharedData.fetch('buffer_text'))
@@ -96,32 +96,58 @@ exports.commands = function(strx,ws){
     let arr = jetpack.list('./public/files/music')
     arr.forEach((v)=>{
       if(global.playing_music == v){
-      htmlx+=`<p><a style="color:red;" href="files/music/${v}" download>${v}</a></p>`
+        htmlx+=`<p><a style="color:red;" href="files/music/${v}" download>${v}</a></p>`
       }else{
-      htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`
+        htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`
       }
     })
     strx = 'SYSTEM'+htmlx
   }
-  
+
   if(global[ws.x_user].includes('новая неделя')){
     let rate = 60
-    strx = circle.sigi_remove(rate,ws)
+    strx = circle.sigi_remove('сигареты',rate,ws)
   }
   if(global[ws.x_user].includes('когда')){
     let rate = 60
-    //let arr = jetpack.list('./public/files')
-    
-    strx = circle.sigi(rate,ws)
+    strx = circle.sigi('сигареты',rate,ws)
   }
   if(global[ws.x_user].includes('сигарет')){
+    let arr_timeX = 
+        [
+          2017,
+          6,
+          21,
+          23,
+          59
+        ]
     let rate = 60
-    strx = circle.sigi_minus(rate,ws)
+    strx = circle.sigi_minus('сигареты',rate,arr_timeX,ws)
   }
-  
-  
-  
-  
+  //////////////////////////////////////////////////////////////////////////
+  if(global[ws.x_user].includes('новая пример')){
+    let rate = 7
+    strx = circle.sigi_remove('банки',rate,ws)
+  }
+  if(global[ws.x_user].includes('трава')){
+    let rate = 7
+    strx = circle.sigi('банки',rate,ws)
+  }
+  if(global[ws.x_user].includes('банка')){
+    let arr_timeX = 
+        [
+          2017,
+          6,
+          21,
+          9,
+          59
+        ]
+    let rate = 7
+    strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
+  }
+
+
+
   console.log('работает0')
   if(strx.includes('когда поливал') && ws.x_user == 'HydraFire'){
     console.log('работает')
@@ -137,7 +163,7 @@ exports.commands = function(strx,ws){
         if(strx.includes('почистил зубы') && ws.x_user == 'HydraFire'){
           strx = polival_kystu.poured_flowers('Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
         }
-/*
+  /*
 
   ////////////////ПЕРЕЙТИ ПО СЫЛКЕ И ПРОЧИТАТЬ С ЛЮБОГО ТЕГА///////////////////
   if(strx.includes('температура киев')){
@@ -245,7 +271,7 @@ exports.commands = function(strx,ws){
   // 
   //  
   //   
-  
+
   //      
   //       
   //        
@@ -254,18 +280,18 @@ exports.commands = function(strx,ws){
   let text_do = global[ws.x_user]
   let x_x_access = false
   let ip_arr = [
-        ['HydraFire','159.224.183.122'],
-        ['HydraFire','159.224.183.122'],
-        ['Noir','46.30.41.26']
-      ]
+    ['HydraFire','159.224.183.122'],
+    ['HydraFire','159.224.183.122'],
+    ['Noir','46.30.41.26']
+  ]
   ip_arr.forEach((v)=>{
     if(v[0] == ws.x_user){
-     x_x_access = true
+      x_x_access = true
     }
   })
-  
+
   console.log(global[ws.x_user])
-  
+
   if(text_do.includes('новое задание') && x_x_access ){
     strx = quest.add_quest(ws)
   }
@@ -339,7 +365,7 @@ exports.commands = function(strx,ws){
   }
 */
 
-/*  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
+  /*  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
     let htmlx = `SYSTEM<iframe src="//coub.com/embed/t26on?muted=false&autostart=true&originalSize=true&startWithHD=true" allowfullscreen="false" frameborder="0" width="1280" height="720"></iframe>`
     let stopin = `SYSTEM<p>Like</p>`;
     //nervMessage(htmlx,ws);
@@ -347,7 +373,7 @@ exports.commands = function(strx,ws){
       //nervMessage(stopin,ws)
     },15500)
  }*/ 
-/*
+  /*
   if(windowManager.sharedData.fetch('buffer_text').includes('видео')){
     let htmlx = `EVALlet contentt = document.querySelector('.info');
 contentt.innerHTML = '<video class="player__video viewer" src="amv/00.mp4" autoplay></video>';
@@ -488,7 +514,7 @@ grafics('Поливал_кусты',10)
     let ask = []
     quest.question('ты выспался?','нет','очень жаль, рекомендую послушать музыку',ws)
   }
-  
+
   //////////////////////////////////////////////////////////////////////////////
   /////////////////////////// Долгий расказ и вопрос полсе /////////////////////
   //////////////////////////////////////////////////////////////////////////////
@@ -515,7 +541,7 @@ grafics('Поливал_кусты',10)
 
 */
   if(global.silence){
-     strx = ''
-    }
+    strx = ''
+  }
   return strx
 }

@@ -136,31 +136,24 @@ const calc_arr_minus_arr = function(arr,arr2){
   return symaDate
 }
 ///////////////////////////////////////////////////////////////////////////
-exports.sigi_remove = function(rate,ws){
+exports.sigi_remove = function(resorse_name,rate,ws){
   let circle_num = [rate]
-  jetpack.write('./JSON/data/'+ws.x_user+'/circle_num.json',circle_num)
+  jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
   return 'Новая неделя пошла, рейты '+rate+' сигарет в неделю'
 }
 ///////////////////////////////////////////////////////////////////////////
-exports.sigi_minus = function(rate,ws){
-  let sxx = sigi(rate,ws)
-  let circle_num = jetpack.read('./JSON/data/'+ws.x_user+'/circle_num.json','json')
+exports.sigi_minus = function(resorse_name,rate,date,ws){
+  let sxx = sigi(resorse_name,rate,ws)
+  let circle_num = jetpack.read('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json','json')
   if(!circle_num){
     circle_num = [rate]
-    jetpack.write('./JSON/data/'+ws.x_user+'/circle_num.json',circle_num)
+    jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
   }
   let giu = parseFloat(circle_num[0]) -1;
   circle_num[0] = giu
-  jetpack.write('./JSON/data/'+ws.x_user+'/circle_num.json',circle_num)
+  jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
   let ix
-  let arr_timeX = 
-      [
-        2017,
-        6,
-        21,
-        23,
-        59
-      ]
+  let arr_timeX = date;
   ix = calc_math(arr_timeX,'minutes')
   ix = ix / parseFloat(circle_num[0])|0
   let arr_ix = []
@@ -169,7 +162,7 @@ exports.sigi_minus = function(rate,ws){
     ki +=ix
     arr_ix.push(calc_into_time(this_real_time(),ki))
   }
-  jetpack.write('./JSON/data/'+ws.x_user+'/circle_arr.json',arr_ix)
+  jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_arr.json',arr_ix)
   console.log(arr_ix)
 
   console.log(sxx)
@@ -181,19 +174,19 @@ exports.sigi_minus = function(rate,ws){
   return sxx
 }
 ///////////////////////////////////////////////////////////////////////////
-const sigi = function(rate,ws){
+const sigi = function(resorse_name,rate,ws){
   console.log('ХУРА')
 
 
 
 
 
-  let circle_num = jetpack.read('./JSON/data/'+ws.x_user+'/circle_num.json','json')
+  let circle_num = jetpack.read('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json','json')
   if(!circle_num){
     circle_num = [rate]
-    jetpack.write('./JSON/data/'+ws.x_user+'/circle_num.json',circle_num)
+    jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
   }
-  let circle_arr = jetpack.read('./JSON/data/'+ws.x_user+'/circle_arr.json','json')
+  let circle_arr = jetpack.read('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_arr.json','json')
   if(!circle_arr){
     circle_arr = [
       [
