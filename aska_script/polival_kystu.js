@@ -4,6 +4,18 @@ const sendToAska = require('../main').sendToAska;
 
 A4DName_json = function(adress,v){
   var arr_json = jetpack.read('./JSON/data/HydraFire/'+adress+'.json','json');
+  if(!arr_json){
+    arr_json = [
+      [
+        2016,
+        12,
+        20,
+        23,
+        7,
+        adress
+      ]
+    ]
+  }
   let arr_json_last
   if(v == undefined){
     if(arr_json == undefined || arr_json == ""){
@@ -139,12 +151,12 @@ exports.poured_flowers = function(this_name,textik,ws){
   }
 
 
-  interval_01 = setInterval(()=>{
+  let interval_01 = setInterval(()=>{
     if(global.aska_state_01 == false){
       console.log('первый этап')
       clearInterval(interval_01)
 
-      interval_02 = setInterval(()=>{
+      let interval_02 = setInterval(()=>{
         if(global.aska_state_01 == true){
           console.log('второй этап')
           clearInterval(interval_02)
@@ -153,9 +165,11 @@ exports.poured_flowers = function(this_name,textik,ws){
           let time = 0
           interval_03 = setInterval(()=>{
             time += 1
-            if(global.aska_state_00.includes('не говорил')){
+            console.log(time+'<15')
+            if(global[ws.x_user][4].includes('не говорил')){
               console.log('третий этап')
               clearInterval(interval_03)
+              clearInterval(interval_02)
               sendToAska('прости, сейчас всё исправлю',ws)
               delete_last_rec(this_name)
             }
@@ -165,7 +179,7 @@ exports.poured_flowers = function(this_name,textik,ws){
           },1000)
         }
       },1000)
-    }
+      }
   },1000)
 
 

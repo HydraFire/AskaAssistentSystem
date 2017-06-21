@@ -44,6 +44,8 @@ const calc_math = function(arr_time,par){
   var symaDate = (real_time[0]*24*60)+(real_time[1]*24*60)+(real_time[2]*24*60)+(real_time[3]*60)+real_time[4]
   // alert(symaDate)
   symaDate = symaDate - the_magic_begin;
+  let wgu = symaDate/1440|0
+  symaDate-= (wgu*480)
   console.log(symaDate)
 
   let textstr
@@ -93,6 +95,7 @@ const calc_math = function(arr_time,par){
   console.log(textstr)
   return textstr
 }
+exports.calc_math = calc_math;
 /////////////////////////////////////////////////////////
 const calc_into_time = function(arr,min){
 
@@ -139,7 +142,7 @@ const calc_arr_minus_arr = function(arr,arr2){
 exports.sigi_remove = function(resorse_name,rate,ws){
   let circle_num = [rate]
   jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
-  return 'Новая неделя пошла, рейты '+rate+' сигарет в неделю'
+  return 'Новая неделя пошла, рейты '+rate+' '+resorse_name+' в неделю'
 }
 ///////////////////////////////////////////////////////////////////////////
 exports.sigi_minus = function(resorse_name,rate,date,ws){
@@ -156,20 +159,35 @@ exports.sigi_minus = function(resorse_name,rate,date,ws){
   let arr_timeX = date;
   ix = calc_math(arr_timeX,'minutes')
   ix = ix / parseFloat(circle_num[0])|0
+
   let arr_ix = []
   let ki = 0
-  for(i=0;i<parseFloat(circle_num[0]);i++){
+  let siple_arr
+  let zzz = parseFloat(circle_num[0])
+  for(i=0;i<zzz;i++){
     ki +=ix
-    arr_ix.push(calc_into_time(this_real_time(),ki))
+    siple_arr = calc_into_time(this_real_time(),ki)
+    if(siple_arr[3] > 8){
+      arr_ix.push(siple_arr)
+    }else{
+      ki +=480
+      siple_arr = calc_into_time(this_real_time(),ki)
+      arr_ix.push(siple_arr)
+    }
   }
+
   jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_arr.json',arr_ix)
   console.log(arr_ix)
 
   console.log(sxx)
-  if(sxx.includes('не курил')){
-    sxx = 'Спасибо что дождался, только так мы победим'
+  if(arr_ix[0] != undefined){
+    if(sxx.includes('не курил')){
+      sxx = 'Спасибо что дождался, только так мы победим '+resorse_name
+    }else{
+      sxx = 'Почему недождался? Нужно держать '+resorse_name+' под контролем'
+    }
   }else{
-    sxx = 'Почему недождался?'
+    sxx = 'Всё '+resorse_name+' закончелись, всё отличьно мы справелись, теперь всё по новой, но ставим чуть меньше рэйты'
   }
   return sxx
 }
@@ -205,20 +223,28 @@ const sigi = function(resorse_name,rate,ws){
       ]
     ]
   }
-  let xhx = calc_math(circle_arr[0],'minutes')
-  //xhx = parseFloat(xhx)
-  console.log('dsfsdfsdf xhx '+xhx)
-  if(xhx <= 0){
-    let arr_z = calc_arr_minus_arr(circle_arr[1],circle_arr[0])
-    console.log("----------xxx-----------")
-    console.log(arr_z)
-    let rry = calc_into_time(circle_arr[0],arr_z)
-    console.log(rry)
-    xhx = calc_math(rry,'text')
-
-    xhx = 'не курил уже '+xhx
+  let xhx
+  if(circle_arr[0] != undefined){
+    xhx = calc_math(circle_arr[0],'minutes')
+    //xhx = parseFloat(xhx)
+    console.log('dsfsdfsdf xhx '+xhx)
+    if(xhx <= 0){
+      let arr_z = calc_arr_minus_arr(circle_arr[1],circle_arr[0])
+      console.log("----------xxx-----------")
+      console.log(arr_z)
+      let rry = calc_into_time(circle_arr[0],arr_z)
+      console.log(rry)
+      xhx = calc_math(rry,'text')
+      xhx = 'не курил уже '+xhx
+    }else{
+      let minutes = xhx%60
+      let hours = (xhx-minutes)/60%24
+      
+      xhx = hours+' часов '+minutes
+      xhx = 'осталось подождать всего '+xhx+' минут'
+    }
   }else{
-    xhx = 'осталось подождать всего '+xhx+' минут'
+    xhx = 'Всё '+resorse_name+' закончелись'
   }
   return xhx
 }

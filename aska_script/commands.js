@@ -1,29 +1,36 @@
 
 const jetpack = require('fs-jetpack');
-//const windowManager = require('electron-window-manager');
-/*
-const webSearch = require('./aska_script/webSearch').webSearch;
-///////////
-const quest = require('./aska_script/quest');
-const NNQ = require('./aska_script/NN_quest');
-const NN_quest_grafics = require('./aska_script/NN_quest_grafics');
-const memory_fun = require('./aska_script/memory_fun');
-const aska_DJ = require('./aska_script/aska_DJ');
-//////////
-const webSearchYouTube = require('./aska_script/webSearchYouTube');
-/////////
-const webPerexod = require('./aska_script/webSearch').webPerexod;
-const nervMessage = require('./aska_script/webSearch').nervMessage;
-*/
 const polival_kystu = require('./polival_kystu');
 const aska_DJ = require('./aska_DJ');
+const NNQ = require('./NN_quest');
 const quest = require('./quest');
 const circle = require('./circle')
+const memory_fun = require('./memory_fun');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 
 exports.commands = function(strx,ws){
+  console.log(global[ws.x_user])
+  console.log('Ответ нейроной сети '+strx+'|')
+  if(global[ws.x_user][4].includes('запом')){
+    let ask = global[ws.x_user][2]
+    let answer = global[ws.x_user][3]
+    if(ask == ' ' || answer == ' '){
+      strx = 'я немогу запомнить пустую информацию'
+    }else{
+      strx = memory_fun.save(ask,answer,ws)
+    }
+    ws.send(strx)
+    strx = ''
+  }
+  if(global[ws.x_user][4].includes('подума') ||
+     global[ws.x_user][4].includes('обучение')){
+    strx = NNQ.aska_learn_quest_main(ws)
+    ws.send(strx)
+    strx = ''
+  }
+
 
   //////////////////////////////// USERS /////////////////////////////////////
   // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
@@ -33,20 +40,6 @@ exports.commands = function(strx,ws){
   //    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
   //}
   /*
-  //////////////////////////////////////////////////////////////////////////
-  let arr_max = jetpack.read('C:/Users/NERV/Desktop/AskaWebServer/JSON/five_buffer.json','json')
-  arr_max.push(windowManager.sharedData.fetch('buffer_text'))
-  jetpack.write('C:/Users/NERV/Desktop/AskaWebServer/JSON/five_buffer.json',arr_max)
-  ///////////////////////////////////////////////////////////////////////////////
-  if(windowManager.sharedData.fetch('buffer_text').includes('запомни')){
-    let ask = arr_max[arr_max.length-3]
-    let answer = arr_max[arr_max.length-2]
-    strx = memory_fun.save(ask,answer,ws)
-  }
-  if(windowManager.sharedData.fetch('buffer_text').includes('подума')
-   ){
-    strx = NNQ.aska_learn_quest_main()
-  }
   if(windowManager.sharedData.fetch('buffer_text').includes('звуки природы')){
     let links = [
       "https://www.youtube.com/embed/YnvOQji6zZ0?ecver=1",
@@ -59,39 +52,23 @@ exports.commands = function(strx,ws){
     strx = webSearchYouTube.webSearch(links,ws)
   }
   ///////////////////////////////////////////////////////////////////////////////  
-  if(windowManager.sharedData.fetch('buffer_text').includes('DATA_JSON')){
-    let str = windowManager.sharedData.fetch('buffer_text');
-    let n = parseFloat(str.substring(10,str.length));
-    let all_file = jetpack.list('C:/Users/ASKA/Desktop/NERV Project/make-cake/public/a_models_configs');
-    if(n > all_file.length){n = n%all_file.length}
-    let arr_scales = jetpack.read('C:/Users/ASKA/Desktop/NERV Project/make-cake/public/a_models_configs/'+all_file[n],'json')
-    strx = 'DATA_JSON'+ JSON.stringify(arr_scales);
-  }
-  if(windowManager.sharedData.fetch('buffer_text').includes('SAVE_JSON')){
-    let str = windowManager.sharedData.fetch('buffer_text');
-    let hjk = str.search('ASKA');
-    let file_number = parseFloat(str.substring(10,hjk))
-    let hui = str.substring(hjk+4,str.length)
-    let arrn = JSON.parse(hui)
-    let all_file = jetpack.list('C:/Users/ASKA/Desktop/NERV Project/make-cake/public/a_models_configs');
-    if(file_number < all_file.length){
-      //n = n%all_file.length
-      jetpack.write('C:/Users/ASKA/Desktop/NERV Project/make-cake/public/a_models_configs/'+all_file[file_number],arrn)
-    }else{
-      jetpack.write('C:/Users/ASKA/Desktop/NERV Project/make-cake/public/a_models_configs/eva_'+all_file.length,arrn)
-    }
-
-    strx = 'Сохранено'
-  }
   ///////////////////////////////////////////////////////////////////////////////
   */
-  if(global[ws.x_user].includes('файл')){
+
+  if(strx.includes('fa0') &&
+     strx.includes('fa1') &&
+     strx.includes('fa2') &&
+     strx.includes('fa3')){
     let htmlx = ''
     let arr = jetpack.list('./public/files')
     arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
-    strx = 'SYSTEM'+htmlx
+    ws.send('SYSTEM'+htmlx)
+    strx = ''
   }
-  if(global[ws.x_user].includes('папка')){
+  if(strx.includes('fb0') &&
+     strx.includes('fb1') &&
+     strx.includes('fb2') &&
+     strx.includes('fb3')){
     let htmlx = ''
     let arr = jetpack.list('./public/files/music')
     arr.forEach((v)=>{
@@ -101,169 +78,179 @@ exports.commands = function(strx,ws){
         htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`
       }
     })
-    strx = 'SYSTEM'+htmlx
+    ws.send('SYSTEM'+htmlx)
+    strx = ''
   }
 
-  if(global[ws.x_user].includes('новая неделя')){
+  if(strx.includes('sa0') &&
+     strx.includes('sa1') &&
+     strx.includes('sa2') &&
+     strx.includes('sa3')){
     let rate = 60
     strx = circle.sigi_remove('сигареты',rate,ws)
+    ws.send(strx);strx = '';
   }
-  if(global[ws.x_user].includes('когда')){
+  if(strx.includes('sb0') &&
+     strx.includes('sb1') &&
+     strx.includes('sb2') &&
+     strx.includes('sb3')){
     let rate = 60
     strx = circle.sigi('сигареты',rate,ws)
+    ws.send(strx);strx = '';
   }
-  if(global[ws.x_user].includes('сигарет')){
+  if(strx.includes('sc0') &&
+     strx.includes('sc1') &&
+     strx.includes('sc2') &&
+     strx.includes('sc3') &&
+     strx.includes('sc4')){
     let arr_timeX = 
         [
           2017,
           6,
-          21,
+          25,
           23,
           59
         ]
     let rate = 60
     strx = circle.sigi_minus('сигареты',rate,arr_timeX,ws)
+    ws.send(strx);strx = '';
   }
   //////////////////////////////////////////////////////////////////////////
-  if(global[ws.x_user].includes('новая пример')){
+  if(strx.includes('ba0') &&
+     strx.includes('ba1') &&
+     strx.includes('ba2') &&
+     strx.includes('ba3')){
     let rate = 7
     strx = circle.sigi_remove('банки',rate,ws)
+    ws.send(strx);strx = '';
   }
-  if(global[ws.x_user].includes('трава')){
+  if(strx.includes('bb0') &&
+     strx.includes('bb1') &&
+     strx.includes('bb2') && 
+     strx.includes('bb3')){
     let rate = 7
     strx = circle.sigi('банки',rate,ws)
+    ws.send(strx);strx = '';
   }
-  if(global[ws.x_user].includes('банка')){
+  if(strx.includes('bc0') &&
+     strx.includes('bc1') &&
+     strx.includes('bc2') && 
+     strx.includes('bc3') &&
+     strx.includes('bc4')){
     let arr_timeX = 
         [
           2017,
           6,
-          21,
-          9,
+          22,
+          23,
           59
         ]
     let rate = 7
     strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
+    ws.send(strx);strx = '';
   }
 
-
+  ///////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
 
   console.log('работает0')
-  if(strx.includes('когда поливал') && ws.x_user == 'HydraFire'){
-    console.log('работает')
+  if(strx.includes('pa0') &&
+     strx.includes('pa1') &&
+     strx.includes('pa2') &&
+     strx.includes('pa3') && ws.x_user == 'HydraFire'){
     strx = polival_kystu.when_watered('Поливал_кусты','Последний раз поливал ')
-    console.log('работает2')
+    ws.send(strx);strx = '';
   }else
-    if(strx.includes('полил') && ws.x_user == 'HydraFire'){
+    if(strx.includes('pb0') &&
+       strx.includes('pb1') &&
+       strx.includes('pb2') &&
+       strx.includes('pb3') && ws.x_user == 'HydraFire'){
       strx = polival_kystu.poured_flowers('Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
+      ws.send(strx);strx = '';
     }else
-      if(strx.includes('когда чистил') && ws.x_user == 'HydraFire'){
+      if(strx.includes('za0') &&
+         strx.includes('za1') &&
+         strx.includes('za2') &&
+         strx.includes('za3') && ws.x_user == 'HydraFire'){
         strx = polival_kystu.when_watered('Когда_чистил_зубы','Последний раз чистил зубы ')
+        ws.send(strx);strx = '';
       }else
-        if(strx.includes('почистил зубы') && ws.x_user == 'HydraFire'){
+        if(strx.includes('zb0') &&
+           strx.includes('zb1') &&
+           strx.includes('zb2') &&
+           strx.includes('zb3') && ws.x_user == 'HydraFire'){
           strx = polival_kystu.poured_flowers('Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
+          ws.send(strx);strx = '';
         }
+
   /*
-
-  ////////////////ПЕРЕЙТИ ПО СЫЛКЕ И ПРОЧИТАТЬ С ЛЮБОГО ТЕГА///////////////////
-  if(strx.includes('температура киев')){
-    let link = 'https://www.meteoprog.ua/ru/weather/Kyiv'
-    let webclass = '.temperature_value'
-    let coments = ' градусов тепла'
-    strx = webSearch(coments,link,webclass,ws)
-  }
-  if(windowManager.sharedData.fetch('buffer_text').includes('берсерк')){
-    let link = 'http://online.anidub.com/anime_tv/anime_ongoing/10139-berserk-tv-3-berserk-tv-3-01-iz-13.html'
-    let webclass = '.titlfull'
-    let coments = ' '
-    strx = webSearch(coments,link,webclass,ws)
-  }
-  if(windowManager.sharedData.fetch('buffer_text').includes('комментарии')){
-    let link = 'https://www.youtube.com/watch?v=Xe20_fMmwOs&t=216s'
-    let webclass = '.comment-renderer-text-content'
-    let coments = ' последний коментарий'
-    strx = webSearch(coments,link,webclass,ws)
-  }
-  if(strx.includes('новые сообщения') && ws.x_user == 'HydraFire'){
-    let link = 'https://vk.com/feed'
-    let webclass = '.left_count'
-    let coments = ' новых сообщений'
-    strx = webSearch(coments,link,webclass,ws)
-  }
-
-  if(strx.includes('последнее сообщение') && ws.x_user == 'HydraFire'){
-    let link = 'https://vk.com/im'
-    let webclass = '._dialog_body'
-    let coments = ' новых сообщений'
-    strx = webSearch(coments,link,webclass,ws)
-  }
-
   ///////////////////////////////////////////////////////////////////////////////
   //                  МУЗЫКАЛЬНЫЙ ПЛЕЕР
   //////////////////////////////////////////////////////////////////////////////
   */
+
   let first_buffer = global[ws.x_user]
-  if(first_buffer.includes('выключи музыку')||
-     first_buffer.includes('выключи')
-    ){
+
+  if(strx.includes('mb0') &&
+     strx.includes('mb1') &&
+     strx.includes('mb2') &&
+     strx.includes('mb3')){
     strx = aska_DJ.stop()
-  }else if(first_buffer.includes('включи музыку')||
-           first_buffer.includes('музыку включи')||
-           first_buffer.includes('музыка')
-          ){strx = aska_DJ.start('new')}
+  }else if(strx.includes('ma0') &&
+           strx.includes('ma1') &&
+           strx.includes('ma2') &&
+           strx.includes('ma3') &&
+           strx.includes('ma4')){
+    strx = aska_DJ.start('new')
+  }
   /////////////////////////////////////////////////////////////////////////
-  if(first_buffer.includes('следующий трек')||
-     first_buffer.includes('следующий')||
-     first_buffer.includes('следующая песня')||
-     first_buffer.includes('следующая композиция')
-    ){
+  if(strx.includes('mc0') &&
+     strx.includes('mc1') &&
+     strx.includes('mc2') &&
+     strx.includes('mc3')){
     strx = aska_DJ.next(2,true)
   }
-  if(first_buffer.includes('найти трек')||
-     first_buffer.includes('найди трек')
-    ){
-    strx = aska_DJ.searchTrack(first_buffer)
+  if(strx.includes('md0') &&
+     strx.includes('md1') &&
+     strx.includes('md2') &&
+     strx.includes('md3')){
+    let axc = global[ws.x_user][4]
+    strx = aska_DJ.searchTrack(axc)
   }
-  if(first_buffer.includes('немного громче')){
+  if(strx.includes('me0') &&
+     strx.includes('me1') &&
+     strx.includes('me2') &&
+     strx.includes('me3')){
     strx = aska_DJ.volume('+',0.2)
-  }else if(first_buffer.includes('громче')){
+  }else if(strx.includes('mf0') &&
+           strx.includes('mf1') &&
+           strx.includes('mf2') &&
+           strx.includes('mf3')){
     strx = aska_DJ.volume('+',0.4)
   }
-  if(first_buffer.includes('немного тише')){
+  if(strx.includes('mg0') &&
+     strx.includes('mg1') &&
+     strx.includes('mg2') &&
+     strx.includes('mg3')){
     strx = aska_DJ.volume('-',0.2)
-  }else if(first_buffer.includes('тише')){
+  }else if(strx.includes('mi0') &&
+           strx.includes('mi1') &&
+           strx.includes('mi2') &&
+           strx.includes('mi3')){
     strx = aska_DJ.volume('-',0.4)
   }
 
-  if(first_buffer.includes('очень нравится') && ws.x_user == 'HydraFire'){
+  if(strx.includes('mu0') &&
+     strx.includes('mu1') &&
+     strx.includes('mu2') &&
+     strx.includes('mu3') && ws.x_user == 'HydraFire'){
     strx = aska_DJ.next(-5,false)
   }
-  if(first_buffer.includes('надоело') && ws.x_user == 'HydraFire'){
+  if(strx.includes('mk0') &&
+     strx.includes('mk1') &&
+     strx.includes('mk2') &&
+     strx.includes('mk3') && ws.x_user == 'HydraFire'){
     strx = aska_DJ.next(5,true)
-  }
-  /*
-  ///////////////////////////////////////////////////////////////////
-  ////ПЕРЕЙТИ ПОСЫЛКЕ НАПИСАТЬ ЧТОТО В ПОИСК И ВЗЯТЬ РЕЗУЛЬТАТ////////////////
-  ///////////////////////////////////////////////////////////////////////
-  if(windowManager.sharedData.fetch('buffer_text').includes('что такое')){
-    let arr = jetpack.read('buffer_text.json','.txt')
-    let coments = arr.substring(10,arr.length)
-    let link = 'https://ru.wikipedia.org/wiki/%D0%97%D0%B0%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0'
-    let click = [750,150]
-    let webclass = '#searchInput'
-    let webclass2 = '#mw-content-text'
-
-    strx = webPerexod(coments,link,click,webclass,webclass2,ws)
-  }
-  if(windowManager.sharedData.fetch('buffer_text').includes('поиск')){
-    let arr = jetpack.read('buffer_text.json','.txt')
-    let coments = arr.substring(6,arr.length)
-    let link = 'https://google.com.ua'
-    let click = [400,480]
-    let webclass = '#lst-ib'
-    let webclass2 = '.r'
-
-    strx = webPerexod(coments,link,click,webclass,webclass2,ws)
   }
   ////////////////////////////////////////////////////////////////////////////// 
   ///////////////////////////////////////////////////////////////////////////
@@ -276,7 +263,7 @@ exports.commands = function(strx,ws){
   //       
   //        
   //
-  */
+  
   let text_do = global[ws.x_user]
   let x_x_access = false
   let ip_arr = [
@@ -292,17 +279,29 @@ exports.commands = function(strx,ws){
 
   console.log(global[ws.x_user])
 
-  if(text_do.includes('новое задание') && x_x_access ){
+  if(strx.includes('na0') &&
+     strx.includes('na1') &&
+     strx.includes('na2') &&
+     strx.includes('na3') &&
+     strx.includes('na4') && x_x_access ){
     strx = quest.add_quest(ws)
   }
 
-  if(text_do.includes('список заданий') && x_x_access){
+  if(strx.includes('nb0') &&
+     strx.includes('nb1') &&
+     strx.includes('nb2') &&
+     strx.includes('nb3') && x_x_access){
     let effects = 'что с ней сделать?'
     strx = quest.list_quest(effects,ws)
   }
-  if(text_do.includes('дай мне задание') && x_x_access){
+  if(strx.includes('nc0') &&
+     strx.includes('nc1') &&
+     strx.includes('nc2') &&
+     strx.includes('nc3') &&
+     strx.includes('nc4') && x_x_access){
     strx = quest.start_quest(ws)
   }
+  
   /*
   if(text_do.includes('что мне делать')){
     //let arrx = jetpack.read('JSON/todo.json','json');
@@ -313,20 +312,36 @@ exports.commands = function(strx,ws){
     strx = NNQ.aska_learn_quest()
   }
   */
-  if(text_do.includes('задание выполнено') && x_x_access){
+  
+  if(strx.includes('nd0') &&
+     strx.includes('nd1') &&
+     strx.includes('nd2') &&
+     strx.includes('nd3') &&
+     strx.includes('nd4') && x_x_access){
     strx = quest.finish_quest(ws)
   }
-  if(text_do.includes('выполненные задания') && x_x_access){
+  /*
+  if(strx.includes('ne0') &&
+     strx.includes('ne1') &&
+     strx.includes('ne2') &&
+     strx.includes('ne3') &&
+     strx.includes('ne4') && x_x_access){
     strx = quest.finished_quest(ws)
   }
-  if(text_do.includes('текущее задание') && x_x_access ||
-     text_do.includes('текущее задания') && x_x_access||
-     text_do.includes('текущая задание') && x_x_access
+  */
+  if(strx.includes('nf0') &&
+     strx.includes('nf1') &&
+     strx.includes('nf2') &&
+     strx.includes('nf3') && x_x_access
     ){
     strx = quest.ongoing(ws)
   }
 
-  if(text_do.includes('книга') && x_x_access){
+  if(strx.includes('da0') &&
+     strx.includes('da1') &&
+     strx.includes('da2') &&
+     strx.includes('da3') &&
+     strx.includes('da4') && x_x_access){
     let text0 = ['самое интересное что ты сделал позавчера',
                  'made_yesterday()',
                  'а что интересного было вчера',
@@ -340,6 +355,7 @@ exports.commands = function(strx,ws){
 
     strx = quest.listener_of_end(text0,ws)
   }
+  
   /*
   //  if(text_do.includes('вчера')){
   //    quest.made_yesterday(ws)

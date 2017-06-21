@@ -68,7 +68,7 @@ const reposition_up = function(answer,effects,onswer,ws){
   let cycle_iid = setInterval(()=>{
     n =n + 1 + global.close_all_intervals
     answer.forEach((v,index)=>{
-      if(global[ws.x_user] == v){
+      if(global[ws.x_user][4] == v){
         let x_x
         try{
           sendToAska('All is OK',ws);
@@ -133,7 +133,7 @@ const reposition_up = function(answer,effects,onswer,ws){
 exports.question = question;
 /////////////////////////////////////////////////////////////////////////////
 const add_quest = function(ws){
-  let text = global[ws.x_user];
+  let text = global[ws.x_user][4];
   let n = 0
   console.log('begin interval')
   let cycle = setInterval(()=>{
@@ -145,10 +145,10 @@ const add_quest = function(ws){
       clearInterval(cycle);
       console.log('interval close')
     }
-    if(text != global[ws.x_user] ){
+    if(text != global[ws.x_user][4] ){
       let x_x
       try{
-        sendToAska(global[ws.x_user]+'. Добавила в список заданий',ws);
+        sendToAska(global[ws.x_user][4]+'. Добавила в список заданий',ws);
         x_x = true
       }catch(err){
         x_x = false
@@ -158,12 +158,12 @@ const add_quest = function(ws){
         let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
         if(!arrx){
           arrx = [
-            "создать еще одну записль",
+            "создать еще одну запись",
             "купить мыло"
           ]
           jetpack.write('./JSON/data/'+ws.x_user+'/todo.json',arrx);
         }
-        arrx.push(global[ws.x_user])
+        arrx.push(global[ws.x_user][4])
         jetpack.write('./JSON/data/'+ws.x_user+'/todo.json',arrx);
         //setTimeout(() => {
         //}, 200);
@@ -191,17 +191,19 @@ const list_quest = function(effects,ws){
     n =n + 1 + global.close_all_intervals
     let answer = jetpack.read('JSON/data/'+ws.x_user+'/todo.json','json');
     answer.forEach((v,i)=>{
-      if(global[ws.x_user] == v){
+      if(global[ws.x_user][4] == v){
 
         setTimeout(() => {
           sendToAska('ты выбрал '+i+'-тую строчку в списке',ws)
           let commands = ["переместить вверх","переместить вниз","выбрать","удалить"];
           let onsver_com = ["переместила ближе","переместила дальше","время пошло","задание удалено"]
           reposition_up(commands,v,onsver_com,ws)
+          /*
           setTimeout(() => {
             sendToAska(effects,ws)
 
           }, 2200);
+          */
         }, 200);
 
 
@@ -344,17 +346,17 @@ const remind = function(answer,adres,ws){
       ]
     ]
   }
-  let buffer_interval = global[ws.x_user];
+  let buffer_interval = global[ws.x_user][4];
   let arr_interval = []
   let n = 0
   let iid = setInterval(()=>{
     //console.log(n)
     n=n+1+ global.close_all_intervals
-    if(buffer_interval != global[ws.x_user]){
-      buffer_interval = global[ws.x_user];
+    if(buffer_interval != global[ws.x_user][4]){
+      buffer_interval = global[ws.x_user][4];
       arr_interval.push(buffer_interval)
-      console.log(n+' global[ws.x_user] = '+global[ws.x_user]+' answer = '+answer)
-      if(global[ws.x_user] == answer){  
+      console.log(n+' global[ws.x_user] = '+global[ws.x_user][4]+' answer = '+answer)
+      if(global[ws.x_user][4] == answer){  
         ws.send('я всё окуратно записала')
         console.log('я всё окуратно записала')
         dreems.push(arr_interval)

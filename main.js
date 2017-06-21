@@ -29,14 +29,18 @@ function somebodyConnected(ws){
   message += userInfo+'<br><br>'
   let version = 'Текущая версия программы 0.301<br>'
   message += version+'<br>'
-  let brainSize = jetpack.inspect('JSON/NN_train_buffer.json').size
-  let arrL = calc_layers()
+  let way = './JSON/data/'+ws.x_user+'/NN_Train.json'
+  let way2 = './JSON/data/'+ws.x_user+'/NN_train_buffer.json'
+  //try{
+  //let brainSize = jetpack.inspect(way2).size
+  //}catch(err){console.log(err);brainSize =10000000}
+  let arrL = calc_layers(way,ws)
   message += '<br>'
   message += '[ входящий слой:  '+arrL[0]+'  ]<br>'
   message += '[ внутрених нейронов:  '+arrL[1]+'  ]<br>'
   message += '[ выходяший слой:  '+arrL[2]+'  ]<br>'
   message += '<br>'
-  message += 'Размер нейро сети '+(brainSize/1000000).toFixed(2)+' МБ.'
+  //message += 'Размер нейро сети '+(brainSize/1000000).toFixed(2)+' МБ.'
   ws.send(message)
 }
 //// WebSocketServer ///////////////////////////////////////////////
@@ -55,6 +59,7 @@ function somebodyConnected_log(ws,id,message){
   }else{
 
     let message2 = 'SYSTEM';
+    
     message2 += JSON.stringify(id)+'  '+message;
     ws.send(message2)
   }
@@ -87,9 +92,11 @@ wss.on("connection", function(ws){
       somebodyConnected(ws)
       global.silence = false
       global.playing_music = 'none'
+      global[ws.x_user] = [' ',' ',' ',' ',' ']
     }
+    console.log('SYSTEM')
     somebodyConnected_log(ws,id,message)
-
+    console.log('TATA')
     if(message.length > 2000){
       let type = global.save_file_name
       type = type.substring(type.length-3,type.length)
@@ -110,8 +117,13 @@ wss.on("connection", function(ws){
         console.log(message)
         global.save_file_name = message
       }else{
-        global[ws.x_user] = message.toString()
-        global.aska_state_00 = message.toString()
+        if(ws.x_user != message.toString()){
+        global[ws.x_user].push(message.toString())
+        global[ws.x_user].splice(0,1)
+        }
+        
+        //global.aska_state_00 = message.toString()
+        console.log(global[ws.x_user])
         set_to_run(message.toString(),ws);
       }
     }

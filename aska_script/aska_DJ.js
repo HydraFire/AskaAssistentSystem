@@ -123,10 +123,16 @@ const next = function(num,letplay){
 //////////////////////////////////////////////////////////////////////////////
 const searchTrack = function(text){
   let first = 'найди трек'
+  console.log(text)
   if(text == 'найти трек' || text == 'найди трек'){
     return 'Пожалуйста назови имя музыкальной композиции'
   }else{
     let name = text.substring(first.length+1,text.length)
+    console.log(name)
+    console.log(name)
+    console.log(name)
+    console.log(name)
+    console.log(name)
     let arr = jetpack.read('./JSON/aska_dj.json','json')
     let arr_track = []
     arr.forEach((v,index)=>{
