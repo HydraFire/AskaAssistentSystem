@@ -86,7 +86,7 @@ exports.commands = function(strx,ws){
      strx.includes('sa1') &&
      strx.includes('sa2') &&
      strx.includes('sa3')){
-    let rate = 60
+    let rate = 44
     strx = circle.sigi_remove('сигареты',rate,ws)
     ws.send(strx);strx = '';
   }
@@ -94,7 +94,7 @@ exports.commands = function(strx,ws){
      strx.includes('sb1') &&
      strx.includes('sb2') &&
      strx.includes('sb3')){
-    let rate = 60
+    let rate = 44
     strx = circle.sigi('сигареты',rate,ws)
     ws.send(strx);strx = '';
   }
@@ -107,11 +107,11 @@ exports.commands = function(strx,ws){
         [
           2017,
           6,
-          25,
+          23,
           23,
           59
         ]
-    let rate = 60
+    let rate = 44
     strx = circle.sigi_minus('сигареты',rate,arr_timeX,ws)
     ws.send(strx);strx = '';
   }
@@ -120,7 +120,7 @@ exports.commands = function(strx,ws){
      strx.includes('ba1') &&
      strx.includes('ba2') &&
      strx.includes('ba3')){
-    let rate = 7
+    let rate = 11
     strx = circle.sigi_remove('банки',rate,ws)
     ws.send(strx);strx = '';
   }
@@ -128,7 +128,7 @@ exports.commands = function(strx,ws){
      strx.includes('bb1') &&
      strx.includes('bb2') && 
      strx.includes('bb3')){
-    let rate = 7
+    let rate = 11
     strx = circle.sigi('банки',rate,ws)
     ws.send(strx);strx = '';
   }
@@ -141,11 +141,11 @@ exports.commands = function(strx,ws){
         [
           2017,
           6,
-          22,
+          23,
           23,
           59
         ]
-    let rate = 7
+    let rate = 11
     strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
     ws.send(strx);strx = '';
   }
