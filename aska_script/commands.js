@@ -120,7 +120,7 @@ exports.commands = function(strx,ws){
      strx.includes('ba1') &&
      strx.includes('ba2') &&
      strx.includes('ba3')){
-    let rate = 11
+    let rate = 26
     strx = circle.sigi_remove('банки',rate,ws)
     ws.send(strx);strx = '';
   }
@@ -128,7 +128,7 @@ exports.commands = function(strx,ws){
      strx.includes('bb1') &&
      strx.includes('bb2') && 
      strx.includes('bb3')){
-    let rate = 11
+    let rate = 26
     strx = circle.sigi('банки',rate,ws)
     ws.send(strx);strx = '';
   }
@@ -141,15 +141,21 @@ exports.commands = function(strx,ws){
         [
           2017,
           6,
-          23,
+          28,
           23,
           59
         ]
-    let rate = 11
+    let rate = 26
     strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
     ws.send(strx);strx = '';
   }
-
+  if(strx.includes('bd0') &&
+     strx.includes('bd1') &&
+     strx.includes('bd2') &&
+     strx.includes('bd3')){
+    let mki = jetpack.read('./public/files/secred_text.json','text')
+    ws.send(mki);strx = '';
+  }
   ///////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////
 
@@ -184,6 +190,7 @@ exports.commands = function(strx,ws){
         }
 
   /*
+
   ///////////////////////////////////////////////////////////////////////////////
   //                  МУЗЫКАЛЬНЫЙ ПЛЕЕР
   //////////////////////////////////////////////////////////////////////////////
@@ -263,7 +270,7 @@ exports.commands = function(strx,ws){
   //       
   //        
   //
-  
+
   let text_do = global[ws.x_user]
   let x_x_access = false
   let ip_arr = [
@@ -301,7 +308,7 @@ exports.commands = function(strx,ws){
      strx.includes('nc4') && x_x_access){
     strx = quest.start_quest(ws)
   }
-  
+
   /*
   if(text_do.includes('что мне делать')){
     //let arrx = jetpack.read('JSON/todo.json','json');
@@ -312,7 +319,7 @@ exports.commands = function(strx,ws){
     strx = NNQ.aska_learn_quest()
   }
   */
-  
+
   if(strx.includes('nd0') &&
      strx.includes('nd1') &&
      strx.includes('nd2') &&
@@ -355,7 +362,7 @@ exports.commands = function(strx,ws){
 
     strx = quest.listener_of_end(text0,ws)
   }
-  
+
   /*
   //  if(text_do.includes('вчера')){
   //    quest.made_yesterday(ws)
