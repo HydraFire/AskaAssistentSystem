@@ -142,7 +142,7 @@ wss.on("connection", function(ws){
     console.log('SYSTEM')
     somebodyConnected_log(ws,id,message)
     console.log('TATA')
-    if(message.length > 80){
+    if(message.length > 2000){
       let type = global.save_file_name
       type = type.substring(type.length-3,type.length)
       let adres = 'public/files/'+global.save_file_name
