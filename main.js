@@ -6,6 +6,51 @@ const express = require("express")
 //app.on('window-all-closed', () => {
 //  console.log('не закрывает сервер после закрытия окна')
 //})
+/*
+const get = require('simple-get')
+get({
+  url: 'http://online.anidub.com/anime_tv/anime_ongoing/10139-berserk-tv-3-berserk-tv-3-01-iz-12.html',
+  method: 'POST',
+  body: 'this is the POST body',
+
+  // simple-get accepts all options that node.js `http` accepts 
+  // See: http://nodejs.org/api/http.html#http_http_request_options_callback 
+  headers: {
+    'user-agent': 'my cool app'
+  }
+}, function (err, res) {
+  console.log(err)
+ 
+  // All properties/methods from http.IncomingResponse are available, 
+  // even if a gunzip/inflate transform stream was returned. 
+  // See: http://nodejs.org/api/http.html#http_http_incomingmessage 
+  res.setTimeout(10000)
+  //console.log(res.headers)
+  let n = 0
+  res.on('data', function (chunk) {
+    // `chunk` is the decoded response, after it's been gunzipped or inflated 
+    // (if applicable) 
+   // console.log('got a chunk of the response: ' + chunk)
+   
+   //Добавлено
+   
+  // console.log(gji)
+   
+   n+=1
+   if(n == 5){
+     let gjk = chunk.toString()
+     let gji = gjk.search('Добавлено:')
+     console.log(gji)
+   //  let jio = gjk.substring(gji,gji+30)
+   console.log(gjk)
+   }
+  })
+}
+   )
+
+*/
+
+
 //const BrowserWindow = electron.BrowserWindow;
 const jetpack = require('fs-jetpack');
 //const windowManager = require('electron-window-manager');
@@ -13,7 +58,7 @@ const jetpack = require('fs-jetpack');
 //Обявление Mesengera //////////////////////////////////////////
 const sendToAska = function (message,ws){
   if(message != ''){
-  ws.send(message)
+    ws.send(message)
   }
 }
 exports.sendToAska = sendToAska;
@@ -59,7 +104,7 @@ function somebodyConnected_log(ws,id,message){
   }else{
 
     let message2 = 'SYSTEM';
-    
+
     message2 += JSON.stringify(id)+'  '+message;
     ws.send(message2)
   }
@@ -68,7 +113,7 @@ function somebodyConnected_log(ws,id,message){
 
 var wss = new WebSocketServer({server: server});
 wss.on("connection", function(ws){
- 
+
   global.close_all_intervals = 0
   ws.addEventListener("close",()=>{
     global.close_all_intervals = 100000
@@ -78,7 +123,7 @@ wss.on("connection", function(ws){
     let data = message.toString()
     if(data.substring(0,4) == 'USER'){
       message = message.toString().substring(4,message.length);
-      
+
       let arr_ip_id = [
         ['HydraFire','159.224.183.122'],
         ['HydraFire','159.224.183.122'],
@@ -97,7 +142,7 @@ wss.on("connection", function(ws){
     console.log('SYSTEM')
     somebodyConnected_log(ws,id,message)
     console.log('TATA')
-    if(message.length > 2000){
+    if(message.length > 80){
       let type = global.save_file_name
       type = type.substring(type.length-3,type.length)
       let adres = 'public/files/'+global.save_file_name
@@ -118,10 +163,10 @@ wss.on("connection", function(ws){
         global.save_file_name = message
       }else{
         if(ws.x_user != message.toString()){
-        global[ws.x_user].push(message.toString())
-        global[ws.x_user].splice(0,1)
+          global[ws.x_user].push(message.toString())
+          global[ws.x_user].splice(0,1)
         }
-        
+
         //global.aska_state_00 = message.toString()
         console.log(global[ws.x_user])
         set_to_run(message.toString(),ws);
