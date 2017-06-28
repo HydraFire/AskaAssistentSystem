@@ -6,6 +6,7 @@ const NNQ = require('./NN_quest');
 const quest = require('./quest');
 const circle = require('./circle')
 const memory_fun = require('./memory_fun');
+const webSearch = require('./webSearch');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
@@ -28,10 +29,38 @@ exports.commands = function(strx,ws){
      global[ws.x_user][4].includes('обучение')){
     strx = NNQ.aska_learn_quest_main(ws)
     ws.send(strx)
+
+  }
+
+  if(global[ws.x_user][4].includes('вакансии джаваскрипт')){
+    let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
+    let leng = 360
+    let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
+    webSearch.post_to_str(ws,site,leng,search_text)
+    strx = ''
+  }
+  if(global[ws.x_user][4].includes('вакансии игры')){
+    let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=game';
+    let leng = 360
+    let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
+    webSearch.post_to_str(ws,site,leng,search_text)
     strx = ''
   }
 
 
+  if(global.silence){
+    strx = '_mute_'
+  }
+
+  /*
+  if(global[ws.x_user][4].includes('найди')){
+     let site = 'https://www.youtube.com/channel/UCdKuE7a2QZeHPhDntXVZ91w';
+     let leng = 50
+     let search_text = `<a class="yt-uix-sessionlink yt-uix-tile-link  spf-link  yt-ui-ellipsis yt-ui-ellipsis-2" dir="ltr" title="`
+     webSearch.post_to_str(ws,site,leng,search_text)
+     strx = ''
+    }
+    */
   //////////////////////////////// USERS /////////////////////////////////////
   // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
   //   strx = 'Хозяин, желаешь чего?'
@@ -563,8 +592,6 @@ grafics('Поливал_кусты',10)
   }
 
 */
-  if(global.silence){
-    strx = ''
-  }
+
   return strx
 }

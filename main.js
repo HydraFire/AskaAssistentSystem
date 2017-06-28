@@ -6,49 +6,7 @@ const express = require("express")
 //app.on('window-all-closed', () => {
 //  console.log('не закрывает сервер после закрытия окна')
 //})
-/*
-const get = require('simple-get')
-get({
-  url: 'http://online.anidub.com/anime_tv/anime_ongoing/10139-berserk-tv-3-berserk-tv-3-01-iz-12.html',
-  method: 'POST',
-  body: 'this is the POST body',
 
-  // simple-get accepts all options that node.js `http` accepts 
-  // See: http://nodejs.org/api/http.html#http_http_request_options_callback 
-  headers: {
-    'user-agent': 'my cool app'
-  }
-}, function (err, res) {
-  console.log(err)
- 
-  // All properties/methods from http.IncomingResponse are available, 
-  // even if a gunzip/inflate transform stream was returned. 
-  // See: http://nodejs.org/api/http.html#http_http_incomingmessage 
-  res.setTimeout(10000)
-  //console.log(res.headers)
-  let n = 0
-  res.on('data', function (chunk) {
-    // `chunk` is the decoded response, after it's been gunzipped or inflated 
-    // (if applicable) 
-   // console.log('got a chunk of the response: ' + chunk)
-   
-   //Добавлено
-   
-  // console.log(gji)
-   
-   n+=1
-   if(n == 5){
-     let gjk = chunk.toString()
-     let gji = gjk.search('Добавлено:')
-     console.log(gji)
-   //  let jio = gjk.substring(gji,gji+30)
-   console.log(gjk)
-   }
-  })
-}
-   )
-
-*/
 
 
 //const BrowserWindow = electron.BrowserWindow;
@@ -57,7 +15,9 @@ const jetpack = require('fs-jetpack');
 
 //Обявление Mesengera //////////////////////////////////////////
 const sendToAska = function (message,ws){
-  if(message != ''){
+  if(message == '' ||
+     message == '_mute_'){
+  }else{
     ws.send(message)
   }
 }
@@ -65,6 +25,7 @@ exports.sendToAska = sendToAska;
 //Подключение функции работаюшей с нейросетью ////////////////////
 const set_to_run = require('./aska_script/neural_network').set_to_run;
 const calc_layers = require('./aska_script/neural_network').calc_layers;
+
 //////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
