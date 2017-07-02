@@ -30,10 +30,8 @@ exports.commands = function(strx,ws){
     strx = NNQ.aska_learn_quest_main(ws)
     ws.send(strx)
   }
-  if(strx.includes('ka0') &&
-     strx.includes('ka1') &&
-     strx.includes('ka2') &&
-     strx.includes('ka3')){
+  if(global[ws.x_user][4].includes('заткнись') ||
+     global[ws.x_user][4].includes('помолчи')){
     global.attention = 'NO LISTEN'
     ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
     strx = ''
@@ -600,7 +598,7 @@ grafics('Поливал_кусты',10)
   }
 
 */
-  if(global[ws.x_user][4].includes('удали последний елемент массива обучения')){
+  if(global[ws.x_user][4].includes('удали последний элемент массива обучения')){
      strx = NNQ.aska_learn_delete(ws)
     //ws.send(strx)
   }
