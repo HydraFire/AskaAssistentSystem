@@ -600,7 +600,7 @@ grafics('Поливал_кусты',10)
   }
 
 */
-  if(global[ws.x_user][4].includes('удали последний едемент массива обучения')){
+  if(global[ws.x_user][4].includes('удали последний елемент массива обучения')){
      strx = NNQ.aska_learn_delete(ws)
     //ws.send(strx)
   }
