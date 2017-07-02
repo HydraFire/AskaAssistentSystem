@@ -600,7 +600,11 @@ grafics('Поливал_кусты',10)
   }
 
 */
-  if(global[ws.x_user][4].includes('удали')){
+  if(strx.includes('da0') &&
+     strx.includes('da1') &&
+     strx.includes('da2') &&
+     strx.includes('da3') &&
+     strx.includes('da4')){
      strx = NNQ.aska_learn_delete(ws)
     //ws.send(strx)
   }
