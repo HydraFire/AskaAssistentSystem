@@ -100,18 +100,18 @@ const aska_give_quest = function(arr_time,ws){
   arr_x.sort().reverse()
   arr_x.map(v=>strx += v[1]+' ')
   /////////////////////////////////////////////////////////////////////////////
-  
+
   //let interval_01
  // clearInterval(interval_01)
   //let interval_02
  // clearInterval(interval_02)
   //let interval_03
-  
-  
+
+
   interval_01 = setInterval(()=>{
     if(windowManager.sharedData.fetch('SHUT_UP') == 'false'){
       clearInterval(interval_01)
-      
+
       interval_02 = setInterval(()=>{
         if(windowManager.sharedData.fetch('SHUT_UP') == 'true'){
           clearInterval(interval_02)
@@ -166,17 +166,17 @@ const aska_screen_quest = function(arr_time,type,ws){
     arr_x[i] = arr_u
   }
   let arr_filter
-  
+
   //for(i=0;i<arr_x.length-1;i++){
     arr_x.map((v,index)=>{if(v[1] == type){
      arr_filter = index;
     }})
-    
-   
-  
-  
-  
- 
+
+
+
+
+
+
   //////////////////////////////////////////////////////////////////////////
   //let zzz = arr_x.indexOf('поиграть_в_цивилизацию')
   return arr_x[arr_filter][0]
@@ -203,6 +203,40 @@ const aska_learn_quest = function(){
 exports.aska_learn_quest = aska_learn_quest;
 ////////////////////////////////////////////////////////////
 */
+const aska_learn_delete = function(ws){
+  let trainFileMain = './JSON/data/'+ws.x_user+'/NN_Train.json';
+  var data = jetpack.read(trainFileMain,'json');
+  let zzz = data[data.length-1]
+  let zzzd = _.pairs(zzz.input)
+  let zzzp = _.pairs(zzz.output)
+  let zdd = []
+  let zpp = []
+  zzzd.forEach((v)=>{zdd.push(v[0])})
+  zzzp.forEach((v)=>{zpp.push(v[0])})
+
+
+  let kkk = zdd.join(' ')
+  let kkk2 = zpp.join(' ')
+
+  let n = 0
+  let iid = setInterval(()=>{
+    console.log(n)
+    n=n+1+ global.close_all_intervals
+    if(global[ws.x_user][4] == 'подтверждаю'){
+      data.splice(data.length-1,1)
+      jetpack.write(trainFileMain,data);
+      ws.send('удаление произведено')
+      clearInterval(iid);
+    }
+
+    if(n>600){
+      clearInterval(iid)
+      console.log('Interval Close')
+    }
+  },500)
+  return 'К удалению предложена запись, '+kkk+'. С ответом, '+kkk2+'. Требуеться подтверждение'
+}
+
 const aska_learn_quest_main = function(ws){
   let first_time = this_real_time()
   let trainFileMain = './JSON/data/'+ws.x_user+'/NN_Train.json';
@@ -221,9 +255,9 @@ const aska_learn_quest_main = function(ws){
   })
   var json_train = net.toJSON();
   jetpack.write(NN_train_buffer,json_train)
-  
-  
+
+
   return 'обучение завершено, '+circle.calc_math(first_time,'text')
 }
 exports.aska_learn_quest_main = aska_learn_quest_main;
-
+exports.aska_learn_delete = aska_learn_delete;

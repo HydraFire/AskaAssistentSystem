@@ -12,8 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   </head>
   <body>
-    <!-- <video id="video" src="files/Evangelion - MusicMix - Numinous AMV.mp4"></video>
--->
+   <!-- <video id="video" loop autoplay src="files/Comp 2.mp4"></video>
+    <video id="video2" src="files/Comp 3.mp4"></video>
+  -->
     <div id="main_container">
       <div id="inter">ASKA</div>
       <input  id="stringOftext" type="text" style=" font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder="Написать Аске"/>
@@ -63,9 +64,15 @@
       color:#fff;
     }
     video {
-      padding-top:0px;
+      padding-top:384px;
       z-index: -5;
       position: absolute;
+    }
+    #video {
+      z-index: -5;
+    }
+    #video2 {
+      z-index: -1;
     }
     #drop_zone {
       border-bottom-color:rgb(187, 187, 187);
@@ -192,20 +199,27 @@
 
 <script>
   function video_animation(){
-    var video = document.querySelector('#video');
-    video.volume = 0
+    var video = document.querySelector('#video2');
     setInterval(()=>{
-      if(window.animation == true){
+      if(window.animation == true &&window.animation_ongoing == true){
+        video.currentTime = 0
         video.play()
-        if(video.currentTime > 64.8){
-          video.currentTime = 64.3
-        }
-      }else{
-        video.currentTime = 61.5
+        window.animation_ongoing = false
       }
-    },300)
+      if(window.animation == true){
+        setTimeout(()=>{
+         video.style.zIndex = -1
+        },100)
+      }
+      if(window.animation == false){
+        window.animation_ongoing = true
+        //window.animation = 'sleep'
+        video.style.zIndex = -15
+        // video.src = 'files/Comp 2.mp4'
+        //video.play()
 
-
+      }
+    },100)
   }
   function FileSelectHandler(file){
     //e.preventDefault()
@@ -364,10 +378,11 @@
 
     p.textContent = transcript;
     if(e.results[0].isFinal){
-
+/*
       if(!localStorage.wait){
         localStorage.wait = 'start';
       }
+*/
       if(transcript.toLowerCase() == 'оскар' ||
          transcript.toLowerCase() == 'отказ' ||
          transcript.toLowerCase() == 'аста' ||
@@ -380,9 +395,10 @@
          transcript.toLowerCase() == 'рассказ' ||
          transcript.toLowerCase() == 'аско' ||
          transcript.toLowerCase() == 'авто'){
-        localStorage.wait = 'start';
+        //localStorage.wait = 'start';
         p.textContent = 'ASKA';
-        localStorage.aska_time_out = 5;
+        //localStorage.aska_time_out = 5;
+        /*
         let aska_listener
         let i
         aska_listener = setInterval(()=>{
@@ -397,9 +413,10 @@
             clearInterval(aska_listener);
           }
         },1000)
-
-
-
+        */
+       window.color_aska = 160
+       aska('а')
+       socket.send('LISTEN')
       }
 
       if(localStorage.wait == 'wait'){
@@ -547,19 +564,21 @@
   canvas.width = 1920;
   canvas.height = 1080;
   init()
+  window.color_aska = 160
+  //video_animation()
   window.onload = function(){
     var inpElelement = document.getElementById('stringOftext')
     inpElelement.onkeydown = function(e){
       if(e.keyCode==13){
         if(this.value != ''){
-         socket.send(this.value)
-         this.value =""
+          socket.send(this.value)
+          this.value =""
         } 
-        
+
       }
     }
   }
-  //video_animation()
+  
   //var colorDate = new Date();
 
   function draw(waveform,frequencies){
@@ -570,8 +589,9 @@
     //console.log(frequencies[10])
     //ctx.fillStyle='#FFFFFF';
     let calc_hue
+    console.log(window.color_aska)
     waveform.forEach((v,index)=>{
-      calc_hue = 160+(waveform[index]/4)
+      calc_hue = window.color_aska +(waveform[index]/4)
       //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
       //(120, 100%, 75%);
       ctx.fillStyle=`hsl(${calc_hue},100%,55%)`;

@@ -70,6 +70,17 @@ const set_to_run = function(text,ws){
   arr_x.map(v=>strx += v[1]+' ')
   /////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////
+  
+  let zex = global.strx
+  zex.push(strx)
+  zex.splice(0,1)
+  global.strx = zex
+  
+  if(global.strx[0]==''&&global.strx[1]==''&&global.strx[2]==''){
+   global.attention = 'NO LISTEN'
+   ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
+  }
+  console.log(zex+' <--------------')
   strx = commands(strx,ws)
   sendToAska(strx,ws)
 };

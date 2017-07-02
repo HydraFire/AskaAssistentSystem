@@ -29,8 +29,16 @@ exports.commands = function(strx,ws){
      global[ws.x_user][4].includes('обучение')){
     strx = NNQ.aska_learn_quest_main(ws)
     ws.send(strx)
-
   }
+  if(strx.includes('ka0') &&
+     strx.includes('ka1') &&
+     strx.includes('ka2') &&
+     strx.includes('ka3')){
+    global.attention = 'NO LISTEN'
+    ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
+    strx = ''
+  }
+
 
   if(global[ws.x_user][4].includes('вакансии джаваскрипт')){
     let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
@@ -592,6 +600,13 @@ grafics('Поливал_кусты',10)
   }
 
 */
-
+  if(strx.includes('da0') &&
+     strx.includes('da1') &&
+     strx.includes('da2') &&
+     strx.includes('da3') &&
+     strx.includes('da4')){
+     strx = NNQ.aska_learn_delete(ws)
+    //ws.send(strx)
+  }
   return strx
 }

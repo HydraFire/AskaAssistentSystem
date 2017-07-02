@@ -25,7 +25,8 @@ exports.sendToAska = sendToAska;
 //Подключение функции работаюшей с нейросетью ////////////////////
 const set_to_run = require('./aska_script/neural_network').set_to_run;
 const calc_layers = require('./aska_script/neural_network').calc_layers;
-
+global.attention = 'LISTEN'
+global.strx = ['null','null','null']
 //////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
@@ -118,19 +119,24 @@ wss.on("connection", function(ws){
         global.aska_state_01 = true
       }else if(message.toString().includes('SPEECH')){
         global.aska_state_01 = false
+      }else if(message.toString().includes('LISTEN')){
+        global.attention = 'LISTEN'
+        global.strx[2] = 'ASKA'
+        console.log('LISTEN')
       }else if(message.toString().includes('FILE')){
         message = message.substring(4,message.length)
         console.log(message)
         global.save_file_name = message
       }else{
-        if(ws.x_user != message.toString()){
-          global[ws.x_user].push(message.toString())
-          global[ws.x_user].splice(0,1)
+        console.log(global.attention)
+        if(global.attention == 'LISTEN'){
+          if(ws.x_user != message.toString()){
+            global[ws.x_user].push(message.toString())
+            global[ws.x_user].splice(0,1)
+          }
+          console.log(global[ws.x_user])
+          set_to_run(message.toString(),ws);
         }
-
-        //global.aska_state_00 = message.toString()
-        console.log(global[ws.x_user])
-        set_to_run(message.toString(),ws);
       }
     }
   });
