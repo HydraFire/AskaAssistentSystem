@@ -99,9 +99,13 @@ exports.commands = function(strx,ws){
        strx.includes('fa3')){
       let htmlx = ''
       let arr = jetpack.list('./public/files')
+      if(arr){
       arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
       ws.send('SYSTEM'+htmlx)
       strx = ''
+      }else{
+      strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
+      }
     }
     if(strx.includes('fb0') &&
        strx.includes('fb1') &&
@@ -109,6 +113,7 @@ exports.commands = function(strx,ws){
        strx.includes('fb3')){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name+'/music')
+      if(arr){
       arr.forEach((v)=>{
         if(global.playing_music == v){
           htmlx+=`<p><a style="color:red;" href="files/music/${v}" download>${v}</a></p>`
@@ -118,6 +123,9 @@ exports.commands = function(strx,ws){
       })
       ws.send('SYSTEM'+htmlx)
       strx = ''
+      }else{
+      strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
+      }
     }
 
     if(strx.includes('sa0') &&
