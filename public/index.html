@@ -12,12 +12,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   </head>
   <body>
-   <!-- <video id="video" loop autoplay src="files/Comp 2.mp4"></video>
-    <video id="video2" src="files/Comp 3.mp4"></video>
-  -->
+    <div class="registration">
+      <form>
+        <strong style="font-size:14pt;">NERV.PRO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+        <input  id="" name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
+        <input  id="" name="password" type="password" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Password"/>
+        <input type="submit" value="GO">
+        <strong style="padding-left:600px;font-size:12pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;В этом веб приложении работает авторегистрация!</strong>
+      </form>
+    </div>
+    <!-- <video id="video" loop autoplay src="files/Comp 2.mp4"></video>
+<video id="video2" src="files/Comp 3.mp4"></video>
+-->
     <div id="main_container">
       <div id="inter">ASKA</div>
-      <input  id="stringOftext" type="text" style=" font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder="Написать Аске"/>
+      <input  id="stringOftext" type="text" style=" font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=""/>
       </input>
     <div class="words" contenteditable></div>
     </div>
@@ -39,6 +48,7 @@
   <audio src="" id="audio2"></audio>
 
   <style>
+    ::-webkit-input-placeholder {color:#45DAB1;}
     ::-webkit-scrollbar { width: 0 !important }
     html {
       font-size: 10px;
@@ -56,6 +66,8 @@
       font-family: 'helvetica neue';
       font-weight: 200;
       font-size: 30px;
+      padding:0px;
+      margin: 0px;
     }
     #list li {
       margin-left:200px;
@@ -67,6 +79,16 @@
       padding-top:384px;
       z-index: -5;
       position: absolute;
+    }
+    .registration {
+      padding-left:70px;
+      margin:0 0% 0% 0%;
+      width: 100%;
+      height: 45px;
+      z-index: 1000;
+      color:#abc;
+      background:rgba(22,22,22,0.65);
+      position: fixed;
     }
     #video {
       z-index: -5;
@@ -128,8 +150,9 @@
       -webkit-user-select: none;
       user-select: none;
       height:180px;
+      padding-top:50px;
       color:#333;
-      font-size: 130pt;
+      font-size: 110pt;
     }
     .info{
       margin: 400px 0px 0px 5%;
@@ -198,6 +221,20 @@
   </body>
 
 <script>
+  function login(e){
+    e.preventDefault()
+    let login = (this.querySelector('[name=login]')).value;
+    this.querySelector('[name=login]').value = '';
+    let password = (this.querySelector('[name=password]')).value;
+    this.querySelector('[name=password]').value = '';
+    document.querySelector('.registration').remove()
+    interface.style.fontSize = '130pt'
+    interface.style.paddingTop = '0px';
+    socket.send('USER'+login+'||'+password+'||'+userip)
+    setTimeout(()=>{
+      socket.send('aska_play_music_false')
+    },1000)
+  }
   function video_animation(){
     var video = document.querySelector('#video2');
     setInterval(()=>{
@@ -208,7 +245,7 @@
       }
       if(window.animation == true){
         setTimeout(()=>{
-         video.style.zIndex = -1
+          video.style.zIndex = -1
         },100)
       }
       if(window.animation == false){
@@ -334,11 +371,11 @@
   bar.style.height = `${ zzz + '%'}`;
   bar.textContent = zzz.toFixed(2);
   const audio2 = document.querySelector('#audio2');
-  speed.addEventListener('mousemove',handleMove)
+  
 
-
-
+/////////////////////////////////////////////////////////////////////////
   function handleMove(e){
+    if(window.is_clicked){
     const y = e.pageY - this.offsetTop - navCoords.top +10;
     console.log(e.pageY,this.offsetTop,navCoords.top)
     const percent = y / this.offsetHeight;
@@ -351,10 +388,20 @@
 
     localStorage.audioVolume = playbackRate;
     console.log(y)
+    }
   }
-
-
-
+  function handleClickDown(e){
+    e.preventDefault();
+    window.is_clicked = true
+  }
+  function handleClickUp(e){
+    e.preventDefault();
+    window.is_clicked = false
+  }
+  speed.addEventListener('mousemove',handleMove)
+  speed.addEventListener('mousedown',handleClickDown)
+  speed.addEventListener('mouseup',handleClickUp)
+///////////////////////////////////////////////////////////////////////////
   var audioTag = document.getElementById('audio');
 
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -378,7 +425,7 @@
 
     p.textContent = transcript;
     if(e.results[0].isFinal){
-/*
+      /*
       if(!localStorage.wait){
         localStorage.wait = 'start';
       }
@@ -414,9 +461,9 @@
           }
         },1000)
         */
-       window.color_aska = 160
-       aska('а')
-       socket.send('LISTEN')
+        window.color_aska = 160
+        aska('а')
+        socket.send('LISTEN')
       }
 
       if(localStorage.wait == 'wait'){
@@ -511,10 +558,9 @@
 
   //var socket = new WebSocket("ws://159.224.183.122:80/index.html");
 
-  //
+  // Всё первоначальные стейты при подключении
   socket.onopen = function() {
-    socket.send('USER'+ userip)
-    console.log("Соединение установлено.");
+    console.log('SOCKET CONNECT')
   };
   socket.onclose = function(event) {
     if (event.wasClean) {
@@ -578,7 +624,7 @@
       }
     }
   }
-  
+
   //var colorDate = new Date();
 
   function draw(waveform,frequencies){
@@ -608,6 +654,11 @@
     // ctx.stroke();
     // ctx.restore();
   };
+  ///////////////////////////////////////////////////////////////////
+  //////////////////////FORM//LOGIN///////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  var registrationForm = document.querySelector('.registration')
+  registrationForm.addEventListener('submit',login)
 
 </script>
 <script type="text/javascript" src="cg.js"></script>

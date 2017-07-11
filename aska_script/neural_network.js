@@ -9,13 +9,16 @@ const jetpack = require('fs-jetpack');
 const sendToAska = require('../main').sendToAska;
 const commands = require('./commands').commands;
 
-const calc_layers = function(way,ws){
+const calc_layers = function(ws,way){
   var arr_p = jetpack.read(way,'json');
+ // console.log(arr_p)
   if(!arr_p){
-    jetpack.copy('./public/files/NN_Train.json', './JSON/data/'+ws.x_user+'/NN_Train.json', { overwrite: true });
-    jetpack.copy('./public/files/NN_train_buffer.json', './JSON/data/'+ws.x_user+'/NN_train_buffer.json', { overwrite: true });
+    console.log('WOW')
+    jetpack.copy('./public/NN_Train.json', './JSON/data/'+ws.x_user+'/NN_Train.json', { overwrite: true });
+    jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.x_user+'/NN_train_buffer.json', { overwrite: true });
     arr_p = jetpack.read(way,'json');
   }
+  
   var tyu = _.pairs(arr_p)
   var l_input = 0
   var l_output = 0
@@ -31,15 +34,16 @@ const calc_layers = function(way,ws){
 
 
 
-const set_to_run = function(text,ws){
+const set_to_run = function(ws,text){
   console.log('NN')
-  console.log(ws.x_user)
+  console.log(ws.users.name)
   console.log('NN')
   let net = new brain.NeuralNetwork({
-    hiddenLayers: calc_layers('./JSON/data/'+ws.x_user+'/NN_Train.json') // global learning rate, useful when training using streams
+    hiddenLayers: calc_layers(ws,'./JSON/data/'+ws.users.name+'/NN_Train.json') // global learning rate, useful when training using streams
   });
-  net.fromJSON(jetpack.read('./JSON/data/'+ws.x_user+'/NN_train_buffer.json','json'));
-  //console.log('nn_set_to_run')
+  console.log('NEXT')
+  net.fromJSON(jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json'));
+  console.log('nn_connect')
   //windowManager.sharedData.set('buffer_text', text);
 
 
@@ -70,18 +74,24 @@ const set_to_run = function(text,ws){
   arr_x.map(v=>strx += v[1]+' ')
   /////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////
-  
-  let zex = global.strx
+  strx == 'я '? strx = '':'';
+  let zex = ws.users.nn_out_arr
   zex.push(strx)
   zex.splice(0,1)
-  global.strx = zex
+  ws.users.nn_out_arr = zex
   
-  if(global.strx[0]==''&&global.strx[1]==''&&global.strx[2]==''){
-   global.attention = 'NO LISTEN'
+  if(ws.users.all_thoughts.length == 0 && ws.users.nn_out_arr[0]==''&&ws.users.nn_out_arr[1]==''&&ws.users.nn_out_arr[2]==''&&ws.users.nn_out_arr[3]==''){
+   ws.users.attention = 'NO LISTEN'
    ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
   }
-  console.log(zex+' <--------------')
+  console.log(ws.users.nn_out_arr)
+  
   strx = commands(strx,ws)
+  
+  if(ws.users.silence){
+    strx = '_mute_'
+  }
+  
   sendToAska(strx,ws)
 };
 exports.set_to_run = set_to_run;

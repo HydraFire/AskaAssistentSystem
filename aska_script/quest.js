@@ -52,23 +52,20 @@ const reposition_up = function(answer,effects,onswer,ws){
     if(vector != 0){
       a.splice(i+vector,0,y[0])
     }       
-    jetpack.write('./JSON/data/'+ws.x_user+'/todo.json',a);
+    jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',a);
   }
 
 
-  //setTimeout(() => {
-  //
 
   console.log('interval START')
-
-
-
-
   let n = 0
-  let cycle_iid = setInterval(()=>{
-    n =n + 1 + global.close_all_intervals
+  let int_00 = ws.users.all_thoughts.length
+  ws.users.all_thoughts[int_00] = setInterval(()=>{
+    n++
+    console.log(n)
+
     answer.forEach((v,index)=>{
-      if(global[ws.x_user][4] == v){
+      if(ws.users.input_Array[4] == v){
         let x_x
         try{
           sendToAska('All is OK',ws);
@@ -79,119 +76,107 @@ const reposition_up = function(answer,effects,onswer,ws){
         }
         if(x_x){
 
-          let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
+          let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
           arrx.forEach((m,i)=>{
             if(m == effects){
               if(index == 0){
                 per(arrx,i,-1)
                 sendToAska(onswer[index],ws)
-                clearInterval(cycle_iid);
+                clearInterval(ws.users.all_thoughts[int_00])
+                ws.users.all_thoughts.splice(int_00,1)
                 console.log('interval close')
               }
               if(index == 1){
                 per(arrx,i,+1)
                 sendToAska(onswer[index],ws)
-                clearInterval(cycle_iid);
+                clearInterval(ws.users.all_thoughts[int_00])
+                ws.users.all_thoughts.splice(int_00,1)
                 console.log('interval close')
               }
               if(index == 2){
                 sendToAska(onswer[index],ws)
                 start_quest(ws,i)
-                clearInterval(cycle_iid);
+                clearInterval(ws.users.all_thoughts[int_00])
+                ws.users.all_thoughts.splice(int_00,1)
                 console.log('interval close')
               }
               if(index == 3){
                 per(arrx,i,0)
                 sendToAska(onswer[index],ws)
-                clearInterval(cycle_iid);
+                clearInterval(ws.users.all_thoughts[int_00])
+                ws.users.all_thoughts.splice(int_00,1)
                 console.log('interval close')
               }
             }
           })
         }
-
-
-
       }
     })
     if(n>60){  
-      clearInterval(cycle_iid);
+      clearInterval(ws.users.all_thoughts[int_00])
+      ws.users.all_thoughts.splice(int_00,1)
       console.log('interval close')
     }
-  },500)
-  //  }, 2000);
-
-
-
-
-
-
-  //debug('градусов тепла')
-
-
-  }                           
+  },1000)
+}                           
 exports.question = question;
 /////////////////////////////////////////////////////////////////////////////
 const add_quest = function(ws){
-  let text = global[ws.x_user][4];
+  let text = ws.users.input_Array[4];
   let n = 0
   console.log('begin interval')
-  let cycle = setInterval(()=>{
-
-
-    n =n + 1 + global.close_all_intervals
+  let int_00 = ws.users.all_thoughts.length
+  ws.users.all_thoughts[int_00]  = setInterval(()=>{
+    n++
     console.log(n)
-    if(n>60){
-      clearInterval(cycle);
-      console.log('interval close')
-    }
-    if(text != global[ws.x_user][4] ){
+
+    if(text != ws.users.input_Array[4]){
       let x_x
       try{
-        sendToAska(global[ws.x_user][4]+'. Добавила в список заданий',ws);
+        sendToAska(ws.users.input_Array[4]+'. Добавила в список заданий',ws);
         x_x = true
       }catch(err){
         x_x = false
         console.log(err)
       }
       if(x_x){
-        let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
+        let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
         if(!arrx){
           arrx = [
-            "создать еще одну запись",
-            "купить мыло"
+            "проверка всех систем"
           ]
-          jetpack.write('./JSON/data/'+ws.x_user+'/todo.json',arrx);
+          jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
         }
-        arrx.push(global[ws.x_user][4])
-        jetpack.write('./JSON/data/'+ws.x_user+'/todo.json',arrx);
-        //setTimeout(() => {
-        //}, 200);
-        clearInterval(cycle);
+        arrx.push(ws.users.input_Array[4])
+        jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
+        clearInterval(ws.users.all_thoughts[int_00])
+        ws.users.all_thoughts.splice(int_00,1)
         console.log('interval close')
-
       }}
-  },500)
+    if(n>60){
+      clearInterval(ws.users.all_thoughts[int_00])
+      ws.users.all_thoughts.splice(int_00,1)
+      console.log('interval close')
+    }
+  },1000)
   return 'записываю';
 }
 exports.add_quest = add_quest;
 
 const list_quest = function(effects,ws){
-  let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
-
-  //setTimeout(() => {
-
-
-
-
-  //sendToAska(ask,ws)
+  let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
+  if(!arrx){
+    return 'Список заданий еще не создан, создай первую запись.Просто скажи, новое задание'
+  }
   console.log('interval START')
   let n = 0
-  let cycle = setInterval(()=>{
-    n =n + 1 + global.close_all_intervals
-    let answer = jetpack.read('JSON/data/'+ws.x_user+'/todo.json','json');
+  let int_id = ws.users.all_thoughts.length
+  ws.users.all_thoughts[int_id] = setInterval(()=>{
+    n++
+    console.log(n)
+    let answer = jetpack.read('JSON/data/'+ws.users.name+'/todo.json','json');
     answer.forEach((v,i)=>{
-      if(global[ws.x_user][4] == v){
+      if(ws.users.input_Array[4] == v){
 
         setTimeout(() => {
           sendToAska('ты выбрал '+i+'-тую строчку в списке',ws)
@@ -204,46 +189,41 @@ const list_quest = function(effects,ws){
 
           }, 2200);
           */
-        }, 200);
-
-
-
-        clearInterval(cycle);
+        },200);
+        clearInterval(ws.users.all_thoughts[int_id])
+        ws.users.all_thoughts.splice(int_id,1)
       }
     })
 
     // },500)
-    if(n>120){  
-      clearInterval(cycle);
+    if(n>30){  
+      clearInterval(ws.users.all_thoughts[int_id])
+      ws.users.all_thoughts.splice(int_id,1)
       console.log('interval close')
     }
-  }, 500);
-
-
-
-
+  }, 1000);
+  ws.send('SYSTEM '+arrx.join(' ,'))
   return arrx.join(' ,');
 }
 exports.list_quest = list_quest;
 
 const finished_quest = function(ws){
-  let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/quest_finished.json','json').join(' ,');
-    console.log('create new file quest_finished.json')
-  
+  let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/quest_finished.json','json').join(' ,');
+  console.log('create new file quest_finished.json')
   return arrx;
 }
 exports.finished_quest = finished_quest;
 
 const start_quest = function(ws,one){
   //console.log('YRA')
-  let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json');
+  let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
   //console.log(arrx)
   if(!one){
-   one = arrx.length-1
+    one = arrx.length-1
   }
   let arrs = [arrx[one],this_real_time()];
   //NNQ.NNQ_to_train(arrx[one].split(' ').join('_'),ws)
-  jetpack.write('./JSON/data/'+ws.x_user+'/quest_ongoing.json',arrs);
+  jetpack.write('./JSON/data/'+ws.users.name+'/quest_ongoing.json',arrs);
 
   return 'я выбрала задание, '+arrx[one];
   ////////////////////////////////////////////////////////////////////
@@ -251,33 +231,29 @@ const start_quest = function(ws,one){
 exports.start_quest = start_quest;
 
 const finish_quest = function(ws){
-  let arrf = jetpack.read('./JSON/data/'+ws.x_user+'/quest_ongoing.json','json');
+  let arrf = jetpack.read('./JSON/data/'+ws.users.name+'/quest_ongoing.json','json');
   if(arrf[0] != 'none'){
     let arrrx = ['none']
-    jetpack.write('./JSON/data/'+ws.x_user+'/quest_ongoing.json',arrrx);
+    jetpack.write('./JSON/data/'+ws.users.name+'/quest_ongoing.json',arrrx);
 
-    let arrx = jetpack.read('./JSON/data/'+ws.x_user+'/todo.json','json')
+    let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json')
     let index = arrx.indexOf(arrf[0]);
     arrx.splice(index,1)
-    jetpack.write('./JSON/data/'+ws.x_user+'/todo.json',arrx);
-
+    jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
     //NNQ.NNQ_to_train(arrf[0],ws)
-    if(arrf[0] == 'почистить зубы'){
-      //polival_kystu.poured_flowers('Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ')
-    }
-
-    let aaa = jetpack.read('./JSON/data/'+ws.x_user+'/quest_finished.json','json');
+ 
+    let aaa = jetpack.read('./JSON/data/'+ws.users.name+'/quest_finished.json','json');
     if(!aaa){
-     aaa = [
-       [
-         "открыл этот сайт",
-         " , ,  1 секунда"
-       ]
-     ]
+      aaa = [
+        [
+          "открыл этот сайт",
+          " , ,  1 секунда"
+        ]
+      ]
     }
     let timer = calc_time(arrf[1]);
     aaa.push([arrf[0],timer]);
-    jetpack.write('./JSON/data/'+ws.x_user+'/quest_finished.json',aaa);
+    jetpack.write('./JSON/data/'+ws.users.name+'/quest_finished.json',aaa);
     return 'выполнено задание '+arrf[0]+', на него ушло '+timer;
   }else{
     return 'я недавала пока некаких заданий';
@@ -286,7 +262,7 @@ const finish_quest = function(ws){
 exports.finish_quest = finish_quest;
 
 const ongoing = function(ws){
-  let arr_ongoing = jetpack.read('./JSON/data/'+ws.x_user+'/quest_ongoing.json','json');
+  let arr_ongoing = jetpack.read('./JSON/data/'+ws.users.name+'/quest_ongoing.json','json');
   if(!arr_ongoing){
     arr_ongoing = [
       "розпросить о других функциях",
@@ -314,7 +290,7 @@ exports.ongoing = ongoing;
 //
 //
 const made_yesterday = function(adres,ws){
-  let arr_made = jetpack.read('./JSON/data/'+ws.x_user+'/'+adres,'json')
+  let arr_made = jetpack.read('./JSON/data/'+ws.users.name+'/'+adres,'json')
   if(!arr_made){
     arr_made = [
       [
@@ -331,11 +307,11 @@ const made_yesterday = function(adres,ws){
 exports.made_yesterday = made_yesterday;
 /////////////////////////////////////////////////////////////////////
 const remind = function(answer,adres,ws){
-  global.inter03 = 'START'
+  ws.users.int_end = 'START'
   console.log('REC')
-  global.silence = true
+  ws.users.silence = true
   //console.log('HERE <---------------')
-  let dreems = jetpack.read('./JSON/data/'+ws.x_user+'/'+adres,'json')
+  let dreems = jetpack.read('./JSON/data/'+ws.users.name+'/'+adres,'json')
 
   if(!dreems){
     dreems = [
@@ -346,40 +322,43 @@ const remind = function(answer,adres,ws){
       ]
     ]
   }
-  let buffer_interval = global[ws.x_user][4];
+  let buffer_interval = ws.users.input_Array[4];
   let arr_interval = []
   let n = 0
-  let iid = setInterval(()=>{
-    //console.log(n)
-    n=n+1+ global.close_all_intervals
-    if(buffer_interval != global[ws.x_user][4]){
-      buffer_interval = global[ws.x_user][4];
+  let int_id = ws.users.all_thoughts.length
+  ws.users.all_thoughts[int_id] = setInterval(()=>{
+    n++
+    console.log(n)
+    if(buffer_interval != ws.users.input_Array[4]){
+      buffer_interval = ws.users.input_Array[4];
       arr_interval.push(buffer_interval)
-      console.log(n+' global[ws.x_user] = '+global[ws.x_user][4]+' answer = '+answer)
-      if(global[ws.x_user][4] == answer){  
+      console.log(n+' global[ws.x_user] = '+ws.users.input_Array[4]+' answer = '+answer)
+      if(ws.users.input_Array[4] == answer){  
         ws.send('я всё окуратно записала')
         console.log('я всё окуратно записала')
         dreems.push(arr_interval)
 
         //sendToAska('SYSTEM '+JSON.stringify(arr_interval),ws)
-        global.inter03 = 'END';
-        jetpack.write('./JSON/data/'+ws.x_user+'/'+adres,dreems);
-        clearInterval(iid);
+        ws.users.int_end = 'END';
+        jetpack.write('./JSON/data/'+ws.users.name+'/'+adres,dreems);
+        clearInterval(ws.users.all_thoughts[int_id]);
+        ws.users.all_thoughts.splice(int_id,1)
         console.log('silence false')
-        global.silence = false;
+        ws.users.silence = false;
 
       }
     }
-    if(n>6000){
-      clearInterval(iid)
+    if(n>600){
+      clearInterval(ws.users.all_thoughts[int_id])
+      ws.users.all_thoughts.splice(int_id,1)
       console.log('Interval Close')
     }
-  },100)
+  },1000)
 
 
 
 
-  }
+}
 exports.remind = remind;
 /*
 const dreamsCome_true = function(answer,ws){
@@ -415,29 +394,40 @@ const listener_of_end = function(arr_command,ws){
   let n = 0
   let t = 0
   let k = 0
-  let interval_01
-  interval_01 = setInterval(()=>{
-    n =n + 1 + global.close_all_intervals
-    console.log(n)
-    if(!global.aska_state_01){
-      clearInterval(interval_01)
-      let interval_02
-      interval_02 = setInterval(()=>{
-        t =t + 1 + global.close_all_intervals
-        if(global.aska_state_01){
-          console.log('YOU HERE <----------------')
+  let int_id00 = ws.users.all_thoughts.length
 
-          clearInterval(interval_02)
+  ws.users.all_thoughts[int_id00] = setInterval(()=>{
+    n++
+    console.log(n)
+    if(!ws.users.aska_talks){
+      clearInterval(ws.users.all_thoughts[int_id00])
+      ws.users.all_thoughts.splice(int_id00,1)
+
+      let int_id01 = ws.users.all_thoughts.length
+      ws.users.all_thoughts[int_id01] = setInterval(()=>{
+        t++
+        console.log(t)
+        if(ws.users.aska_talks){
+          console.log('YOU HERE <----------------')
+          clearInterval(ws.users.all_thoughts[int_id01])
+          ws.users.all_thoughts.splice(int_id01,1)
+
           if(arr_command.length > 1){
             if(arr_command[0].includes('а что интересного было вчера')){
               remind('всё','Dreams.json',ws)
-              let interval_03
-              interval_03 = setInterval(()=>{
-                k=k+1+global.close_all_intervals
-                if(global.inter03 == 'END'){
-                  clearInterval(interval_03)
+
+              let int_id02 = ws.users.all_thoughts.length
+              console.log(int_id02)
+              ws.users.all_thoughts[int_id02] = setInterval(()=>{
+                k++
+                if(ws.users.int_end == 'END'){
+                  clearInterval(ws.users.all_thoughts[int_id02-1])
+                  console.log(int_id02)
+                  ws.users.all_thoughts.splice(int_id02-1,1)
                   let arr_re = Array.from(arr_command)
                   arr_re.splice(0,1)
+                  console.log('ZDESSSS')
+                  console.log(ws.users.all_thoughts)
                   let text1 = listener_of_end(arr_re,ws)
                   try{
                     sendToAska(text1,ws)
@@ -447,19 +437,24 @@ const listener_of_end = function(arr_command,ws){
                 }
                 if(k>1000){
                   console.log('clear interval_03')
-                  clearInterval(interval_03)
+                  clearInterval(ws.users.all_thoughts[int_id02])
+                  ws.users.all_thoughts.splice(int_id02,1)
                 }
               },500)
             }else if(arr_command[0].includes('что собираешься делать сегодня')){
               remind('всё','dreamsCome_true.json',ws)
-              let interval_03
-              interval_03 = setInterval(()=>{
-                k=k+1+global.close_all_intervals
-                if(global.inter03 == 'END'){
+
+              let int_id02 = ws.users.all_thoughts.length
+              ws.users.all_thoughts[int_id02] = setInterval(()=>{
+                k++
+                if(ws.users.int_end == 'END'){
+                  clearInterval(ws.users.all_thoughts[int_id02-1])
+                  ws.users.all_thoughts.splice(int_id02-1,1)
                   let arr_re = Array.from(arr_command)
                   arr_re.splice(0,1)
+                  //console.log('ZDESSSS')
+                  console.log(ws.users.all_thoughts)
                   let text1 = listener_of_end(arr_re,ws)
-                  clearInterval(interval_03)
                   try{
                     sendToAska(text1,ws)
                   }catch(err){
@@ -468,7 +463,8 @@ const listener_of_end = function(arr_command,ws){
                 }
                 if(k>100){
                   console.log('clear interval_03')
-                  clearInterval(interval_03)
+                  clearInterval(ws.users.all_thoughts[int_id02-1])
+                  ws.users.all_thoughts.splice(int_id02-1,1)
                 }
               },500)
             }else{
@@ -485,13 +481,15 @@ const listener_of_end = function(arr_command,ws){
           }
         }
         if(t>100){
-          clearInterval(interval_02)
+          clearInterval(ws.users.all_thoughts[int_id01])
+          ws.users.all_thoughts.splice(int_id01,1)
           console.log('Interval Close')
         }
       },500)
     }
     if(n>100){
-      clearInterval(interval_01)
+      clearInterval(ws.users.all_thoughts[int_id00])
+      ws.users.all_thoughts.splice(int_id00,1)
       console.log('Interval Close')
     }
   },500)

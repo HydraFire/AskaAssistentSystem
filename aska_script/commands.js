@@ -11,54 +11,57 @@ const webSearch = require('./webSearch');
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 
+
 exports.commands = function(strx,ws){
-  console.log(global[ws.x_user])
-  console.log('Ответ нейроной сети '+strx+'|')
-  if(global[ws.x_user][4].includes('запом')){
-    let ask = global[ws.x_user][2]
-    let answer = global[ws.x_user][3]
-    if(ask == ' ' || answer == ' '){
-      strx = 'я немогу запомнить пустую информацию'
-    }else{
-      strx = memory_fun.save(ask,answer,ws)
+  console.log(global[ws.users.name])
+  console.log('Ответ нейроной сети |'+strx+'|')
+  if(ws.users.all_thoughts.length == 0){
+///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+    if(ws.users.input_Array[4].includes('запом')){
+      let ask = ws.users.input_Array[2]
+      let answer = ws.users.input_Array[3]
+      if(ask == ' ' || answer == ' '){
+        strx = 'я немогу запомнить пустую информацию'
+      }else{
+        strx = memory_fun.save(ask,answer,ws)
+      }
+      ws.send(strx)
+      strx = ''
     }
-    ws.send(strx)
-    strx = ''
-  }
-  if(global[ws.x_user][4].includes('подума') ||
-     global[ws.x_user][4].includes('обучение')){
-    strx = NNQ.aska_learn_quest_main(ws)
-    ws.send(strx)
-  }
-  if(global[ws.x_user][4].includes('заткнись') ||
-     global[ws.x_user][4].includes('помолчи')){
-    global.attention = 'NO LISTEN'
-    ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
-    strx = ''
-  }
+    if(ws.users.input_Array[4].includes('подума') ||
+       ws.users.input_Array[4].includes('обучение')){
+      strx = NNQ.aska_learn_quest_main(ws)
+      ws.send(strx)
+    }
+    if(ws.users.input_Array[4].includes('заткнись') ||
+       ws.users.input_Array[4].includes('помолчи')){
+      ws.users.attention = 'NO LISTEN'
+      ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
+      strx = ''
+    }
 
 
-  if(global[ws.x_user][4].includes('вакансии джаваскрипт')){
-    let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
-    let leng = 360
-    let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
-    webSearch.post_to_str(ws,site,leng,search_text)
-    strx = ''
-  }
-  if(global[ws.x_user][4].includes('вакансии игры')){
-    let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=game';
-    let leng = 360
-    let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
-    webSearch.post_to_str(ws,site,leng,search_text)
-    strx = ''
-  }
+    if(ws.users.input_Array[4].includes('вакансии джаваскрипт')){
+      let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
+      let leng = 360
+      let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
+      webSearch.post_to_str(ws,site,leng,search_text)
+      strx = ''
+    }
+    if(ws.users.input_Array[4].includes('вакансии игры')){
+      let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=game';
+      let leng = 360
+      let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
+      webSearch.post_to_str(ws,site,leng,search_text)
+      strx = ''
+    }
 
 
-  if(global.silence){
-    strx = '_mute_'
-  }
 
-  /*
+
+    /*
   if(global[ws.x_user][4].includes('найди')){
      let site = 'https://www.youtube.com/channel/UCdKuE7a2QZeHPhDntXVZ91w';
      let leng = 50
@@ -67,14 +70,14 @@ exports.commands = function(strx,ws){
      strx = ''
     }
     */
-  //////////////////////////////// USERS /////////////////////////////////////
-  // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
-  //   strx = 'Хозяин, желаешь чего?'
-  // }
-  // if(windowManager.sharedData.fetch('buffer_text').includes('unidentified')){
-  //    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
-  //}
-  /*
+    //////////////////////////////// USERS /////////////////////////////////////
+    // if(windowManager.sharedData.fetch('buffer_text').includes('HydraFire')){
+    //   strx = 'Хозяин, желаешь чего?'
+    // }
+    // if(windowManager.sharedData.fetch('buffer_text').includes('unidentified')){
+    //    strx = 'Внимание, ваш ip адрес, не закреплен, ни за одним, из пользователей, обратитесь к анминистратору'
+    //}
+    /*
   if(windowManager.sharedData.fetch('buffer_text').includes('звуки природы')){
     let links = [
       "https://www.youtube.com/embed/YnvOQji6zZ0?ecver=1",
@@ -90,261 +93,249 @@ exports.commands = function(strx,ws){
   ///////////////////////////////////////////////////////////////////////////////
   */
 
-  if(strx.includes('fa0') &&
-     strx.includes('fa1') &&
-     strx.includes('fa2') &&
-     strx.includes('fa3')){
-    let htmlx = ''
-    let arr = jetpack.list('./public/files')
-    arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
-    ws.send('SYSTEM'+htmlx)
-    strx = ''
-  }
-  if(strx.includes('fb0') &&
-     strx.includes('fb1') &&
-     strx.includes('fb2') &&
-     strx.includes('fb3')){
-    let htmlx = ''
-    let arr = jetpack.list('./public/files/music')
-    arr.forEach((v)=>{
-      if(global.playing_music == v){
-        htmlx+=`<p><a style="color:red;" href="files/music/${v}" download>${v}</a></p>`
-      }else{
-        htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`
-      }
-    })
-    ws.send('SYSTEM'+htmlx)
-    strx = ''
-  }
+    if(strx.includes('fa0') &&
+       strx.includes('fa1') &&
+       strx.includes('fa2') &&
+       strx.includes('fa3')){
+      let htmlx = ''
+      let arr = jetpack.list('./public/files')
+      arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
+      ws.send('SYSTEM'+htmlx)
+      strx = ''
+    }
+    if(strx.includes('fb0') &&
+       strx.includes('fb1') &&
+       strx.includes('fb2') &&
+       strx.includes('fb3')){
+      let htmlx = ''
+      let arr = jetpack.list('./public/users/'+ws.users.name+'/music')
+      arr.forEach((v)=>{
+        if(global.playing_music == v){
+          htmlx+=`<p><a style="color:red;" href="files/music/${v}" download>${v}</a></p>`
+        }else{
+          htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`
+        }
+      })
+      ws.send('SYSTEM'+htmlx)
+      strx = ''
+    }
 
-  if(strx.includes('sa0') &&
-     strx.includes('sa1') &&
-     strx.includes('sa2') &&
-     strx.includes('sa3')){
-    let rate = 44
-    strx = circle.sigi_remove('сигареты',rate,ws)
-    ws.send(strx);strx = '';
-  }
-  if(strx.includes('sb0') &&
-     strx.includes('sb1') &&
-     strx.includes('sb2') &&
-     strx.includes('sb3')){
-    let rate = 44
-    strx = circle.sigi('сигареты',rate,ws)
-    ws.send(strx);strx = '';
-  }
-  if(strx.includes('sc0') &&
-     strx.includes('sc1') &&
-     strx.includes('sc2') &&
-     strx.includes('sc3') &&
-     strx.includes('sc4')){
-    let arr_timeX = 
-        [
-          2017,
-          6,
-          23,
-          23,
-          59
-        ]
-    let rate = 44
-    strx = circle.sigi_minus('сигареты',rate,arr_timeX,ws)
-    ws.send(strx);strx = '';
-  }
-  //////////////////////////////////////////////////////////////////////////
-  if(strx.includes('ba0') &&
-     strx.includes('ba1') &&
-     strx.includes('ba2') &&
-     strx.includes('ba3')){
-    let rate = 26
-    strx = circle.sigi_remove('банки',rate,ws)
-    ws.send(strx);strx = '';
-  }
-  if(strx.includes('bb0') &&
-     strx.includes('bb1') &&
-     strx.includes('bb2') && 
-     strx.includes('bb3')){
-    let rate = 26
-    strx = circle.sigi('банки',rate,ws)
-    ws.send(strx);strx = '';
-  }
-  if(strx.includes('bc0') &&
-     strx.includes('bc1') &&
-     strx.includes('bc2') && 
-     strx.includes('bc3') &&
-     strx.includes('bc4')){
-    let arr_timeX = 
-        [
-          2017,
-          6,
-          28,
-          23,
-          59
-        ]
-    let rate = 26
-    strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
-    ws.send(strx);strx = '';
-  }
-  if(strx.includes('bd0') &&
-     strx.includes('bd1') &&
-     strx.includes('bd2') &&
-     strx.includes('bd3')){
-    let mki = jetpack.read('./public/files/secred_text.json','text')
-    ws.send(mki);strx = '';
-  }
-  ///////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////
+    if(strx.includes('sa0') &&
+       strx.includes('sa1') &&
+       strx.includes('sa2') &&
+       strx.includes('sa3')){
+      let rate = 44
+      strx = circle.sigi_remove('сигареты',rate,ws)
+      ws.send(strx);strx = '';
+    }
+    if(strx.includes('sb0') &&
+       strx.includes('sb1') &&
+       strx.includes('sb2') &&
+       strx.includes('sb3')){
+      let rate = 44
+      strx = circle.sigi('сигареты',rate,ws)
+      ws.send(strx);strx = '';
+    }
+    if(strx.includes('sc0') &&
+       strx.includes('sc1') &&
+       strx.includes('sc2') &&
+       strx.includes('sc3') &&
+       strx.includes('sc4')){
+      let arr_timeX = 
+          [
+            2017,
+            6,
+            23,
+            23,
+            59
+          ]
+      let rate = 44
+      strx = circle.sigi_minus('сигареты',rate,arr_timeX,ws)
+      ws.send(strx);strx = '';
+    }
+    //////////////////////////////////////////////////////////////////////////
+    if(strx.includes('ba0') &&
+       strx.includes('ba1') &&
+       strx.includes('ba2') &&
+       strx.includes('ba3')){
+      let rate = 26
+      strx = circle.sigi_remove('банки',rate,ws)
+      ws.send(strx);strx = '';
+    }
+    if(strx.includes('bb0') &&
+       strx.includes('bb1') &&
+       strx.includes('bb2') && 
+       strx.includes('bb3')){
+      let rate = 26
+      strx = circle.sigi('банки',rate,ws)
+      ws.send(strx);strx = '';
+    }
+    if(strx.includes('bc0') &&
+       strx.includes('bc1') &&
+       strx.includes('bc2') && 
+       strx.includes('bc3') &&
+       strx.includes('bc4')){
+      let arr_timeX = 
+          [
+            2017,
+            6,
+            28,
+            23,
+            59
+          ]
+      let rate = 26
+      strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
+      ws.send(strx);strx = '';
+    }
+    if(strx.includes('bd0') &&
+       strx.includes('bd1') &&
+       strx.includes('bd2') &&
+       strx.includes('bd3')){
+      let mki = jetpack.read('./public/files/secred_text.json','text')
+      ws.send(mki);strx = '';
+    }
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    console.log(`
+////////////////////////////
+///ALL//INTERVAL//CLEAR/////
+////////////////////////////`)
 
-  console.log('работает0')
-  if(strx.includes('pa0') &&
-     strx.includes('pa1') &&
-     strx.includes('pa2') &&
-     strx.includes('pa3') && ws.x_user == 'HydraFire'){
-    strx = polival_kystu.when_watered('Поливал_кусты','Последний раз поливал ')
-    ws.send(strx);strx = '';
-  }else
-    if(strx.includes('pb0') &&
-       strx.includes('pb1') &&
-       strx.includes('pb2') &&
-       strx.includes('pb3') && ws.x_user == 'HydraFire'){
-      strx = polival_kystu.poured_flowers('Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
+    if(strx.includes('pa0') &&
+       strx.includes('pa1') &&
+       strx.includes('pa2') &&
+       strx.includes('pa3')){
+      console.log(ws.users.name+'<------------------------1')
+      strx = polival_kystu.when_watered(ws,'Поливал_кусты','Последний раз поливал ')
       ws.send(strx);strx = '';
     }else
-      if(strx.includes('za0') &&
-         strx.includes('za1') &&
-         strx.includes('za2') &&
-         strx.includes('za3') && ws.x_user == 'HydraFire'){
-        strx = polival_kystu.when_watered('Когда_чистил_зубы','Последний раз чистил зубы ')
+      if(strx.includes('pb0') &&
+         strx.includes('pb1') &&
+         strx.includes('pb2') &&
+         strx.includes('pb3')){
+        strx = polival_kystu.poured_flowers(ws,'Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
         ws.send(strx);strx = '';
       }else
-        if(strx.includes('zb0') &&
-           strx.includes('zb1') &&
-           strx.includes('zb2') &&
-           strx.includes('zb3') && ws.x_user == 'HydraFire'){
-          strx = polival_kystu.poured_flowers('Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
+        if(strx.includes('za0') &&
+           strx.includes('za1') &&
+           strx.includes('za2') &&
+           strx.includes('za3')){
+          strx = polival_kystu.when_watered(ws,'Когда_чистил_зубы','Последний раз чистил зубы ')
           ws.send(strx);strx = '';
-        }
+        }else
+          if(strx.includes('zb0') &&
+             strx.includes('zb1') &&
+             strx.includes('zb2') &&
+             strx.includes('zb3')){
+            strx = polival_kystu.poured_flowers(ws,'Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
+            ws.send(strx);strx = '';
+          }
 
-  /*
+    /*
 
   ///////////////////////////////////////////////////////////////////////////////
   //                  МУЗЫКАЛЬНЫЙ ПЛЕЕР
   //////////////////////////////////////////////////////////////////////////////
   */
-
-  let first_buffer = global[ws.x_user]
-
-  if(strx.includes('mb0') &&
-     strx.includes('mb1') &&
-     strx.includes('mb2') &&
-     strx.includes('mb3')){
-    strx = aska_DJ.stop()
-  }else if(strx.includes('ma0') &&
-           strx.includes('ma1') &&
-           strx.includes('ma2') &&
-           strx.includes('ma3') &&
-           strx.includes('ma4')){
-    strx = aska_DJ.start('new')
-  }
-  /////////////////////////////////////////////////////////////////////////
-  if(strx.includes('mc0') &&
-     strx.includes('mc1') &&
-     strx.includes('mc2') &&
-     strx.includes('mc3')){
-    strx = aska_DJ.next(2,true)
-  }
-  if(strx.includes('md0') &&
-     strx.includes('md1') &&
-     strx.includes('md2') &&
-     strx.includes('md3')){
-    let axc = global[ws.x_user][4]
-    strx = aska_DJ.searchTrack(axc)
-  }
-  if(strx.includes('me0') &&
-     strx.includes('me1') &&
-     strx.includes('me2') &&
-     strx.includes('me3')){
-    strx = aska_DJ.volume('+',0.2)
-  }else if(strx.includes('mf0') &&
-           strx.includes('mf1') &&
-           strx.includes('mf2') &&
-           strx.includes('mf3')){
-    strx = aska_DJ.volume('+',0.4)
-  }
-  if(strx.includes('mg0') &&
-     strx.includes('mg1') &&
-     strx.includes('mg2') &&
-     strx.includes('mg3')){
-    strx = aska_DJ.volume('-',0.2)
-  }else if(strx.includes('mi0') &&
-           strx.includes('mi1') &&
-           strx.includes('mi2') &&
-           strx.includes('mi3')){
-    strx = aska_DJ.volume('-',0.4)
-  }
-
-  if(strx.includes('mu0') &&
-     strx.includes('mu1') &&
-     strx.includes('mu2') &&
-     strx.includes('mu3') && ws.x_user == 'HydraFire'){
-    strx = aska_DJ.next(-5,false)
-  }
-  if(strx.includes('mk0') &&
-     strx.includes('mk1') &&
-     strx.includes('mk2') &&
-     strx.includes('mk3') && ws.x_user == 'HydraFire'){
-    strx = aska_DJ.next(5,true)
-  }
-  ////////////////////////////////////////////////////////////////////////////// 
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  // 
-  //  
-  //   
-
-  //      
-  //       
-  //        
-  //
-
-  let text_do = global[ws.x_user]
-  let x_x_access = false
-  let ip_arr = [
-    ['HydraFire','159.224.183.122'],
-    ['HydraFire','159.224.183.122'],
-    ['Noir','46.30.41.26']
-  ]
-  ip_arr.forEach((v)=>{
-    if(v[0] == ws.x_user){
-      x_x_access = true
+    if(strx.includes('mb0') &&
+       strx.includes('mb1') &&
+       strx.includes('mb2') &&
+       strx.includes('mb3')){
+      strx = aska_DJ.stop(ws)
+    }else if(strx.includes('ma0') &&
+             strx.includes('ma1') &&
+             strx.includes('ma2') &&
+             strx.includes('ma3') &&
+             strx.includes('ma4')){
+      strx = aska_DJ.start(ws,'new')
     }
-  })
+    /////////////////////////////////////////////////////////////////////////
+    if(strx.includes('mc0') &&
+       strx.includes('mc1') &&
+       strx.includes('mc2') &&
+       strx.includes('mc3')){
+      strx = aska_DJ.next(ws,2,true)
+    }
+    if(strx.includes('md0') &&
+       strx.includes('md1') &&
+       strx.includes('md2') &&
+       strx.includes('md3')){
+      let axc = ws.users.input_Array[4]
+      strx = aska_DJ.searchTrack(ws,axc)
+    }
+    if(strx.includes('me0') &&
+       strx.includes('me1') &&
+       strx.includes('me2') &&
+       strx.includes('me3')){
+      strx = aska_DJ.volume('+',0.2)
+    }else if(strx.includes('mf0') &&
+             strx.includes('mf1') &&
+             strx.includes('mf2') &&
+             strx.includes('mf3')){
+      strx = aska_DJ.volume('+',0.4)
+    }
+    if(strx.includes('mg0') &&
+       strx.includes('mg1') &&
+       strx.includes('mg2') &&
+       strx.includes('mg3')){
+      strx = aska_DJ.volume('-',0.2)
+    }else if(strx.includes('mi0') &&
+             strx.includes('mi1') &&
+             strx.includes('mi2') &&
+             strx.includes('mi3')){
+      strx = aska_DJ.volume('-',0.4)
+    }
 
-  console.log(global[ws.x_user])
+    if(strx.includes('mu0') &&
+       strx.includes('mu1') &&
+       strx.includes('mu2') &&
+       strx.includes('mu3')){
+      strx = aska_DJ.next(ws,-5,false)
+    }
+    if(strx.includes('mk0') &&
+       strx.includes('mk1') &&
+       strx.includes('mk2') &&
+       strx.includes('mk3')){
+      strx = aska_DJ.next(ws,5,true)
+    }
+    ////////////////////////////////////////////////////////////////////////////// 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // 
+    //  
+    //   
 
-  if(strx.includes('na0') &&
-     strx.includes('na1') &&
-     strx.includes('na2') &&
-     strx.includes('na3') &&
-     strx.includes('na4') && x_x_access ){
-    strx = quest.add_quest(ws)
-  }
+    //      
+    //       
+    //        
+    //
 
-  if(strx.includes('nb0') &&
-     strx.includes('nb1') &&
-     strx.includes('nb2') &&
-     strx.includes('nb3') && x_x_access){
-    let effects = 'что с ней сделать?'
-    strx = quest.list_quest(effects,ws)
-  }
-  if(strx.includes('nc0') &&
-     strx.includes('nc1') &&
-     strx.includes('nc2') &&
-     strx.includes('nc3') &&
-     strx.includes('nc4') && x_x_access){
-    strx = quest.start_quest(ws)
-  }
+   
 
-  /*
+    if(strx.includes('na0') &&
+       strx.includes('na1') &&
+       strx.includes('na2') &&
+       strx.includes('na3') &&
+       strx.includes('na4')){
+      strx = quest.add_quest(ws)
+    }
+
+    if(strx.includes('nb0') &&
+       strx.includes('nb1') &&
+       strx.includes('nb2') &&
+       strx.includes('nb3')){
+      let effects = 'что с ней сделать?'
+      strx = quest.list_quest(effects,ws)
+    }
+    if(strx.includes('nc0') &&
+       strx.includes('nc1') &&
+       strx.includes('nc2') &&
+       strx.includes('nc3') &&
+       strx.includes('nc4')){
+      strx = quest.start_quest(ws)
+    }
+
+    /*
   if(text_do.includes('что мне делать')){
     //let arrx = jetpack.read('JSON/todo.json','json');
     //strx = quest.start_quest(arrx.length-1,ws)
@@ -355,14 +346,14 @@ exports.commands = function(strx,ws){
   }
   */
 
-  if(strx.includes('nd0') &&
-     strx.includes('nd1') &&
-     strx.includes('nd2') &&
-     strx.includes('nd3') &&
-     strx.includes('nd4') && x_x_access){
-    strx = quest.finish_quest(ws)
-  }
-  /*
+    if(strx.includes('nd0') &&
+       strx.includes('nd1') &&
+       strx.includes('nd2') &&
+       strx.includes('nd3') &&
+       strx.includes('nd4')){
+      strx = quest.finish_quest(ws)
+    }
+    /*
   if(strx.includes('ne0') &&
      strx.includes('ne1') &&
      strx.includes('ne2') &&
@@ -371,34 +362,33 @@ exports.commands = function(strx,ws){
     strx = quest.finished_quest(ws)
   }
   */
-  if(strx.includes('nf0') &&
-     strx.includes('nf1') &&
-     strx.includes('nf2') &&
-     strx.includes('nf3') && x_x_access
-    ){
-    strx = quest.ongoing(ws)
-  }
+    if(strx.includes('nf0') &&
+       strx.includes('nf1') &&
+       strx.includes('nf2') &&
+       strx.includes('nf3')){
+      strx = quest.ongoing(ws)
+    }
 
-  if(strx.includes('da0') &&
-     strx.includes('da1') &&
-     strx.includes('da2') &&
-     strx.includes('da3') &&
-     strx.includes('da4') && x_x_access){
-    let text0 = ['самое интересное что ты сделал позавчера',
-                 'made_yesterday()',
-                 'а что интересного было вчера',
-                 'remind()',
-                 'а вчера ты планировал сделать',
-                 'wanted_yesterday()',
-                 'что собираешься делать сегодня',
-                 'dreamsCome_true()',
-                 'ясно, давай, всё получится, позже ты будешь это вспоминать',
-                 'похоже всё работает, я очень рада что могу быть тебе полезной']
+    if(strx.includes('da0') &&
+       strx.includes('da1') &&
+       strx.includes('da2') &&
+       strx.includes('da3') &&
+       strx.includes('da4')){
+      let text0 = ['самое интересное что ты сделал позавчера',
+                   'made_yesterday()',
+                   'а что интересного было вчера',
+                   'remind()',
+                   'а вчера ты планировал сделать',
+                   'wanted_yesterday()',
+                   'что собираешься делать сегодня',
+                   'dreamsCome_true()',
+                   'ясно, давай, всё получится, позже ты будешь это вспоминать',
+                   'похоже всё работает, я очень рада что могу быть тебе полезной']
 
-    strx = quest.listener_of_end(text0,ws)
-  }
+      strx = quest.listener_of_end(text0,ws)
+    }
 
-  /*
+    /*
   //  if(text_do.includes('вчера')){
   //    quest.made_yesterday(ws)
   ///  }
@@ -423,7 +413,7 @@ exports.commands = function(strx,ws){
   }
 */
 
-  /*  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
+    /*  if(windowManager.sharedData.fetch('buffer_text').includes('покажи')){
     let htmlx = `SYSTEM<iframe src="//coub.com/embed/t26on?muted=false&autostart=true&originalSize=true&startWithHD=true" allowfullscreen="false" frameborder="0" width="1280" height="720"></iframe>`
     let stopin = `SYSTEM<p>Like</p>`;
     //nervMessage(htmlx,ws);
@@ -431,7 +421,7 @@ exports.commands = function(strx,ws){
       //nervMessage(stopin,ws)
     },15500)
  }*/ 
-  /*
+    /*
   if(windowManager.sharedData.fetch('buffer_text').includes('видео')){
     let htmlx = `EVALlet contentt = document.querySelector('.info');
 contentt.innerHTML = '<video class="player__video viewer" src="amv/00.mp4" autoplay></video>';
@@ -448,12 +438,13 @@ video.currentTime = (3*60)+24;
   }
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
-  if(windowManager.sharedData.fetch('buffer_text').includes('график')){
+  */
+  if(ws.users.input_Array[4].includes('график')){
     let adress = 'Когда_чистил_зубы';
-    let arr_json = jetpack.read('F:/ajr/JSON/'+adress+'.json','txt');
+    let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/'+adress+'.json','txt');
 
     arr_json = `EVALvar arr_json = ${arr_json};`;
-    nervMessage(arr_json,ws);
+    ws.send(arr_json,ws);
     //jetpack.read('F:/ajr/JSON/'+adress+'.json','json');
 
     let htmlx = `EVAL
@@ -558,9 +549,9 @@ options: options2
 }
 grafics('Поливал_кусты',10)
 `;
-    nervMessage(htmlx,ws);
+    ws.send(htmlx,ws);
   }
-
+/*
 
 
 
@@ -598,9 +589,9 @@ grafics('Поливал_кусты',10)
   }
 
 */
-  if(global[ws.x_user][4].includes('удали последний элемент массива обучения')){
-     strx = NNQ.aska_learn_delete(ws)
-    //ws.send(strx)
+    if(ws.users.input_Array[4].includes('удали последний элемент массива обучения')){
+      strx = NNQ.aska_learn_delete(ws)
+    }
   }
   return strx
 }
