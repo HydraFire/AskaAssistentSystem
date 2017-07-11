@@ -62,10 +62,6 @@ wss.on("connection", function(ws){
   if(user_ip == '159.224.183.122'){
    ws.send('Доступ розрешон')
    let login_data = 'USERHydraFire||1||159.224.183.122'
-   if(ws.users.all_thoughts){
-      ws.users.all_thoughts.forEach((v)=>{clearInterval(v)})
-      console.log('CLOSE CONNECTION')
-    }
    registration.login(ws,login_data)
   }else{
    ws.send('Доступ в общественую ветку')

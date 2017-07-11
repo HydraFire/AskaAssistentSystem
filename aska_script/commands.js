@@ -98,7 +98,7 @@ exports.commands = function(strx,ws){
        strx.includes('fa2') &&
        strx.includes('fa3')){
       let htmlx = ''
-      let arr = jetpack.list('./public/files')
+      let arr = jetpack.list('./public/users/'+ws.users.name)
       if(arr){
       arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
       ws.send('SYSTEM'+htmlx)
