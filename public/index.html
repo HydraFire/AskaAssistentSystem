@@ -8,7 +8,6 @@
 
 
 
-    <script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   </head>
   <body>
@@ -230,7 +229,7 @@
     document.querySelector('.registration').remove()
     interface.style.fontSize = '130pt'
     interface.style.paddingTop = '0px';
-    socket.send('USER'+login+'||'+password+'||'+userip)
+    socket.send('USER'+login+'||'+password+'||'+'0')
     setTimeout(()=>{
       socket.send('aska_play_music_false')
     },1000)
@@ -495,7 +494,7 @@
     console.log(transcript);
   });
 
-  recognition.start()
+  //recognition.start()
   if(localStorage.wait == 'wait'){
     recognition.addEventListener('end', recognition.start)
   }
@@ -635,9 +634,16 @@
     //console.log(frequencies[10])
     //ctx.fillStyle='#FFFFFF';
     let calc_hue
+    let arr_fre = []
     console.log(window.color_aska)
+    frequencies.forEach((v)=>{arr_fre.push(v)})
+    arr_fre.reverse()
+    frequencies.forEach((v)=>{arr_fre.push(v)})
+    for(i=0;i<550;i++){
+    arr_fre.splice(0,1)
+    }
     waveform.forEach((v,index)=>{
-      calc_hue = window.color_aska +(waveform[index]/4)
+      calc_hue = window.color_aska +(arr_fre[index]/4)
       //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
       //(120, 100%, 75%);
       ctx.fillStyle=`hsl(${calc_hue},100%,55%)`;
