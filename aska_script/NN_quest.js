@@ -204,7 +204,7 @@ exports.aska_learn_quest = aska_learn_quest;
 ////////////////////////////////////////////////////////////
 */
 const aska_learn_delete = function(ws){
-  let trainFileMain = './JSON/data/'+ws.x_user+'/NN_Train.json';
+  let trainFileMain = './JSON/data/'+ws.users.name+'/NN_Train.json';
   var data = jetpack.read(trainFileMain,'json');
   let zzz = data[data.length-1]
   let zzzd = _.pairs(zzz.input)
@@ -239,8 +239,8 @@ const aska_learn_delete = function(ws){
 
 const aska_learn_quest_main = function(ws){
   let first_time = this_real_time()
-  let trainFileMain = './JSON/data/'+ws.x_user+'/NN_Train.json';
-  let NN_train_buffer = './JSON/data/'+ws.x_user+'/NN_train_buffer.json';
+  let trainFileMain = './JSON/data/'+ws.users.name+'/NN_Train.json';
+  let NN_train_buffer = './JSON/data/'+ws.users.name+'/NN_train_buffer.json';
   const net = new brain.NeuralNetwork({
     hiddenLayers: calc_layers(trainFileMain) // global learning rate, useful when training using streams
   });

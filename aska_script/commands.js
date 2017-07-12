@@ -7,6 +7,7 @@ const quest = require('./quest');
 const circle = require('./circle')
 const memory_fun = require('./memory_fun');
 const webSearch = require('./webSearch');
+const messenger = require('./messenger');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
@@ -38,7 +39,7 @@ exports.commands = function(strx,ws){
     if(ws.users.input_Array[4].includes('заткнись') ||
        ws.users.input_Array[4].includes('помолчи')){
       ws.users.attention = 'NO LISTEN'
-      ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
+      ws.send('EVALwindow.color_aska_h = 20;aska("режим ожидания")')
       strx = ''
     }
 
@@ -57,8 +58,31 @@ exports.commands = function(strx,ws){
       webSearch.post_to_str(ws,site,leng,search_text)
       strx = ''
     }
-
-
+    if(strx.includes('ua0') &&
+       strx.includes('ua1') &&
+       strx.includes('ua2') &&
+       strx.includes('ua3')){
+      ws.send('диктуй текст сообщения')
+      let userM = ''
+      if(ws.users.name == 'HydraFire'){
+        userM = 'Noir'
+      }else{
+        userM = 'HydraFire'
+      }
+      messenger.rec(ws,'всё','all_messege.json',userM)
+      strx = ''
+    }
+    if(strx.includes('ub0') &&
+       strx.includes('ub1') &&
+       strx.includes('ub2') &&
+       strx.includes('ub3') &&
+       strx.includes('ub4')){
+      ws.send('сообщение от пользователя HydraFire')
+      setTimeout(()=>{
+      messenger.read(ws,'last','all_messege.json')
+      },2000)
+      strx = ''
+    }
 
 
     /*
@@ -100,7 +124,7 @@ exports.commands = function(strx,ws){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name)
       if(arr){
-      arr.forEach(v=>htmlx+=`<p><a href="files/${v}" download>${v}</a></p>`)
+      arr.forEach(v=>htmlx+=`<p><a href="./public/users/${ws.users.name}/${v}" download>${v}</a></p>`)
       ws.send('SYSTEM'+htmlx)
       strx = ''
       }else{
@@ -115,10 +139,10 @@ exports.commands = function(strx,ws){
       let arr = jetpack.list('./public/users/'+ws.users.name+'/music')
       if(arr){
       arr.forEach((v)=>{
-        if(global.playing_music == v){
-          htmlx+=`<p><a style="color:red;" href="files/music/${v}" download>${v}</a></p>`
+        if(ws.users.playing_music == v){
+          htmlx+=`<p><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
         }else{
-          htmlx+=`<p><a href="files/music/${v}" download>${v}</a></p>`
+          htmlx+=`<p><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
         }
       })
       ws.send('SYSTEM'+htmlx)

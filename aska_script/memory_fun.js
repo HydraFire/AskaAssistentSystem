@@ -4,7 +4,7 @@ const jetpack = require('fs-jetpack');
 
 
 const save = function(ask,answer,ws){
-  var adreesJSON = './JSON/data/'+ws.x_user+'/NN_Train.json';
+  var adreesJSON = './JSON/data/'+ws.users.name+'/NN_Train.json';
   var NN_Train = jetpack.read(adreesJSON,'json');
   if(!NN_Train){
     NN_Train = [

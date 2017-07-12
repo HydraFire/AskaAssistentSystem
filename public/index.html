@@ -443,24 +443,8 @@
          transcript.toLowerCase() == 'авто'){
         //localStorage.wait = 'start';
         p.textContent = 'ASKA';
-        //localStorage.aska_time_out = 5;
-        /*
-        let aska_listener
-        let i
-        aska_listener = setInterval(()=>{
-          i = localStorage.aska_time_out;
-          i--;
-          localStorage.aska_time_out = i;
-          document.title = `00:${i < 10 ? '0' : ''}${i}`;
-          if(i<0){
-            //console.log('many times')
-            document.title = 'Say:"ASKA" to Activate';
-            localStorage.wait = 'wait';
-            clearInterval(aska_listener);
-          }
-        },1000)
-        */
-        window.color_aska = 160
+        window.color_aska = 350
+        window.color_aska_h = 100
         aska('а')
         socket.send('LISTEN')
       }
@@ -580,7 +564,7 @@
       run_code(event.data)
 
       let calc_hue = (new Date().getHours()*15)+0
-      displayit(event.data,`hsl(${170},100%,25%)`)
+      displayit(event.data,`hsl(${20},${window.color_aska_h}%,25%)`)
     }else{
       aska(event.data);
     }
@@ -609,7 +593,8 @@
   canvas.width = 1920;
   canvas.height = 1080;
   init()
-  window.color_aska = 160
+  window.color_aska = 350
+  window.color_aska_h = 100
   //video_animation()
   window.onload = function(){
     var inpElelement = document.getElementById('stringOftext')
@@ -646,7 +631,7 @@
       calc_hue = window.color_aska +(arr_fre[index]/4)
       //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
       //(120, 100%, 75%);
-      ctx.fillStyle=`hsl(${calc_hue},100%,55%)`;
+      ctx.fillStyle=`hsl(${calc_hue},${window.color_aska_h}%,55%)`;
 
       //ctx.fillStyle=`hsl(220,100%,55%)`;
       ctx.fillRect(index*2,0,1,v*3)
