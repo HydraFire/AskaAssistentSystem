@@ -139,7 +139,7 @@ exports.commands = function(strx,ws){
       let arr = jetpack.list('./public/users/'+ws.users.name+'/music')
       if(arr){
       arr.forEach((v)=>{
-        if(ws.users.playing_music == v){
+        if(ws.users.track == v){
           htmlx+=`<p><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
         }else{
           htmlx+=`<p><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
