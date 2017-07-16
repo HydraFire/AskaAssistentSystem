@@ -420,6 +420,7 @@ const listener_of_end = function(arr_command,ws){
               console.log(int_id02)
               ws.users.all_thoughts[int_id02] = setInterval(()=>{
                 k++
+                console.log(k)
                 if(ws.users.int_end == 'END'){
                   clearInterval(ws.users.all_thoughts[int_id02-1])
                   console.log(int_id02)
@@ -435,7 +436,7 @@ const listener_of_end = function(arr_command,ws){
                     console.log(err)
                   }
                 }
-                if(k>1000){
+                if(k>2000){
                   console.log('clear interval_03')
                   clearInterval(ws.users.all_thoughts[int_id02])
                   ws.users.all_thoughts.splice(int_id02,1)
@@ -447,6 +448,7 @@ const listener_of_end = function(arr_command,ws){
               let int_id02 = ws.users.all_thoughts.length
               ws.users.all_thoughts[int_id02] = setInterval(()=>{
                 k++
+                console.log(k)
                 if(ws.users.int_end == 'END'){
                   clearInterval(ws.users.all_thoughts[int_id02-1])
                   ws.users.all_thoughts.splice(int_id02-1,1)
@@ -461,7 +463,7 @@ const listener_of_end = function(arr_command,ws){
                     console.log(err)
                   }
                 }
-                if(k>100){
+                if(k>2000){
                   console.log('clear interval_03')
                   clearInterval(ws.users.all_thoughts[int_id02-1])
                   ws.users.all_thoughts.splice(int_id02-1,1)
