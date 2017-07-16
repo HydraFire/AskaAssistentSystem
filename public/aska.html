@@ -33,7 +33,7 @@
         position: absolute;
         width:100%;
         z-index: 10;
-        font-size: 64px;
+        font-size: 54px;
         color: #5F5F5F;
         text-align: left;
         font-family: 'Exo 2', sans-serif;
@@ -41,20 +41,20 @@
       .wrapper {
         z-index: 100;
         padding: 0px 0px 0px 0px;
-        margin: 460px 0px 0px 200px;
+        margin: 0px 0px 0px 0px;
         position:absolute;
-        width:735px;
-        height:400px;
+        width:980px;
+        height:1300px;
         display:flex;
       }
       .speed {
-        background:#666;
+        background:rgba(0,0,0,0);
         flex:1;
         display:flex;
         align-items:flex-start;
         margin:10px;
         border-radius:30px;
-        box-shadow:0 0 1px 3px rgba(0,0,0,0.1);
+        box-shadow:0 0 1px 3px rgba(0,0,0,0);
         overflow: hidden;
       }
       .speed-bar {
@@ -65,14 +65,14 @@
   </head>
   <body>
     <div id="main_container">
-      <div id="inter">ASKA</div>
+      <div id="connect">CONNECT</div>
+      <div id="load">LOAD</div>
     </div>
     <div class="wrapper">
       <div class="speed">
         <div class="speed-bar">0.2</div>
       </div>
     </div>
-    <button onclick="siga()">сигарета</button>
     <div class="info"></div>
     <div class="words" contenteditable></div>
 
@@ -84,36 +84,6 @@
     const words_p = words.querySelectorAll('p')
 
     /////////////////////////////////////////////////////////////////////////
-    function voice(text){
-      /*
-      let promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve('go');
-        }, 500);
-      });
-      promise.then(
-        result => {
-          // window.getSelection().removeAllRanges();
-        },
-        error => {
-          console.log("Rejected: " + error);
-        }
-      );
-      */
-
-
-      //setInterval(asd,2000)
-      //setTimeout(asd,5000)
-
-      //recognition.stop();
-
-      //recognition.removeEventListener('end', recognition.start)
-
-      // e.preventDefault();
-    }
-    function siga(){
-      socket.send('сигарета')
-    }
     function mic(){
       socket.send('SHUT_UP')
       let p = document.createElement('p');
@@ -167,30 +137,37 @@
           '&robot=1'+
           '&emotion=evil';//evil
 
-      audio.src = url;
-
-      audio.load();
-
-      audio.onloadeddata = function () {
-        //  alert(text)
-        //audio.play();
-        // recognition.stop();
-        //  recognition.removeEventListener('end', recognition.start)
+      if(window.last_url != url){
+        audio.src = url
+        audio.load();
+        audio.onloadeddata = function () {
+          words.children[1].style.color = '#fff'
+          /*
+          setTimeout(()=>{
+            document.querySelector('#load').style.color = '#111'
+          },3000)
+          */
+        }
       }
+      window.last_url = url
     }
-
+    function voice(){
+      aska(words.children[1].textContent)
+      audio.play();
+    }
     ///////////////////////// WebSocket /////////////////////////////////////
-    function test(e){
-      console.log(e)
-      socket.send(e);
-    }
+
     //var socket = new WebSocket("ws://159.224.183.122:80/aska.html");
     var socket = new WebSocket("ws://185.25.119.59:80/aska.html");
     socket.onopen = function() {
-      socket.send('USER159.224.183.122')//+ userip)
-      //  alert("Соединение установлено.");
+      socket.send('USER'+'HydraFire'+'||'+'1'+'||'+'0')
+      setTimeout(()=>{
+        socket.send('aska_play_music_false')
+      },1000)
+      document.querySelector('#connect').style.color = '#fff'
     };
     socket.onclose = function(event) {
+      document.querySelector('#connect').style.color = '#111'
       if (event.wasClean) {
         //alert('Соединение закрыто чисто');
       } else {
@@ -210,77 +187,56 @@
         p.textContent = event.data.toString();
         words.insertBefore(p,words.children[1]);
         words.children[1].style.color = '#97FFFF';
-        
-        //words.children[1].addEventListener('click',voice)
         socket.send('SPEECH')
-        //aska(event.data.toString());
+        aska(words.children[1].textContent)
       }
     };
 
     socket.onerror = function(error) {
       // alert("Ошибка " + error.message);
     };
-    //localStorage.wait = 'wait';
     /////////////////////////////////////////////////////////////////////////////    
     /////////////////////////////////////////////////////////////////////////////     
-    //words = document.querySelector('.words');
+
+
+
     const speed = document.querySelector('.speed');
     const bar = speed.querySelector('.speed-bar');
     const navCoords = speed.getBoundingClientRect();
-    let zzz = 100 - (0.3 * 100 |0)
-    bar.style.height = `${ zzz + '%'}`;
-    bar.textContent = zzz.toFixed(2);
+    window.start_x = 0
+    window.end_x = 0
 
-    window.f_y = 0
-    //const audio2 = document.querySelector('#audio2');
-
-    function handleMoveDown(e){
-      //const yx = e.pageY - this.offsetTop - navCoords.top +10;
-      window.s_f_y = true
-      console.log(e)
-      
+    function handleDown(e){
+      if(e.targetTouches.length == 1){
+        let touch = event.targetTouches[0];
+        window.start_x = touch.pageX|0;
+        window.end_x = 0
+      }
     }
-   
-    function handleMoveMove(e){
-      //const yx = e.pageY - this.offsetTop - navCoords.top +10;
-      //window.f_y = yx
 
-      if (e.targetTouches.length == 1) {
+    function handleMove(e){
+      if(e.targetTouches.length == 1){
         var touch = event.targetTouches[0];
-        window.f_y = touch.pageX;
-        if(window.s_f_y){
-          window.s_f_y_a = touch.pageX;
-          window.s_f_y= false
+        window.end_x = touch.pageX|0;
+      }
+    }
+    function handleUp(e){
+      let audio = document.querySelector('audio');
+      if(e.targetTouches.length == 0){
+        let calc = window.end_x - window.start_x
+        //alert(window.end_x+' - '+window.start_x+' '+calc)
+        if(calc > 100){
+          mic()
+        }else{
+          aska(words.children[1].textContent)
+          audio.play();
         }
       }
-      console.log(e)
     }
-    function handleMoveUp(e){
-     let audio = document.querySelector('audio');
-      let met = window.s_f_y_a - window.f_y|0
-      //alert(met)
-      if(met <= -100){
-        //alert(met)
-        mic()
-        
-      }else{
-        
-        
-        audio.play();
-      }
+    speed.addEventListener('touchstart',handleDown)
+    speed.addEventListener('touchmove',handleMove)
+    speed.addEventListener('touchend',handleUp)
 
-      console.log(y)
-    }
-    speed.addEventListener('touchstart',handleMoveDown)
-    speed.addEventListener('touchmove',handleMoveMove)
-    speed.addEventListener('touchend',handleMoveUp)
-    function clearSelection(){
-      window.getSelection().removeAllRanges();
-      aska(words.children[1].textContent)
-      audio.play();
-    }
-    speed.addEventListener('click',clearSelection)
-    /////////////////////////////////////////////////////////////////////////////      
   </script>
 
 

@@ -219,21 +219,54 @@ const aska_learn_delete = function(ws){
   let kkk2 = zpp.join(' ')
 
   let n = 0
-  let iid = setInterval(()=>{
+  let t = 0
+  let k = 0
+  let int_i00 = ws.users.all_thoughts.length
+  ws.users.all_thoughts[int_i00] = setInterval(()=>{
+    n++
     console.log(n)
-    n=n+1+ global.close_all_intervals
-    if(global[ws.x_user][4] == 'подтверждаю'){
-      data.splice(data.length-1,1)
-      jetpack.write(trainFileMain,data);
-      ws.send('удаление произведено')
-      clearInterval(iid);
-    }
+    if(!ws.users.aska_talks){
+      //console.log('первый этап')
+      clearInterval(ws.users.all_thoughts[int_i00])
+      ws.users.all_thoughts.splice(int_i00,1)
 
-    if(n>600){
-      clearInterval(iid)
-      console.log('Interval Close')
+      let int_i01 = ws.users.all_thoughts.length
+      ws.users.all_thoughts[int_i01] = setInterval(()=>{
+        t++
+        console.log('t'+t)
+        if(ws.users.aska_talks){
+          //console.log('второй этап')
+          clearInterval(ws.users.all_thoughts[int_i01])
+          ws.users.all_thoughts.splice(int_i01,1)
+
+
+          let int_i02 = ws.users.all_thoughts.length
+          ws.users.all_thoughts[int_i02] = setInterval(()=>{
+            k ++
+            console.log('k'+k)
+            if(ws.users.input_Array[4] == 'подтверждаю'){
+              //console.log('третий этап')
+              clearInterval(ws.users.all_thoughts[int_i02])
+              ws.users.all_thoughts.splice(int_i02,1)
+              data.splice(data.length-1,1)
+              jetpack.write(trainFileMain,data);
+              ws.send('удаление произведено')
+            }
+            if(k > 15){
+              clearInterval(ws.users.all_thoughts[int_i02])
+              ws.users.all_thoughts.splice(int_i02,1)
+              console.log(ws.users.all_thoughts)
+            }
+          },1000)
+        }
+        if(t > 15){
+          clearInterval(ws.users.all_thoughts[int_i01])
+          ws.users.all_thoughts.splice(int_i01,1)
+          console.log(ws.users.all_thoughts)
+        }
+      },1000)
     }
-  },500)
+  },1000)
   return 'К удалению предложена запись, '+kkk+'. С ответом, '+kkk2+'. Требуеться подтверждение'
 }
 

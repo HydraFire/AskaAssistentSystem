@@ -60,11 +60,11 @@ wss.on("connection", function(ws){
   let user_ip = ws._socket.remoteAddress
   user_ip = user_ip.substring(7,user_ip.length)
   if(user_ip == '159.224.183.122'){
-   ws.send('Доступ розрешон')
+   //ws.send('Доступ розрешон')
    let login_data = 'USERHydraFire||1||159.224.183.122'
    registration.login(ws,login_data)
   }else{
-   ws.send('Доступ в общественую ветку')
+   //ws.send('Доступ в общественую ветку')
    let login_data = 'USERundefined||public||'+user_ip
    registration.login(ws,login_data)
   }

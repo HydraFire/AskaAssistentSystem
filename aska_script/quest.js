@@ -348,7 +348,7 @@ const remind = function(answer,adres,ws){
 
       }
     }
-    if(n>600){
+    if(n>1200){
       clearInterval(ws.users.all_thoughts[int_id])
       ws.users.all_thoughts.splice(int_id,1)
       console.log('Interval Close')

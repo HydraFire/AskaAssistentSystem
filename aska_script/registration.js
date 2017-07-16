@@ -42,6 +42,7 @@ const login = function(ws,message){
     ['Noir','1234567890','46.30.41.26'],
     ['undefined','public','46.30.41.26']
   ]
+  let dont_now_pass = 0
   arr_ip_id.forEach((v)=>{
     if(login_data[0] == v[0]){
       if(login_data[1] == v[1]){
@@ -64,7 +65,7 @@ const login = function(ws,message){
       }
     }
   })
-
+ // ws.terminate()
   /*
   arr_ip_id.some(v=>{
     if(v[1] == message){ return message = v[0]}else{message = message}

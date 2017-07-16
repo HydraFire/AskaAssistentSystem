@@ -17,9 +17,9 @@ exports.commands = function(strx,ws){
   console.log(global[ws.users.name])
   console.log('Ответ нейроной сети |'+strx+'|')
   if(ws.users.all_thoughts.length == 0){
-///////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     if(ws.users.input_Array[4].includes('запом')){
       let ask = ws.users.input_Array[2]
       let answer = ws.users.input_Array[3]
@@ -79,7 +79,7 @@ exports.commands = function(strx,ws){
        strx.includes('ub4')){
       ws.send('сообщение от пользователя HydraFire')
       setTimeout(()=>{
-      messenger.read(ws,'last','all_messege.json')
+        messenger.read(ws,'last','all_messege.json')
       },2000)
       strx = ''
     }
@@ -124,11 +124,11 @@ exports.commands = function(strx,ws){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name)
       if(arr){
-      arr.forEach(v=>htmlx+=`<p><a href="./public/users/${ws.users.name}/${v}" download>${v}</a></p>`)
-      ws.send('SYSTEM'+htmlx)
-      strx = ''
+        arr.forEach(v=>htmlx+=`<p><a href="./public/users/${ws.users.name}/${v}" download>${v}</a></p>`)
+        ws.send('SYSTEM'+htmlx)
+        strx = ''
       }else{
-      strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
+        strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
       }
     }
     if(strx.includes('fb0') &&
@@ -138,20 +138,20 @@ exports.commands = function(strx,ws){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name+'/music')
       if(arr){
-      arr.forEach((v)=>{
-        if(ws.users.track == v){
-          htmlx+=`<p><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
-        }else{
-          htmlx+=`<p><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
-        }
-      })
-      ws.send('SYSTEM'+htmlx)
-      strx = ''
+        arr.forEach((v)=>{
+          if(ws.users.track == v){
+            htmlx+=`<p><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
+          }else{
+            htmlx+=`<p><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
+          }
+        })
+        ws.send('SYSTEM'+htmlx)
+        strx = ''
       }else{
-      strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
+        strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
       }
     }
-
+    /*
     if(strx.includes('sa0') &&
        strx.includes('sa1') &&
        strx.includes('sa2') &&
@@ -226,12 +226,45 @@ exports.commands = function(strx,ws){
       let mki = jetpack.read('./public/files/secred_text.json','text')
       ws.send(mki);strx = '';
     }
+    */
     ///////////////////////////////////////////////////////////////////////
+    //                 ЗАПОМИНАЛКА ЛЮБЫХ СОБЫТИЙ
     /////////////////////////////////////////////////////////////////////////
     console.log(`
 ////////////////////////////
 ///ALL//INTERVAL//CLEAR/////
 ////////////////////////////`)
+    /*
+    if(ws.users.input_Array[4].charAt(0) == 'я'){
+      let arr_test = ws.users.input_Array[4].split(' ')
+      if(arr_test.length == 3){
+        arr_test.splice(0,1)
+        let x_name = arr_test.join('_')
+        strx = polival_kystu.event_doing(ws,x_name,'Ясно, за всё время, '+arr_test[0]+' '+arr_test[1]+' уже ',ws)
+        ws.send(strx);strx = '';
+      }
+    }
+    if(ws.users.input_Array[4].charAt(6) == 'я'){
+      let arr_test = ws.users.input_Array[4].split(' ')
+      if(arr_test[0] == 'когда' &&
+         arr_test[1] == 'я' &&
+         arr_test[2] == 'последний' &&
+         arr_test[3] == 'раз' 
+        ){
+        if(arr_test.length == 6){
+          console.log('WWWWW')
+          arr_test.splice(0,1)
+          arr_test.splice(0,1)
+          arr_test.splice(0,1)
+          arr_test.splice(0,1)
+          let x_name = arr_test.join('_')
+          console.log(x_name)
+          strx = polival_kystu.then_event_bin(ws,x_name,'последний раз , '+arr_test[0]+' '+arr_test[1]+' ',ws)
+          ws.send(strx);strx = '';
+        }
+      }
+    }
+    */
 
     if(strx.includes('pa0') &&
        strx.includes('pa1') &&
@@ -245,7 +278,7 @@ exports.commands = function(strx,ws){
          strx.includes('pb1') &&
          strx.includes('pb2') &&
          strx.includes('pb3')){
-        strx = polival_kystu.poured_flowers(ws,'Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
+        strx = polival_kystu.event_doing(ws,'Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
         ws.send(strx);strx = '';
       }else
         if(strx.includes('za0') &&
@@ -259,7 +292,7 @@ exports.commands = function(strx,ws){
              strx.includes('zb1') &&
              strx.includes('zb2') &&
              strx.includes('zb3')){
-            strx = polival_kystu.poured_flowers(ws,'Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
+            strx = polival_kystu.event_doing(ws,'Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
             ws.send(strx);strx = '';
           }
 
@@ -342,7 +375,7 @@ exports.commands = function(strx,ws){
     //        
     //
 
-   
+
 
     if(strx.includes('na0') &&
        strx.includes('na1') &&
@@ -471,15 +504,15 @@ video.currentTime = (3*60)+24;
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
   */
-  if(ws.users.input_Array[4].includes('график')){
-    let adress = 'Когда_чистил_зубы';
-    let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/'+adress+'.json','txt');
+    if(ws.users.input_Array[4].includes('график')){
+      let adress = 'Когда_чистил_зубы';
+      let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/'+adress+'.json','txt');
 
-    arr_json = `EVALvar arr_json = ${arr_json};`;
-    ws.send(arr_json,ws);
-    //jetpack.read('F:/ajr/JSON/'+adress+'.json','json');
+      arr_json = `EVALvar arr_json = ${arr_json};`;
+      ws.send(arr_json,ws);
+      //jetpack.read('F:/ajr/JSON/'+adress+'.json','json');
 
-    let htmlx = `EVAL
+      let htmlx = `EVAL
 const this_real_time = function(){
 var objData = new Date();
 var year = objData.getFullYear()
@@ -581,9 +614,9 @@ options: options2
 }
 grafics('Поливал_кусты',10)
 `;
-    ws.send(htmlx,ws);
-  }
-/*
+      ws.send(htmlx,ws);
+    }
+    /*
 
 
 
@@ -621,7 +654,7 @@ grafics('Поливал_кусты',10)
   }
 
 */
-    if(ws.users.input_Array[4].includes('удали последний элемент массива обучения')){
+    if(ws.users.input_Array[4].includes('удали последний элемент массива')){
       strx = NNQ.aska_learn_delete(ws)
     }
   }
