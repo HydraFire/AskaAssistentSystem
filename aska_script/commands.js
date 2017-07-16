@@ -278,7 +278,7 @@ exports.commands = function(strx,ws){
          strx.includes('pb1') &&
          strx.includes('pb2') &&
          strx.includes('pb3')){
-        strx = polival_kystu.event_doing(ws,'Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
+        strx = polival_kystu.poured_flowers(ws,'Поливал_кусты','Молодец, за всё время, поливал цветы уже ',ws)
         ws.send(strx);strx = '';
       }else
         if(strx.includes('za0') &&
@@ -292,7 +292,7 @@ exports.commands = function(strx,ws){
              strx.includes('zb1') &&
              strx.includes('zb2') &&
              strx.includes('zb3')){
-            strx = polival_kystu.event_doing(ws,'Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
+            strx = polival_kystu.poured_flowers(ws,'Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
             ws.send(strx);strx = '';
           }
 
