@@ -390,7 +390,7 @@ if (symM > 50) {
   bigCubeScale += camera.distance/ 300|0 ;
 
   console.log('bigCubeScale'+bigCubeScale+'  '+frequencies[0]);
-  boostTarget += symM
+  boostTarget += (symM/4|0)
   console.log(boostTarget)
   if(boost > 15000 || boost < -15000){ boost = -1000; boostTarget = 0;}
 
