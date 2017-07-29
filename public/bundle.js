@@ -374,7 +374,7 @@ quatIdent(camera.rotation)
 
 
 
-quatRotateY(camera.rotation, camera.rotation, -boost *0.002 )
+quatRotateY(camera.rotation, camera.rotation, -boost *0.0002 )
 quatRotateX(camera.rotation, camera.rotation,  -t * 2)
 quatRotateY(camera.rotation, camera.rotation,  +t * 1.5)
 quatRotateZ(camera.rotation, camera.rotation,  -t * 0.65)
