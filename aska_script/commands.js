@@ -224,14 +224,15 @@ exports.commands = function(strx,ws){
       strx = circle.sigi_minus('банки',rate,arr_timeX,ws)
       ws.send(strx);strx = '';
     }
+    */
     if(strx.includes('bd0') &&
        strx.includes('bd1') &&
        strx.includes('bd2') &&
        strx.includes('bd3')){
-      let mki = jetpack.read('./public/files/secred_text.json','text')
+      let mki = jetpack.read('./public/users/'+ws.users.name+'/secred_text.json','text')
       ws.send(mki);strx = '';
     }
-    */
+    
     ///////////////////////////////////////////////////////////////////////
     //                 ЗАПОМИНАЛКА ЛЮБЫХ СОБЫТИЙ
     /////////////////////////////////////////////////////////////////////////
