@@ -387,7 +387,7 @@ quatRotateZ(camera.rotation, camera.rotation,  -t * 0.65)
 
 
 
-var gravity = 25;
+var gravity = 125;
 let symM = (frequencies[0] + frequencies[1] + frequencies[2] + frequencies[3] + frequencies[4])/5|0;
 if (symM > 50) {
   gravity = -0.0001
