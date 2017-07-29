@@ -344,7 +344,7 @@ if(sym_camera > 35){
   camera.distance = 10+(sym_camera/2|0)
 }else if(sym_camera > 60){
   camera.distance = 35+(sym_camera/5|0)
-}else if(sym_camera > 75){
+}else if(sym_camera < 75){
   camera.distance = 50+(sym_camera/10|0)
 }else{
   camera.distance = 100+(sym_camera/20|0)+camera.distance;
@@ -390,7 +390,7 @@ quatRotateZ(camera.rotation, camera.rotation,  -t * 0.65)
 var gravity = 25;
 let symM = (frequencies[0] + frequencies[1] + frequencies[2] + frequencies[3] + frequencies[4])/5|0;
 if (symM > 50) {
-  gravity = -(0.01*symM)
+  gravity = -0.0001
   bigCubeScale += camera.distance/ 300|0 ;
 
   console.log('bigCubeScale'+bigCubeScale+'  '+frequencies[0]);
