@@ -248,9 +248,9 @@ tBackgroundPrevious = tBackgroundCurrent
 tHighlightPrevious = tHighlightCurrent
 if (true) {
   tForegroundCurrent = palettes[19][0]
-  let r_color = (Math.random()*5)/5|0;
-  let g_color = (Math.random()*5)/5|0;
-  let b_color = (Math.random()*5)/5|0;
+  let r_color = (Math.random()*6)/5|0;
+  let g_color = (Math.random()*6)/5|0;
+  let b_color = (Math.random()*6)/5|0;
 
   let r_color2 = (Math.random()*7)/5|0;
   let g_color2 = (Math.random()*7)/5|0;
