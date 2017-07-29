@@ -345,9 +345,9 @@ if(frequencies[13] > 150){
 }else{
   camera.distance = 100
 }
-
+let tolstosum = (frequencies[50]+frequencies[51]+frequencies[52]+frequencies[53]+frequencies[54]+frequencies[55])/6;
 sphere.bind(sphereShader)
-sphereShader.uniforms.proj = perspective(proj, (frequencies[50]/20).toFixed(1)+20, width / height, 0.1,  3000)
+sphereShader.uniforms.proj = perspective(proj, (tolstosum/20).toFixed(1)+20, width / height, 0.1,  3000)
 sphereShader.uniforms.view = camera.view()
 
 
@@ -361,7 +361,7 @@ gl.enable(gl.DEPTH_TEST)
 gl.depthMask(false)
 cube.bind(shader)
 
-shader.uniforms.proj = perspective(proj, (frequencies[50]/20).toFixed(1)+20, width / height, 0.1, 7000)
+shader.uniforms.proj = perspective(proj, (tolstosum/20)+20|0, width / height, 0.1, 7000)
 shader.uniforms.view = camera.view()
 
 camera.tick()
