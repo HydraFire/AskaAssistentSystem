@@ -386,7 +386,7 @@ quatRotateZ(camera.rotation, camera.rotation,  -t * 0.65)
 var gravity = 25;
 let symM = (frequencies[0] + frequencies[1] + frequencies[2] + frequencies[3] + frequencies[4])/5|0;
 if (symM > 50) {
-  gravity = -0.001
+  gravity = -0.0001
   bigCubeScale += camera.distance/ 300|0 ;
 
   console.log('bigCubeScale'+bigCubeScale+'  '+frequencies[0]);
