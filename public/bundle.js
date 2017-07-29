@@ -246,10 +246,10 @@ function triggerPulse () {
 tForegroundPrevious = tForegroundCurrent
 tBackgroundPrevious = tBackgroundCurrent
 tHighlightPrevious = tHighlightCurrent
-if (false) {
+if (true) {
   tForegroundCurrent = [Math.random(), Math.random(), Math.random()]
-  tBackgroundCurrent = [Math.random(), Math.random(), Math.random()]
-  tHighlightCurrent = [Math.random(), Math.random(), Math.random()]
+  tBackgroundCurrent = palettes[12][1]
+  tHighlightCurrent = palettes[19][2] || palettes[index][1]
 } else {
   var index = Math.floor(Math.random() * palettes.length)
   tForegroundCurrent = palettes[19][0]
