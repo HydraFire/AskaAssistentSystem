@@ -339,8 +339,8 @@ gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
  gl.lineWidth(4)
 
 // console.log(boost)
-
-if(frequencies[13] > 150){
+let sym_camera = (frequencies[13]+frequencies[14]+frequencies[15]+frequencies[16]+frequencies[17]+frequencies[18]+frequencies[19])/7|0;
+if(sym_camera > 150){
   camera.distance = 1000
 }else{
   camera.distance = 100
