@@ -246,7 +246,7 @@ function triggerPulse () {
 tForegroundPrevious = tForegroundCurrent
 tBackgroundPrevious = tBackgroundCurrent
 tHighlightPrevious = tHighlightCurrent
-if (true) {
+if (false) {
   tForegroundCurrent = [Math.random(), Math.random(), Math.random()]
   tBackgroundCurrent = [Math.random(), Math.random(), Math.random()]
   tHighlightCurrent = [Math.random(), Math.random(), Math.random()]
