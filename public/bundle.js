@@ -252,9 +252,9 @@ if (true) {
   let g_color = (Math.random()*5)/5|0;
   let b_color = (Math.random()*5)/5|0;
 
-  let r_color2 = (Math.random()*10)/5|0;
-  let g_color2 = (Math.random()*10)/5|0;
-  let b_color2 = (Math.random()*10)/5|0;
+  let r_color2 = (Math.random()*7)/5|0;
+  let g_color2 = (Math.random()*7)/5|0;
+  let b_color2 = (Math.random()*7)/5|0;
   tBackgroundCurrent = [r_color, g_color, b_color]
   tHighlightCurrent = [r_color2, g_color2, b_color2]
 } else {
