@@ -361,7 +361,7 @@ gl.enable(gl.DEPTH_TEST)
 gl.depthMask(false)
 cube.bind(shader)
 
-shader.uniforms.proj = perspective(proj, Math.PI / (boost*0.002) , width / height, 0.1, 7000)
+shader.uniforms.proj = perspective(proj, (frequencies[50]/20).toFixed(1)+20, width / height, 0.1, 7000)
 shader.uniforms.view = camera.view()
 
 camera.tick()
