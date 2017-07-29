@@ -234,6 +234,19 @@
       socket.send('aska_play_music_false')
     },1000)
   }
+
+  function readClipboard(){
+    let extensionId = 'pbeblkahgpkafmmonncmbkihebhcpbjb';
+    chrome.runtime.sendMessage(
+      extensionId,
+      { method: 'getClipboard' },
+      function(response){
+        aska(response);
+        console.log('extension getClipboard response', response);
+      }
+    );
+  }
+
   function video_animation(){
     var video = document.querySelector('#video2');
     setInterval(()=>{
@@ -370,23 +383,23 @@
   bar.style.height = `${ zzz + '%'}`;
   bar.textContent = zzz.toFixed(2);
   const audio2 = document.querySelector('#audio2');
-  
 
-/////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////
   function handleMove(e){
     if(window.is_clicked){
-    const y = e.pageY - this.offsetTop - navCoords.top +10;
-    console.log(e.pageY,this.offsetTop,navCoords.top)
-    const percent = y / this.offsetHeight;
-    const min = 0.1;
-    const max = 1;
-    const height = (percent * 100 |0) + '%'
-    const playbackRate = 1 -(percent * (max - min) + min);
-    bar.style.height = height;
-    bar.textContent = playbackRate.toFixed(2);
+      const y = e.pageY - this.offsetTop - navCoords.top +10;
+      console.log(e.pageY,this.offsetTop,navCoords.top)
+      const percent = y / this.offsetHeight;
+      const min = 0.1;
+      const max = 1;
+      const height = (percent * 100 |0) + '%'
+      const playbackRate = 1 -(percent * (max - min) + min);
+      bar.style.height = height;
+      bar.textContent = playbackRate.toFixed(2);
 
-    localStorage.audioVolume = playbackRate;
-    console.log(y)
+      localStorage.audioVolume = playbackRate;
+      console.log(y)
     }
   }
   function handleClickDown(e){
@@ -400,7 +413,7 @@
   speed.addEventListener('mousemove',handleMove)
   speed.addEventListener('mousedown',handleClickDown)
   speed.addEventListener('mouseup',handleClickUp)
-///////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
   var audioTag = document.getElementById('audio');
 
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -440,6 +453,8 @@
          transcript.toLowerCase() == 'vk' ||
          transcript.toLowerCase() == 'рассказ' ||
          transcript.toLowerCase() == 'аско' ||
+         transcript.toLowerCase() == 'аркан' ||
+         transcript.toLowerCase() == 'аха' ||
          transcript.toLowerCase() == 'авто'){
         //localStorage.wait = 'start';
         p.textContent = 'ASKA';
@@ -537,7 +552,7 @@
     console.log(e)
     socket.send(e);
   }
-  var socket = new WebSocket("ws://185.25.119.59:80/index.html");
+   var socket = new WebSocket("ws://185.25.119.59:80/index.html");
 
   //var socket = new WebSocket("ws://159.224.183.122:80/index.html");
 
@@ -625,7 +640,7 @@
     arr_fre.reverse()
     frequencies.forEach((v)=>{arr_fre.push(v)})
     for(i=0;i<550;i++){
-    arr_fre.splice(0,1)
+      arr_fre.splice(0,1)
     }
     waveform.forEach((v,index)=>{
       calc_hue = window.color_aska +(arr_fre[index]/4)
@@ -653,5 +668,4 @@
 
 </script>
 <script type="text/javascript" src="cg.js"></script>
-
 </html>

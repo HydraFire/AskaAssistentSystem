@@ -42,6 +42,11 @@ exports.commands = function(strx,ws){
       ws.send('EVALwindow.color_aska_h = 20;aska("режим ожидания")')
       strx = ''
     }
+    
+    if(ws.users.input_Array[4].includes('прочитай')){
+     ws.send('EVALreadClipboard()')
+     strx = ''
+    }
 
 
     if(ws.users.input_Array[4].includes('вакансии джаваскрипт')){
