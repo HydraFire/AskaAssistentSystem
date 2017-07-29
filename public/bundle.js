@@ -248,8 +248,15 @@ tBackgroundPrevious = tBackgroundCurrent
 tHighlightPrevious = tHighlightCurrent
 if (true) {
   tForegroundCurrent = palettes[19][0]
-  tBackgroundCurrent = [Math.random(), Math.random(), Math.random()]
-  tHighlightCurrent = [Math.random(), Math.random(), Math.random()]
+  let r_color = Math.random()*50
+  let g_color = Math.random()*50
+  let b_color = Math.random()*50
+
+  let r_color2 = Math.random()*100
+  let g_color2 = Math.random()*100
+  let b_color2 = Math.random()*100
+  tBackgroundCurrent = [r_color, g_color, b_color]
+  tHighlightCurrent = [r_color2, g_color2, b_color2]
 } else {
   var index = Math.floor(Math.random() * palettes.length)
   tForegroundCurrent = palettes[19][0]
