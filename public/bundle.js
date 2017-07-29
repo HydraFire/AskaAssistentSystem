@@ -285,7 +285,7 @@ const frequencies = analyser.frequencies()
 const waveform = analyser.waveform()
 const detection = !!detect(frequencies)[0]
 // console.log(frequencies)
-if (detection && lastPulse + 2000 < Date.now()) {
+if (detection && lastPulse + 8000 < Date.now()) {
   triggerPulse()
 }
 /*
