@@ -14,8 +14,8 @@ const calc_layers = function(ws,way){
  // console.log(arr_p)
   if(!arr_p){
     console.log('WOW')
-    jetpack.copy('./public/NN_Train.json', './JSON/data/'+ws.x_user+'/NN_Train.json', { overwrite: true });
-    jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.x_user+'/NN_train_buffer.json', { overwrite: true });
+    jetpack.copy('./public/NN_Train.json', './JSON/data/'+ws.users.name+'/NN_Train.json', { overwrite: true });
+    jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.users.name+'/NN_train_buffer.json', { overwrite: true });
     arr_p = jetpack.read(way,'json');
   }
   
@@ -42,7 +42,12 @@ const set_to_run = function(ws,text){
     hiddenLayers: calc_layers(ws,'./JSON/data/'+ws.users.name+'/NN_Train.json') // global learning rate, useful when training using streams
   });
   console.log('NEXT')
-  net.fromJSON(jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json'));
+  let net_render = jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json')
+  if(!net_render){
+   jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.users.name+'/NN_train_buffer.json', { overwrite: true });
+   net_render = jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json')  
+  }
+  net.fromJSON(net_render);
   console.log('nn_connect')
   //windowManager.sharedData.set('buffer_text', text);
 
