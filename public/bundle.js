@@ -347,7 +347,7 @@ if(sym_camera > 10){
 }else if(sym_camera > 50){
   camera.distance = 50+(sym_camera/10|0)
 }else{
-  camera.distance = 200+(sym_camera/20|0)
+  camera.distance = 200+(sym_camera/20|0)+camera.distance;
 }
 let tolstosum = (frequencies[50]+frequencies[51]+frequencies[52]+frequencies[53]+frequencies[54]+frequencies[55])/6;
 sphere.bind(sphereShader)
