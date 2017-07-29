@@ -361,7 +361,7 @@ gl.enable(gl.DEPTH_TEST)
 gl.depthMask(false)
 cube.bind(shader)
 
-shader.uniforms.proj = perspective(proj, (100 - tolstosum)+20|0, width / height, 0.1, 7000)
+shader.uniforms.proj = perspective(proj, (frequencies[50]/20)+20|0, width / height, 0.1, 7000)
 shader.uniforms.view = camera.view()
 
 camera.tick()
@@ -386,7 +386,7 @@ quatRotateZ(camera.rotation, camera.rotation,  -t * 0.65)
 var gravity = 25;
 let symM = (frequencies[0] + frequencies[1] + frequencies[2] + frequencies[3] + frequencies[4])/5|0;
 if (symM > 50) {
-  gravity = -0.01
+  gravity = -0.1
   bigCubeScale += camera.distance/ 300|0 ;
 
   console.log('bigCubeScale'+bigCubeScale+'  '+frequencies[0]);
