@@ -1,4 +1,5 @@
 
+const _ = require('underscore');
 const jetpack = require('fs-jetpack');
 const polival_kystu = require('./polival_kystu');
 const aska_DJ = require('./aska_DJ');
@@ -8,6 +9,7 @@ const circle = require('./circle')
 const memory_fun = require('./memory_fun');
 const webSearch = require('./webSearch');
 const messenger = require('./messenger');
+//const ask = require('./ask');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
@@ -42,12 +44,21 @@ exports.commands = function(strx,ws){
       ws.send('EVALwindow.color_aska_h = 20;aska("режим ожидания")')
       strx = ''
     }
-    
+
     if(ws.users.input_Array[4].includes('прочитай')){
-     ws.send('EVALreadClipboard()')
+      ws.send('EVALreadClipboard()')
+      strx = ''
+    }
+    /*
+    if(ws.users.input_Array[4].includes('пишу функцию')){
+     //ws.send('EVALreadClipboard()')
+     let po4istil_zubu = ["лимон","мандарин","помидор","банлажан"]
+     let gogo = ask.ask_arr(po4istil_zubu,ws)
+     console.log(gogo+'    <-----------------------')
+     //ws.send("внимание")
      strx = ''
     }
-
+*/
 
     if(ws.users.input_Array[4].includes('вакансии джаваскрипт')){
       let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
@@ -232,7 +243,7 @@ exports.commands = function(strx,ws){
       let mki = jetpack.read('./public/users/'+ws.users.name+'/secred_text.json','text')
       ws.send(mki);strx = '';
     }
-    
+
     ///////////////////////////////////////////////////////////////////////
     //                 ЗАПОМИНАЛКА ЛЮБЫХ СОБЫТИЙ
     /////////////////////////////////////////////////////////////////////////
@@ -240,13 +251,15 @@ exports.commands = function(strx,ws){
 ////////////////////////////
 ///ALL//INTERVAL//CLEAR/////
 ////////////////////////////`)
-    /*
+
     if(ws.users.input_Array[4].charAt(0) == 'я'){
       let arr_test = ws.users.input_Array[4].split(' ')
-      if(arr_test.length == 3){
+      if(arr_test.length == 3||arr_test.length == 4){
         arr_test.splice(0,1)
         let x_name = arr_test.join('_')
-        strx = polival_kystu.event_doing(ws,x_name,'Ясно, за всё время, '+arr_test[0]+' '+arr_test[1]+' уже ',ws)
+        let textik = ["Ясно","Хорошо","Наконецьто","Отличьно","Замечательно","Умничька"]
+        let random = Math.random()*textik.length-1|0
+        strx = polival_kystu.event_doing(ws,x_name,textik[random]+', на моей памяти , '+arr_test[0]+' '+arr_test[1]+' это уже получаеться',ws)
         ws.send(strx);strx = '';
       }
     }
@@ -270,7 +283,7 @@ exports.commands = function(strx,ws){
         }
       }
     }
-    */
+    /*
 
     if(strx.includes('pa0') &&
        strx.includes('pa1') &&
@@ -301,7 +314,7 @@ exports.commands = function(strx,ws){
             strx = polival_kystu.poured_flowers(ws,'Когда_чистил_зубы','Молодец, за всё время, чистил зубы уже ',ws)
             ws.send(strx);strx = '';
           }
-
+*/
     /*
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -510,16 +523,78 @@ video.currentTime = (3*60)+24;
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
   */
-    if(ws.users.input_Array[4].includes('график')){
-      let adress = 'Когда_чистил_зубы';
-      let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/'+adress+'.json','txt');
+    if(ws.users.input_Array[4].includes('покажи график')){
+      let subtext = ws.users.input_Array[4]
+      // let adress = subtext.substring(14,subtext.length)
+      //adress = adress.split(' ').join('_')
+      ///////////////// 1 Задание ////// берем адреса всех не стринговых
+      let arr = jetpack.list('./JSON/data/'+ws.users.name+'/graphics_data')
+      let arr_i = []
 
-      arr_json = `EVALvar arr_json = ${arr_json};`;
-      ws.send(arr_json,ws);
+      arr.forEach((v)=>{
+        let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v,'json');
+        if(_.isString(arr_json[0])){
+          console.log(v)
+        }else{
+          v = v.substring(0,v.length-5)
+          arr_i.push(v)
+        }
+      })
+      console.log('adress '+arr_i)
+      strx = ""
+      ///////////////// 2 Задание ////// фор ич для масиива адресов
+      let arr_array = []
+      arr_i.forEach((v)=>{
+        arr_array.push(jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v+'.json','text'))
+      })
+
+
+      //let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+adress+'.json','json');
+
+
+
+
+
+      let arr_grafics = ''
+      arr_grafics += `EVAL`;
+
+      arr_i.forEach((v,i)=>{
+        arr_grafics += ` var arr_${i} = ${arr_array[i]};`;
+      })
+
+      // let yuii = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+arr_i[3]+'.json','json')
+      // console.log(yuii)
+      //arr_grafics += `var arr_n = ${yuii}`;
+      ws.send(arr_grafics);
+
+      let dat_data = ''
+      let lcolor = `window.chartColors.red`
+      arr_i.forEach((v,i)=>{
+        if(i == 1){lcolor = `localStorage.line_color_0`}
+        if(i == 2){lcolor = `localStorage.line_color_1`}
+        if(i == 3){lcolor = `localStorage.line_color_2`}
+        if(i == 4){lcolor = `localStorage.line_color_3`}
+        if(i == 5){lcolor = `localStorage.line_color_4`}
+        if(i == 6){lcolor = `localStorage.line_color_5`}
+        if(i == 7){lcolor = `localStorage.line_color_6`}
+        if(i == 8){lcolor = `localStorage.line_color_7`}
+        if(i == 9){lcolor = `localStorage.line_color_8`}
+        if(i == 10){lcolor = `localStorage.line_color_9`}
+        if(i == 11){lcolor = `localStorage.line_color_10`}
+        if(i == 12){lcolor = `localStorage.line_color_11`}
+        dat_data+=`{
+label: "${v}",
+backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+borderColor: ${lcolor},
+fill: false,
+data: preparing_data(arr_${i})
+},`
+      })
+      dat_data = dat_data.substring(0,dat_data.length-1)
+      console.log(dat_data)
       //jetpack.read('F:/ajr/JSON/'+adress+'.json','json');
 
-      let htmlx = `EVAL
-const this_real_time = function(){
+      let htmlx = `EVALconst this_real_time = function(){
 var objData = new Date();
 var year = objData.getFullYear()
 var month = objData.getMonth();
@@ -528,6 +603,16 @@ var hours = objData.getHours();
 var minutes = objData.getMinutes();
 return [year,month+1,date,hours,minutes]
 }
+if(!localStorage.line_color_0){
+localStorage.line_color_0 = 'rgb(75, 192, 192)'
+localStorage.line_color_1 = 'rgb(192, 75, 192)'
+localStorage.line_color_2 = 'rgb(192, 192, 75)'
+localStorage.line_color_3 = 'rgb(75, 75, 192)'
+localStorage.line_color_4 = 'rgb(75, 192, 75)'
+localStorage.line_color_5 = 'rgb(192, 75, 75)'
+}
+
+
 const calc_time_difference = function(arr_time_x,arr_real_time){
 
 
@@ -556,73 +641,101 @@ var symaDate = (v0*24*60)+(v1*24*60)+(arr_real_time[2]*24*60)+(arr_real_time[3]*
 symaDate = symaDate - the_magic_begin;
 return symaDate
 }
-const grafics = function(adress,v){
-if(arr_json == undefined || arr_json == ""){
-alert('файл '+adress+' ненайден')
-}else{
+
+
+
+//////////////////////////////////////////////////////////////////////
+const preparing_data = function(arr){
+let arr_corect = []
+arr.forEach((v)=>arr_corect.push(v[1]+'/'+v[2]+'/'+v[0]+' '+v[3]+':'+v[4]))
+console.log(arr_corect)
+
 let arr_x = []
-for(i=0;i<arr_json.length-1;i++){
-arr_x.push(calc_time_difference(arr_json[i],arr_json[i+1]))
+for(i=0;i<arr.length-1;i++){
+arr_x.push(calc_time_difference(arr[i],arr[i+1]))
 }
-arr_x.push(calc_time_difference(arr_json[arr_json.length-1],this_real_time()));
+// arr_x.push(calc_time_difference(arr[arr_json.length-1],this_real_time()));
 console.log(arr_x);
-if(v=='-'){arr_x = arr_x.map(v=>-v)}
-var data = {
-labels: arr_x,
-datasets: [
-{
-label: adress,
-fill: true,
-lineTension: 0.1,// угол сглаживания линии
-backgroundColor: "rgba(150,60,60,0.5)",// цвет столбцов
-borderColor: "rgba(192,75,75,1)",// цвет линии
-borderCapStyle: 'butt',
-borderDash: [],
-borderDashOffset: 0.0,
-borderJoinStyle: 'miter',
-pointBorderColor: "rgba(192,75,75,1)",// цвет точек
-pointBackgroundColor: "#111",// цвет в центре точки
-pointBorderWidth: 1,// толшина линии на круге
-pointHoverRadius: 1,
-pointHoverBackgroundColor: "rgba(75,192,192,1)",
-pointHoverBorderColor: "rgba(200,200,200,0.1)",
-pointHoverBorderWidth: 10,
-pointRadius: 10,// размер точек
-pointHitRadius: 10,
-data: arr_x,
-spanGaps: false
+
+
+let arr_with_objects = []
+arr_corect.forEach((v,i)=>{
+let obj_test = {
+x: v,
+y: arr_x[i-1]
 }
-]
-};
-var options2 = {
-title: {
-display: true,
-text: adress,
-padding: 80
-},
-scales: {
-yAxes: [{
-stacked: true
-}]
-}
+arr_with_objects.push(obj_test)
+})
+console.log(arr_with_objects)
+return arr_with_objects
 }
 
-//var Chart = require('F:/ajr/aspirin/node_modules/chart.js/src/chart.js')
-var ctx2 = document.querySelector('#myChart')
-ctx2.width = 1920;
-ctx2.height = 600;
-var myLineChart = new Chart(ctx2, {
+
+
+let time_to_string = ''
+let lasttime = this_real_time()
+time_to_string = lasttime[1]+'/'+lasttime[2]+'/'+lasttime[0]+' '+lasttime[3]+':'+lasttime[4]
+
+
+
+var timeFormat = 'MM/DD/YYYY HH:mm';
+function newDate(days) {
+return moment().add(days, 'd').toDate();
+}
+function newDateString(days) {
+return moment().add(days, 'd').format(timeFormat);
+}
+function newTimestamp(days) {
+return moment().add(days, 'd').unix();
+}
+console.log(newDateString(15))
+var color = Chart.helpers.color;
+var config = {
 type: 'line',
-data: data,
-options: options2
-});
+data: {
+datasets: [${dat_data}]
+},
+options: {
+title:{
+text: "Chart.js Time Scale"
+},
+scales: {
+xAxes: [{
+type: "time",
+time: {
+format: timeFormat,
+max:time_to_string,
+tooltipFormat: 'll HH:mm'
+},
+scaleLabel: {
+display: true,
+labelString: 'Date'
 }
+}, ],
+yAxes: [{
+scaleLabel: {
+display: true,
+labelString: 'value',
 }
-grafics('Поливал_кусты',10)
+}]
+},
+}
+};
+
+var ctx2 = document.getElementById("myChart").getContext("2d");
+window.myLine = new Chart(ctx2, config);
+
+var colorNames = Object.keys(window.chartColors);
+
+// window.myLine.update();
+
 `;
-      ws.send(htmlx,ws);
-    }
-    /*
+        ws.send(htmlx);
+      }
+
+
+
+        /*
 
 
 
@@ -660,9 +773,9 @@ grafics('Поливал_кусты',10)
   }
 
 */
-    if(ws.users.input_Array[4].includes('удали последний элемент массива')){
-      strx = NNQ.aska_learn_delete(ws)
-    }
-  }
-  return strx
-}
+        if(ws.users.input_Array[4].includes('удали последний элемент массива')){
+          strx = NNQ.aska_learn_delete(ws)
+        }
+      }
+        return strx
+      }
