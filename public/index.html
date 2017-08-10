@@ -7,8 +7,9 @@
     <title>Speech Detection</title>
 
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
   </head>
   <body>
     <div class="registration">
@@ -37,12 +38,13 @@
   <div class="info">
     <div id="drop_zone">Drop files here</div>
     <output id="list"></output>
+    <canvas id="myChart" width="600" height="100"></canvas>
   </div>
 
 
 
   <canvas id="draw" width="1024" height="300"></canvas>   
-  <canvas id="myChart" width="400" height="400"></canvas>
+  
   <audio src="" id="audio"></audio>
   <audio src="" id="audio2"></audio>
 
@@ -140,6 +142,11 @@
       text-align: center;
       width: 100%;
       margin: 0px 0px 0px 0px;
+      z-index: 5;
+      position: absolute;
+    }
+    #myChart{
+      padding: 80px 0px 0px 0px;
       z-index: 5;
       position: absolute;
     }
@@ -326,7 +333,7 @@
 
     const info = document.querySelector('.info')
 
-    data.toString();
+    data = data.toString();
     data.includes('SYSTEM') ? data = data.substring(6,data.length) : '';
     data.includes('NERV') ? data = data.substring(4,data.length) : '';
     data.includes('EVAL') ? data = data.substring(4,data.length) : '';
@@ -458,7 +465,7 @@
          transcript.toLowerCase() == 'авто'){
         //localStorage.wait = 'start';
         p.textContent = 'ASKA';
-        window.color_aska = 350
+        window.color_aska = 180
         window.color_aska_h = 100
         aska('а')
         socket.send('LISTEN')
@@ -555,6 +562,7 @@
    var socket = new WebSocket("ws://185.25.119.59:80/index.html");
 
   //var socket = new WebSocket("ws://159.224.183.122:80/index.html");
+  //var socket = new WebSocket("ws://localhost:80/index.html");
 
   // Всё первоначальные стейты при подключении
   socket.onopen = function() {
@@ -579,7 +587,7 @@
       run_code(event.data)
 
       let calc_hue = (new Date().getHours()*15)+0
-      displayit(event.data,`hsl(${20},${window.color_aska_h}%,25%)`)
+      displayit(event.data,`hsl(${180},${window.color_aska_h}%,25%)`)
     }else{
       aska(event.data);
     }
@@ -608,7 +616,7 @@
   canvas.width = 1920;
   canvas.height = 1080;
   init()
-  window.color_aska = 350
+  window.color_aska = 205
   window.color_aska_h = 100
   //video_animation()
   window.onload = function(){
@@ -643,7 +651,7 @@
       arr_fre.splice(0,1)
     }
     waveform.forEach((v,index)=>{
-      calc_hue = window.color_aska +(arr_fre[index]/4)
+      calc_hue = window.color_aska -(arr_fre[index]/8)
       //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
       //(120, 100%, 75%);
       ctx.fillStyle=`hsl(${calc_hue},${window.color_aska_h}%,55%)`;
