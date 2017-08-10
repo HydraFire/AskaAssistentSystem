@@ -568,7 +568,7 @@ video.currentTime = (3*60)+24;
       ws.send(arr_grafics);
 
       let dat_data = ''
-      let lcolor = 'rgb(192, 75, 75)'
+      let lcolor = `'rgb(192, 75, 75)'`;
       arr_i.forEach((v,i)=>{
         if(i == 1){lcolor = `localStorage.line_color_0`}
         if(i == 2){lcolor = `localStorage.line_color_1`}
