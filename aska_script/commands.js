@@ -584,7 +584,7 @@ video.currentTime = (3*60)+24;
         if(i == 12){lcolor = `localStorage.line_color_11`}
         dat_data+=`{
 label: "${v}",
-backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+backgroundColor: 'rgb(3, 3, 3)',
 borderColor: ${lcolor},
 fill: false,
 data: preparing_data(arr_${i})
