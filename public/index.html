@@ -9,7 +9,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
-    <script type="text/javascript" src="utils.js"></script>
   </head>
   <body>
     <div class="registration">
@@ -562,7 +561,7 @@
    var socket = new WebSocket("ws://185.25.119.59:80/index.html");
 
   //var socket = new WebSocket("ws://159.224.183.122:80/index.html");
-  //var socket = new WebSocket("ws://localhost:80/index.html");
+ // var socket = new WebSocket("ws://localhost:80/index.html");
 
   // Всё первоначальные стейты при подключении
   socket.onopen = function() {

@@ -725,8 +725,6 @@ labelString: 'value',
 var ctx2 = document.getElementById("myChart").getContext("2d");
 window.myLine = new Chart(ctx2, config);
 
-var colorNames = Object.keys(window.chartColors);
-
 // window.myLine.update();
 
 `;
