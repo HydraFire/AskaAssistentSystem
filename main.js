@@ -24,6 +24,7 @@ const sendToAska = function (message,ws){
 exports.sendToAska = sendToAska;
 
 const registration = require('./aska_script/registration');
+const napominalka = require('./aska_script/napominalka');
 //Подключение функции работаюшей с нейросетью ////////////////////
 const set_to_run = require('./aska_script/neural_network').set_to_run;
 

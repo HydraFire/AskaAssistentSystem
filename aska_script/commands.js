@@ -529,72 +529,73 @@ video.currentTime = (3*60)+24;
       //adress = adress.split(' ').join('_')
       ///////////////// 1 Задание ////// берем адреса всех не стринговых
       let arr = jetpack.list('./JSON/data/'+ws.users.name+'/graphics_data')
-      let arr_i = []
+      if(arr != null){
+        let arr_i = []
 
-      arr.forEach((v)=>{
-        let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v,'json');
-        if(_.isString(arr_json[0])){
-          console.log(v)
-        }else{
-          v = v.substring(0,v.length-5)
-          arr_i.push(v)
-        }
-      })
-      console.log('adress '+arr_i)
-      strx = ""
-      ///////////////// 2 Задание ////// фор ич для масиива адресов
-      let arr_array = []
-      arr_i.forEach((v)=>{
-        arr_array.push(jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v+'.json','text'))
-      })
-
-
-      //let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+adress+'.json','json');
+        arr.forEach((v)=>{
+          let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v,'json');
+          if(_.isString(arr_json[0])){
+            console.log(v)
+          }else{
+            v = v.substring(0,v.length-5)
+            arr_i.push(v)
+          }
+        })
+        console.log('adress '+arr_i)
+        strx = ""
+        ///////////////// 2 Задание ////// фор ич для масиива адресов
+        let arr_array = []
+        arr_i.forEach((v)=>{
+          arr_array.push(jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v+'.json','text'))
+        })
 
 
+        //let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+adress+'.json','json');
 
 
 
-      let arr_grafics = ''
-      arr_grafics += `EVAL`;
 
-      arr_i.forEach((v,i)=>{
-        arr_grafics += ` var arr_${i} = ${arr_array[i]};`;
-      })
 
-      // let yuii = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+arr_i[3]+'.json','json')
-      // console.log(yuii)
-      //arr_grafics += `var arr_n = ${yuii}`;
-      ws.send(arr_grafics);
+        let arr_grafics = ''
+        arr_grafics += `EVAL`;
 
-      let dat_data = ''
-      let lcolor = `'rgb(192, 75, 75)'`;
-      arr_i.forEach((v,i)=>{
-        if(i == 1){lcolor = `localStorage.line_color_0`}
-        if(i == 2){lcolor = `localStorage.line_color_1`}
-        if(i == 3){lcolor = `localStorage.line_color_2`}
-        if(i == 4){lcolor = `localStorage.line_color_3`}
-        if(i == 5){lcolor = `localStorage.line_color_4`}
-        if(i == 6){lcolor = `localStorage.line_color_5`}
-        if(i == 7){lcolor = `localStorage.line_color_6`}
-        if(i == 8){lcolor = `localStorage.line_color_7`}
-        if(i == 9){lcolor = `localStorage.line_color_8`}
-        if(i == 10){lcolor = `localStorage.line_color_9`}
-        if(i == 11){lcolor = `localStorage.line_color_10`}
-        if(i == 12){lcolor = `localStorage.line_color_11`}
-        dat_data+=`{
+        arr_i.forEach((v,i)=>{
+          arr_grafics += ` var arr_${i} = ${arr_array[i]};`;
+        })
+
+        // let yuii = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+arr_i[3]+'.json','json')
+        // console.log(yuii)
+        //arr_grafics += `var arr_n = ${yuii}`;
+        ws.send(arr_grafics);
+
+        let dat_data = ''
+        let lcolor = `'rgb(192, 75, 75)'`;
+        arr_i.forEach((v,i)=>{
+          if(i == 1){lcolor = `localStorage.line_color_0`}
+          if(i == 2){lcolor = `localStorage.line_color_1`}
+          if(i == 3){lcolor = `localStorage.line_color_2`}
+          if(i == 4){lcolor = `localStorage.line_color_3`}
+          if(i == 5){lcolor = `localStorage.line_color_4`}
+          if(i == 6){lcolor = `localStorage.line_color_5`}
+          if(i == 7){lcolor = `localStorage.line_color_6`}
+          if(i == 8){lcolor = `localStorage.line_color_7`}
+          if(i == 9){lcolor = `localStorage.line_color_8`}
+          if(i == 10){lcolor = `localStorage.line_color_9`}
+          if(i == 11){lcolor = `localStorage.line_color_10`}
+          if(i == 12){lcolor = `localStorage.line_color_11`}
+          dat_data+=`{
 label: "${v}",
 backgroundColor: 'rgb(3, 3, 3)',
 borderColor: ${lcolor},
 fill: false,
 data: preparing_data(arr_${i})
 },`
-      })
-      dat_data = dat_data.substring(0,dat_data.length-1)
-      console.log(dat_data)
-      //jetpack.read('F:/ajr/JSON/'+adress+'.json','json');
+        })
+        dat_data = dat_data.substring(0,dat_data.length-1)
+        console.log(dat_data)
+        //jetpack.read('F:/ajr/JSON/'+adress+'.json','json');
 
-      let htmlx = `EVALconst this_real_time = function(){
+        let htmlx = `EVALconst this_real_time = function(){
 var objData = new Date();
 var year = objData.getFullYear()
 var month = objData.getMonth();
@@ -729,11 +730,13 @@ window.myLine = new Chart(ctx2, config);
 
 `;
         ws.send(htmlx);
+      }else{
+        ws.send('нет статистики для построения графика');
       }
+    }
 
 
-
-        /*
+    /*
 
 
 
@@ -771,9 +774,9 @@ window.myLine = new Chart(ctx2, config);
   }
 
 */
-        if(ws.users.input_Array[4].includes('удали последний элемент массива')){
-          strx = NNQ.aska_learn_delete(ws)
-        }
-      }
-        return strx
-      }
+    if(ws.users.input_Array[4].includes('удали последний элемент массива')){
+      strx = NNQ.aska_learn_delete(ws)
+    }
+  }
+  return strx
+}

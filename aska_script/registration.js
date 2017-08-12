@@ -3,6 +3,7 @@
 const jetpack = require('fs-jetpack');
 const calc_layers = require('./neural_network').calc_layers;
 const this_real_time = require('./polival_kystu').this_real_time;
+const napominalka = require('./napominalka');
 
 /////////////////////////////////////////////////////////////////
 function get_info(ws){
@@ -62,10 +63,19 @@ const login = function(ws,message){
         ws.users.aska_talks = false
         console.log('CONECTION '+ws.users.name)
         get_info(ws)
+        setTimeout(()=>{
+          if(jetpack.read('./JSON/data/'+ws.users.name+'/arr_napominalka.json','json')){
+            napominalka.check_time(ws)
+            setInterval(()=>{
+              napominalka.check_time(ws)
+              console.log('napominanie')
+            },360000)
+          }
+        },1000)
       }
     }
   })
- // ws.terminate()
+  // ws.terminate()
   /*
   arr_ip_id.some(v=>{
     if(v[1] == message){ return message = v[0]}else{message = message}
