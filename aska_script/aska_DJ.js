@@ -115,10 +115,10 @@ socket.send('aska_play_music_true')
     let code_to_eval_on_client_part2 = `
 }, false);
 
-//setTimeout(()=>{
-//recognition.start();
-//recognition.addEventListener('end', recognition.start)
-//},2000)
+setTimeout(()=>{
+recognition.start();
+recognition.addEventListener('end', recognition.start)
+},2000)
 `;
     let code_sym = event_to_next_track2+code_to_eval_on_client_part1+event_fo_next_track+code_to_eval_on_client_part2
     return code_sym
