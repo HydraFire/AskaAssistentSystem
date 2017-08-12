@@ -102,7 +102,7 @@ wss.on("connection", function(ws){
     somebodyConnected_log(ws,message)
 
 
-    if(message.length > 2000){
+    if(message.length > 200){
       let type = ws.users.save_file_name
       type = type.substring(type.length-3,type.length)
       let adres = 'public/users/'+ws.users.name
