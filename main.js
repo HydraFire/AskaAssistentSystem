@@ -30,13 +30,26 @@ const set_to_run = require('./aska_script/neural_network').set_to_run;
 //global.attention = 'LISTEN'
 //////////////////////////////////////////////////////////////////
 //// WebSocketServer ///////////////////////////////////////////////
-var WebSocketServer = require("ws").Server,
-    http = require("http"),
-    exp = express(),
-    server = http.createServer(exp);
+const WebSocketServer = require("ws").Server
+const https = require("https")
+const exp = express()
 
+
+var fs = require('fs');
+
+var key = fs.readFileSync('public/users/HydraFire/private.key');
+var cert = fs.readFileSync( 'public/users/HydraFire/primary.crt' );
+var ca = fs.readFileSync( 'public/users/HydraFire/intermediate.crt' );
+
+var options = {
+  key: key,
+  cert: cert,
+  ca:ca
+};
+
+var server = https.createServer(options,exp).listen(443);
 exp.use(express.static(__dirname + '/public'));
-server.listen(80);
+//server;
 
 function somebodyConnected_log(ws,message){
   if(message.length > 2000){
@@ -51,25 +64,27 @@ function somebodyConnected_log(ws,message){
 
 global.aska_play_music = false /// < ------------------------
 //////////////////////WebSocket/////////////////////////////////
+
 var wss = new WebSocketServer({server: server});
+
 wss.on("connection", function(ws){
   ws.users = []
   ws.users.aska_play_music = false
-  
-  
+
+
   let user_ip = ws._socket.remoteAddress
   user_ip = user_ip.substring(7,user_ip.length)
   if(user_ip == '159.224.183.122'){
-   //ws.send('Доступ розрешон')
-   let login_data = 'USERHydraFire||1||159.224.183.122'
-   registration.login(ws,login_data)
+    //ws.send('Доступ розрешон')
+    let login_data = 'USERHydraFire||1||159.224.183.122'
+    registration.login(ws,login_data)
   }else{
-   //ws.send('Доступ в общественую ветку')
-   let login_data = 'USERundefined||public||'+user_ip
-   registration.login(ws,login_data)
+    //ws.send('Доступ в общественую ветку')
+    let login_data = 'USERundefined||public||'+user_ip
+    registration.login(ws,login_data)
   }
   console.log(user_ip)
-  
+
 
   ws.on('message', function(message) {
     let str_m = message.toString()
