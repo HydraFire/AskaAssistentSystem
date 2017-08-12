@@ -27,9 +27,15 @@ const registration = require('./aska_script/registration');
 //Подключение функции работаюшей с нейросетью ////////////////////
 const set_to_run = require('./aska_script/neural_network').set_to_run;
 
+var WebSocketServer = require("ws").Server,
+    http = require("http"),
+    exp = express(),
+    server = http.createServer(exp);
+
 //global.attention = 'LISTEN'
 //////////////////////////////////////////////////////////////////
 //// WebSocketServer ///////////////////////////////////////////////
+/*
 const WebSocketServer = require("ws").Server
 const https = require("https")
 const exp = express()
@@ -48,9 +54,10 @@ var options = {
 };
 
 var server = https.createServer(options,exp).listen(443);
+*/
 exp.use(express.static(__dirname + '/public'));
 //server;
-
+server.listen(80);
 function somebodyConnected_log(ws,message){
   if(message.length > 2000){
     let message2 = 'SYSTEM слишком большой ФАЙЛ';
