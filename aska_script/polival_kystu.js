@@ -20,17 +20,17 @@ const count_to_text = function(v){
               if(zzz == 6 ){date2 +='шестьсот '}else
                 if(zzz == 7 ){date2 +='семьсот '}else
                   if(zzz == 8 ){date2 +='восемьсот '}else
-                    if(zzz == 9 ){date2 +='девятьсот '}else
-                      if(zz == 1 && z == 0){date2 +='десятый '}else
-                        if(zz == 1 && z == 1){date2 +='одиннадцатый '}else
-                          if(zz == 1 && z == 2){date2 +='двенадцатый '}else
-                            if(zz == 1 && z == 3){date2 +='тринадцатый '}else
-                              if(zz == 1 && z == 4){date2 +='четырнадцатый '}else
-                                if(zz == 1 && z == 5){date2 +='пятнадцатый '}else
-                                  if(zz == 1 && z == 6){date2 +='шестнадцатый '}else
-                                    if(zz == 1 && z == 7){date2 +='семнадцатый '}else
-                                      if(zz == 1 && z == 8){date2 +='восемнадцатый '}else
-                                        if(zz == 1 && z == 9){date2 +='девятнадцатый '}
+                    if(zzz == 9 ){date2 +='девятьсот '}
+    if(zz == 1 && z == 0){date2 +='десятый '}else
+      if(zz == 1 && z == 1){date2 +='одиннадцатый '}else
+        if(zz == 1 && z == 2){date2 +='двенадцатый '}else
+          if(zz == 1 && z == 3){date2 +='тринадцатый '}else
+            if(zz == 1 && z == 4){date2 +='четырнадцатый '}else
+              if(zz == 1 && z == 5){date2 +='пятнадцатый '}else
+                if(zz == 1 && z == 6){date2 +='шестнадцатый '}else
+                  if(zz == 1 && z == 7){date2 +='семнадцатый '}else
+                    if(zz == 1 && z == 8){date2 +='восемнадцатый '}else
+                      if(zz == 1 && z == 9){date2 +='девятнадцатый '}
     if(zz == 2 && z == 0){date2 +='двадцатый '}else
       if(zz == 3 && z == 0){date2 +='тридцатый '}else
         if(zz == 4 && z == 0){date2 +='сороковой '}else
