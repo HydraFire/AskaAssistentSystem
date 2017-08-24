@@ -43,7 +43,7 @@
 
 
   <canvas id="draw" width="1024" height="300"></canvas>   
-  
+
   <audio src="" id="audio"></audio>
   <audio src="" id="audio2"></audio>
 
@@ -89,6 +89,16 @@
       color:#abc;
       background:rgba(22,22,22,0.65);
       position: fixed;
+    }
+    .tracks {
+      width: 100%;
+      float: left;
+      background:rgba(22,22,22,0.65);
+    }
+    .track_button {
+      width: 150px;
+      float: left;
+      background:rgba(22,22,22,0.65);
     }
     #video {
       z-index: -5;
@@ -226,6 +236,7 @@
   </body>
 
 <script>
+
   function login(e){
     e.preventDefault()
     let login = (this.querySelector('[name=login]')).value;
@@ -242,7 +253,7 @@
   }
 
   function readClipboard(){
-    let extensionId = 'pbeblkahgpkafmmonncmbkihebhcpbjb';
+    let extensionId = "pbeblkahgpkafmmonncmbkihebhcpbjb";
     chrome.runtime.sendMessage(
       extensionId,
       { method: 'getClipboard' },
@@ -251,6 +262,43 @@
         console.log('extension getClipboard response', response);
       }
     );
+  }
+
+  function play_music(adres){
+    socket.send('найди трек '+adres)
+  }
+  function play_from(){
+    let audio = document.querySelector('#audio')
+    socket.send('начиная с этого момента '+(audio.currentTime|0))
+  }
+  function play_to(){
+    let audio = document.querySelector('#audio')
+    socket.send('заканчивай на этом '+(audio.currentTime|0))
+  }
+  function coub_animation(adres){
+    
+    let contentt2 = document.querySelector('.info');
+    let zzz = contentt2.querySelector('video')
+    console.log(adres)
+    let abc_arr = adres.split('/')
+
+    if(abc_arr[4]){
+      if(zzz){
+        contentt2.removeChild(contentt2.lastChild)
+      }
+      contentt2.innerHTML += '<video class="player__video viewer" src="'+adres+'" autoplay loop></video>';
+    }else{
+      if(zzz){
+        contentt2.removeChild(contentt2.lastChild)
+      }
+      console.log('нет видео')
+    }
+
+    //let video = document.querySelector('.player__video');
+    //video.webkitRequestFullscreen();
+    //video.volume = localStorage.audioVolume;
+    //video.currentTime = (3*60)+24;
+
   }
 
   function video_animation(){
@@ -469,11 +517,19 @@
         aska('а')
         socket.send('LISTEN')
       }
-
-      if(localStorage.wait == 'wait'){
-        console.log(transcript.toLowerCase())
+      if(transcript.toLowerCase() == 'начиная с этого момента'||
+         transcript.toLowerCase() == 'заканчивай на этом'
+        ){
+        let audio = document.querySelector('#audio')
+        console.log(audio)
+        let xtext = transcript+' '+(audio.currentTime|0)
+        socket.send(xtext)
       }else{
-        socket.send(transcript.toLowerCase())
+        if(localStorage.wait == 'wait'){
+          console.log(transcript.toLowerCase())
+        }else{
+          socket.send(transcript.toLowerCase())
+        }
       }
       if(localStorage.wait == 'start'){
         p = document.createElement('p');
@@ -561,7 +617,7 @@
    var socket = new WebSocket("wss://nerv.pro/index.html");
 
   //var socket = new WebSocket("wss://159.224.183.122:443/index.html");
- // var socket = new WebSocket("ws://localhost:80/index.html");
+  // var socket = new WebSocket("ws://localhost:80/index.html");
 
   // Всё первоначальные стейты при подключении
   socket.onopen = function() {

@@ -48,7 +48,8 @@ const login = function(ws,message){
     if(login_data[0] == v[0]){
       if(login_data[1] == v[1]){
         if(ws.users.all_thoughts){
-          ws.users.all_thoughts.forEach((v)=>{clearInterval(v)})
+          ws.users.all_thoughts.forEach((v)=>{clearInterval(v)});
+          clearInterval(ws.users.napomni)
           console.log('CLOSE CONNECTION')
         }
         ws.users = []
@@ -56,7 +57,9 @@ const login = function(ws,message){
         ws.users.input_Array = ['','','','','']
         ws.users.output_Array = ['','','','']
         ws.users.track = 'none'
+         ws.users.last_track = []
         ws.users.all_thoughts = []
+        ws.users.napomni = ''
         ws.users.attention = 'LISTEN'
         ws.users.nn_out_arr = ['null','null','null','null']
         ws.users.silence = false
@@ -66,7 +69,7 @@ const login = function(ws,message){
         setTimeout(()=>{
           if(jetpack.read('./JSON/data/'+ws.users.name+'/arr_napominalka.json','json')){
             napominalka.check_time(ws)
-            setInterval(()=>{
+            ws.users.napomni = setInterval(()=>{
               napominalka.check_time(ws)
               console.log('napominanie')
             },360000)

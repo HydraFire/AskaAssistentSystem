@@ -41,7 +41,11 @@ const check_time = function(ws){
     }
   })
   if(text_speech != ''){
-   ws.send('рекомендовано к выполнению, '+text_speech)
+    try{
+      ws.send('рекомендовано к выполнению, '+text_speech)
+    }catch(err){
+     console.log(err)
+    }
   }
 }
 exports.check_time = check_time;

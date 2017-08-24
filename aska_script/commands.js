@@ -49,6 +49,70 @@ exports.commands = function(strx,ws){
       ws.send('EVALreadClipboard()')
       strx = ''
     }
+    if(ws.users.input_Array[4].includes('начиная с этого момента')){
+      let text = ws.users.input_Array[4]
+      let textik = 'начиная с этого момента'
+      aska_DJ.fron_this_moment(ws,text,textik)
+      strx = ''
+    }
+    if(ws.users.input_Array[4].includes('заканчивай на этом')){
+      let text = ws.users.input_Array[4]
+      let textik = 'заканчивай на этом'
+      aska_DJ.to_this_moment(ws,text,textik)
+      strx = ''
+    }
+    if(ws.users.input_Array[4] == 'удали видео с этого трека'){
+      //let text = ws.users.input_Array[4]
+      //let textik = 'заканчивай на этом'
+      aska_DJ.delete_video_link(ws)
+      strx = ''
+    }
+    if(ws.users.input_Array[4] == 'удали этот файл видео'){
+      //let text = ws.users.input_Array[4]
+      //let textik = 'заканчивай на этом'
+      console.log('HO')
+      aska_DJ.delete_video(ws)
+      strx = ''
+    }
+    if(ws.users.input_Array[4] == 'н**** удали этот трек'||
+      ws.users.input_Array[4] == 'н**** удалил этот трек'||
+      ws.users.input_Array[4] == 'н**** выдали этот трек'||
+      ws.users.input_Array[4] == 'удали н**** этот трек'||
+      ws.users.input_Array[4] == 'настя удали этот трек'
+      ){
+      //let text = ws.users.input_Array[4]
+      //let textik = 'заканчивай на этом'
+      aska_DJ.delete_audio(ws)
+      strx = ''
+    }
+    if(ws.users.input_Array[4] == 'повтори предыдущий трек'||
+      ws.users.input_Array[4] == 'включи предыдущий трек'){
+      //let text = ws.users.input_Array[4]
+      //let textik = 'заканчивай на этом'
+      aska_DJ.replay_last(ws)
+      strx = ''
+    }
+    if(ws.users.input_Array[4] == 'список всех команд'){
+      //let text = ws.users.input_Array[4]
+      //let textik = 'заканчивай на этом'
+      let htcode = 'SYSTEM'
+      htcode+= `<button onclick="socket.send('последний ошибка которая у тебя была')">последний ошибка которая у тебя была</button>`
+      ws.send(htcode)
+      strx = ''
+    }
+    if(ws.users.input_Array[4] == 'последний ошибка которая у тебя было'||
+      ws.users.input_Array[4] == 'последний ошибка которая у тебя была'||
+      ws.users.input_Array[4] == 'последняя ошибка которую у тебя было'
+      ){
+      let arr_err = jetpack.read('./JSON/data/'+ws.users.name+'/err_arr.json','json')
+      //let text = ws.users.input_Array[4]
+      //let textik = 'заканчивай на этом'
+      if(arr_err){
+      strx = arr_err[arr_err.length-1]
+      }else{
+      strx = 'Пока небыло некаких ошибок'
+      }
+    }
     /*
     if(ws.users.input_Array[4].includes('пишу функцию')){
      //ws.send('EVALreadClipboard()')
@@ -156,9 +220,9 @@ exports.commands = function(strx,ws){
       if(arr){
         arr.forEach((v)=>{
           if(ws.users.track == v){
-            htmlx+=`<p><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
+            htmlx+=`<p><div class="tracks"><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a><div class="track_button"><a onclick="play_music('${v}')">►</a> Pause Delete <a onclick="play_from('${v}')"> ☼</a><a onclick="play_to('${v}')"> ☼</a></div></p></div>`
           }else{
-            htmlx+=`<p><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a></p>`
+            htmlx+=`<p><div class="tracks"><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a><div class="track_button"><a onclick="play_music('${v}')">►</a> Pause Delete ☼ ☼</div></p></div>`
           }
         })
         ws.send('SYSTEM'+htmlx)

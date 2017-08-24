@@ -25,6 +25,7 @@ exports.sendToAska = sendToAska;
 
 const registration = require('./aska_script/registration');
 const napominalka = require('./aska_script/napominalka');
+const askaDJ = require('./aska_script/aska_DJ');
 //Подключение функции работаюшей с нейросетью ////////////////////
 const set_to_run = require('./aska_script/neural_network').set_to_run;
 
@@ -69,6 +70,7 @@ global.aska_play_music = false /// < ------------------------
 var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(ws){
+
   ws.users = []
   ws.users.aska_play_music = false
 
@@ -88,79 +90,102 @@ wss.on("connection", function(ws){
 
 
   ws.on('message', function(message) {
-    let str_m = message.toString()
-    if(str_m.substring(0,4) == 'USER'){
-      message = registration.login(ws,message)
-    }
-    //console.log('SYSTEM '+message)
-    somebodyConnected_log(ws,message)
-
-
-    if(message.length > 2000){
-      let type = ws.users.save_file_name
-      type = type.substring(type.length-3,type.length)
-      let adres = 'public/users/'+ws.users.name
-      if(type == 'mp3'){
-        adres = 'public/users/'+ws.users.name+'/music'
+    try{
+      let str_m = message.toString()
+      if(str_m.substring(0,4) == 'USER'){
+        message = registration.login(ws,message)
       }
-      let msize = jetpack.inspectTree(adres)
-      console.log(adres)
-      if(msize == null){
-        jetpack.write(adres+'/'+ws.users.save_file_name,message)
-        ws.send('SYSTEMFile UPLOAD "'+adres+'"')
-      }else
-        if(ws.users.name == 'HydraFire'){
-          if(msize.size < 10000000000){
-            console.log(msize.size)
-            jetpack.write(adres+'/'+ws.users.save_file_name,message)
-            ws.send('SYSTEMFile UPLOAD "'+adres+'"')
-          }else{
-            ws.send('Всё, ты уперся в ограничение места, больше нельзя заливать файлы')
-            console.log(msize.size)
-          }
-        }else{
-          if(msize.size < 1000000000){
-            console.log(msize.size)
-            jetpack.write(adres+'/'+ws.users.save_file_name,message)
-            ws.send('SYSTEMFile UPLOAD "'+adres+'"')
-          }else{
-            ws.send('Всё, ты уперся в ограничение места, больше нельзя заливать файлы')
-            console.log(msize.size)
-          }
-        }
+      //console.log('SYSTEM '+message)
+      somebodyConnected_log(ws,message)
 
-    }else{
-      if(message.toString().includes('SHUT_UP')){
-        ws.users.aska_talks = true
-      }else if(message.toString().includes('SPEECH')){
-        ws.users.aska_talks = false
-      }else if(message.toString().includes('aska_play_music_true')){
-        ws.users.aska_play_music = true
-      }else if(message.toString().includes('aska_play_music_false')){
-        ws.users.aska_play_music = false
-      }else if(message.toString().includes('LISTEN')){
-        ws.users.attention = 'LISTEN'
-        ws.users.nn_out_arr[3] = 'ASKA'
-      }else if(message.toString().includes('FILE')){
-        message = message.substring(4,message.length)
-        //console.log(message)
-        ws.users.save_file_name = message
+
+      if(message.length > 2000){
+        let type = ws.users.save_file_name
+        type = type.substring(type.length-3,type.length)
+        let adres = 'public/users/'+ws.users.name
+        if(type == 'mp3'){
+          adres = 'public/users/'+ws.users.name+'/music'
+        }else if(type == 'mp4' && ws.users.track != 'none'){
+          adres = 'public/users/'+ws.users.name+'/video'
+          askaDJ.add_video(ws)
+        }
+        let msize = jetpack.inspectTree(adres)
+        console.log(adres)
+        if(msize == null){
+          jetpack.write(adres+'/'+ws.users.save_file_name,message)
+          ws.send('SYSTEMFile UPLOAD "'+adres+'"')
+        }else
+          if(ws.users.name == 'HydraFire'){
+            if(msize.size < 10000000000){
+              console.log(msize.size)
+              jetpack.write(adres+'/'+ws.users.save_file_name,message)
+              ws.send('SYSTEMFile UPLOAD "'+adres+'"')
+            }else{
+              ws.send('Всё, ты уперся в ограничение места, больше нельзя заливать файлы')
+              console.log(msize.size)
+            }
+          }else{
+            if(msize.size < 1000000000){
+              console.log(msize.size)
+              jetpack.write(adres+'/'+ws.users.save_file_name,message)
+              ws.send('SYSTEMFile UPLOAD "'+adres+'"')
+            }else{
+              ws.send('Всё, ты уперся в ограничение места, больше нельзя заливать файлы')
+              console.log(msize.size)
+            }
+          }
+
       }else{
-        //console.log(' ws.users.attention = '+ws.users.attention)
-        if(ws.users.attention == 'LISTEN'){
-          if(ws.users.input_Array[ws.users.input_Array.length-1] != message){
-            ws.users.input_Array.push(message)
-            ws.users.input_Array.splice(0,1)
+        if(message.toString().includes('SHUT_UP')){
+          ws.users.aska_talks = true
+        }else if(message.toString().includes('SPEECH')){
+          ws.users.aska_talks = false
+        }else if(message.toString().includes('aska_play_music_true')){
+          ws.users.aska_play_music = true
+        }else if(message.toString().includes('aska_play_music_false')){
+          ws.users.aska_play_music = false
+        }else if(message.toString().includes('LISTEN')){
+          ws.users.attention = 'LISTEN'
+          ws.users.nn_out_arr[3] = 'ASKA'
+        }else if(message.toString().includes('FILE')){
+          message = message.substring(4,message.length)
+          //console.log(message)
+          ws.users.save_file_name = message
+        }else{
+          //console.log(' ws.users.attention = '+ws.users.attention)
+          if(ws.users.attention == 'LISTEN'){
+            if(ws.users.input_Array[ws.users.input_Array.length-1] != message){
+              ws.users.input_Array.push(message)
+              ws.users.input_Array.splice(0,1)
+            }
+            console.log(ws.users.input_Array)
+            set_to_run(ws,message.toString());
           }
-          console.log(ws.users.input_Array)
-          set_to_run(ws,message.toString());
         }
       }
-    }
-  });
+    }catch(err){
+      console.log(err)
+      let err2 = err.toString()
+      err2 = err2.substring(0,40)
+      console.log(err2)
+      ws.send('Внимание, Ошибка'+err2)
+      if(ws.users.all_thoughts){
+        ws.users.all_thoughts.forEach((v)=>{clearInterval(v)})
+        clearInterval(ws.users.napomni)
+        console.log('CLOSE CONNECTION')
+        let err_arr = jetpack.read('./JSON/data/'+ws.users.name+'/err_arr.json','json')
+        if(!err_arr){
+         err_arr = ['пока не было ошибок']
+        }
+        err_arr.push(err2)
+        jetpack.write('./JSON/data/'+ws.users.name+'/err_arr.json',err_arr)
+        ws.close()
+      }
+    }});
   ws.addEventListener("close",()=>{
     if(ws.users.all_thoughts){
       ws.users.all_thoughts.forEach((v)=>{clearInterval(v)})
+      clearInterval(ws.users.napomni)
       console.log('CLOSE CONNECTION')
     }
   });

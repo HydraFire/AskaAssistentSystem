@@ -12,7 +12,7 @@ function get_new_tracks(ws){
     if(!aska_dj){
       aska_dj = []
       arr_list.forEach((v)=>{
-        aska_dj.splice(aska_dj.length,1,[1,v])
+        aska_dj.splice(aska_dj.length,1,[1,v,''])
       })
     }else{
       arr_list.forEach((v)=>{
@@ -35,30 +35,173 @@ function get_new_tracks(ws){
 }
 function track_played_plus1(ws,track,arr,num){
   let r
-    arr.forEach((v,index)=>{
-      if(v.indexOf(track) > 0){
-        r = index
+  arr.forEach((v,index)=>{
+    if(v.indexOf(track) > 0){
+      r = index
+    }
+  })
+  let arr_statistic = parseFloat(arr[r][0])+num
+  arr[r].splice(0,1,arr_statistic)
+  arr.sort(function(a, b) {
+    return a[0] - b[0];
+  });
+  jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',arr)
+}
+///////////////////////////////////////////////////////////////////////////
+const replay_last = function(ws){
+  if(ws.users.last_track.length > 1){
+    
+    let last_track = ''
+    
+    
+    ws.users.last_track.forEach((v,i)=>{
+      if(v == ws.users.track){
+        last_track = ws.users.last_track[i-1]
       }
     })
-    let arr_statistic = parseFloat(arr[r][0])+num
-    arr[r].splice(0,1,arr_statistic)
-    arr.sort(function(a, b) {
-      return a[0] - b[0];
-    });
-    jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',arr)
+  
+    
+        //ws.users.last_track[ws.users.last_track.length-2]
+    console.log(last_track)
+    ws.send(start(ws,'none',last_track))
+  }else{
+  ws.send('я забыла какой там был трек')
+  }
 }
+exports.replay_last = replay_last;
+///////////////////////////////////////////////////////////////////////////
+const delete_audio = function(ws){
+  let name_track = ws.users.track
+  var aska_dj2 = jetpack.read('./JSON/data/'+ws.users.name+'/aska_dj.json','json')
+  if(aska_dj2){
+    aska_dj2.forEach((v,i)=>{
+      if(v[1] == name_track){
+        aska_dj2.splice(i,1)
+      }
+    })
+  }
+  jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',aska_dj2)
+  ws.send(stop(ws))
+  jetpack.remove('./public/users/'+ws.users.name+'/music/'+name_track);
+  ws.send('Удалила трек '+ws.users.track)
+} 
+exports.delete_audio = delete_audio;
+//////////////////////////////////////////////////////////////////////
+const delete_video = function(ws){
+  var aska_dj2 = jetpack.read('./JSON/data/'+ws.users.name+'/aska_dj.json','json')
+  let video_file = ''
+  if(aska_dj2){
+    aska_dj2.forEach((v,i)=>{
+      if(v[1] == ws.users.track){
+        video_file = v[2]
+      }
+    })
+  }
+  if(video_file != ''){
+    aska_dj2.forEach((v,i)=>{
+      if(v[2] == video_file){
+        v[2] = ''
+      }
+    })
+    jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',aska_dj2)
+    console.log(video_file)
+    jetpack.remove('./public/users/'+ws.users.name+'/video/'+video_file);
+  } 
+}
+exports.delete_video = delete_video;
 /////////////////////////////////////////////////////////////////
+const delete_video_link = function(ws){
+  var aska_dj2 = jetpack.read('./JSON/data/'+ws.users.name+'/aska_dj.json','json')
+  if(aska_dj2){
+    aska_dj2.forEach((v,i)=>{
+      if(v[1] == ws.users.track){
+        v[2] = ""
+      }
+    })
+  }
+  jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',aska_dj2)
+}
+exports.delete_video_link = delete_video_link;
+/////////////////////////////////////////////////////////////////
+const fron_this_moment = function(ws,text,textik){
+  text = text.substring(textik.length,text.length)
+  text = parseFloat(text)
+  console.log(text)
+  console.log(text)
+  console.log(text)
+  var aska_dj2 = jetpack.read('./JSON/data/'+ws.users.name+'/aska_dj.json','json')
+  let name_id = 's'
+  if(aska_dj2){
+    aska_dj2.forEach((v,i)=>{
+      if(v[1] == ws.users.track){
+        name_id = i
+      }
+    })
+  }
+  if(name_id != 's'){
+    console.log(aska_dj2[name_id][3]+'    '+text)
+    aska_dj2[name_id][3] = text
+    console.log(aska_dj2[name_id][3]+'    '+text)
+  }
+  jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',aska_dj2)
+  ws.send('хорошо, трек будет начинаться с '+text+' секунда')
+}
+exports.fron_this_moment = fron_this_moment;
 
+const to_this_moment = function(ws,text,textik){
+  text = text.substring(textik.length,text.length)
+  text = parseFloat(text)
+  console.log(text)
+  console.log(text)
+  console.log(text)
+  var aska_dj2 = jetpack.read('./JSON/data/'+ws.users.name+'/aska_dj.json','json')
+  let name_id = 's'
+  if(aska_dj2){
+    aska_dj2.forEach((v,i)=>{
+      if(v[1] == ws.users.track){
+        name_id = i
+      }
+    })
+  }
+  console.log(name_id)
+  if(name_id != 's'){
+    if(!aska_dj2[name_id][3]){
+      aska_dj2[name_id][3] = 0
+    }
+    console.log(aska_dj2[name_id][4])
+    aska_dj2[name_id][4] = text
+    console.log(aska_dj2[name_id][4])
+  }
+  console.log(aska_dj2)
+  jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',aska_dj2)
+  ws.send('хорошо, трек будет заканчиваться на этом '+text+' секунда')
+}
+exports.to_this_moment = to_this_moment;
 
+const add_video = function(ws){
+  let name = ws.users.save_file_name
+  let track = ws.users.track
 
+  let aska_dj2 = jetpack.read('./JSON/data/'+ws.users.name+'/aska_dj.json','json')
+  if(aska_dj2){
+    aska_dj2.forEach((v)=>{
+      console.log(v[1]+''+ws.users.track)
+      if(v[1] == ws.users.track){
+        v[2] = ws.users.save_file_name
+      }
+    })
+    jetpack.write('./JSON/data/'+ws.users.name+'/aska_dj.json',aska_dj2)
+  }
 
-
-
-
-
+  console.log(name+' <-----> '+track)
+}
+exports.add_video = add_video;
 
 const start = function(ws,par,track){
   console.log(track)
+  let coub
+  let start_sec
+  let end_sec
   if(par == 'new'){
     var aska_dj2 = get_new_tracks(ws)
     }else{
@@ -75,9 +218,35 @@ const start = function(ws,par,track){
       arr_x5.push(aska_dj2[i])
     }
     if(aska_dj2.length > 10){
-      track == undefined ? track = arr_x5[(Math.random()*arr_x5.length)|0][1]:'';
+      let mathrandom = (Math.random()*arr_x5.length)|0
+      if(track == undefined){
+        track = arr_x5[mathrandom][1]
+        start_sec = arr_x5[mathrandom][3]
+        end_sec = arr_x5[mathrandom][4]
+        ws.users.last_track.push(track)
+        if(ws.users.last_track.length > 4){
+         ws.users.last_track.splice(0,1)
+        }
+        console.log(ws.users.last_track)
+        aska_dj2.forEach((v)=>{
+          console.log(v[1]+''+track)
+          if(v[1] == track){
+            coub = v[2]
+          }
+        })
+      }else{
+        aska_dj2.forEach((v)=>{
+          console.log(v[1]+''+track)
+          if(v[1] == track){
+            coub = v[2]
+          }
+        })
+      }
     }else{
       track = aska_dj2[0][1]
+      coub = aska_dj2[0][2]
+      start_sec = false
+      end_sec = false
     }
     ws.users.track = track
     console.log(track)
@@ -91,11 +260,25 @@ const start = function(ws,par,track){
 
     let code_to_eval_on_client_part1 = `
 audio.src = "./users/${ws.users.name}/music/${track}";
+coub_animation("./users/${ws.users.name}/video/${coub}")
 audio.addEventListener("canplay", function(e) {
 e.target.removeEventListener(e.type, arguments.callee)
 if(localStorage.music_volume == undefined){localStorage.music_volume = 0.2;}
 audio.volume = localStorage.music_volume;
+let sec = ${start_sec}
+let end = ${end_sec}
+if(sec){
+audio.currentTime = sec
+}else{
 audio.currentTime = (Math.random()*10|0)+5
+}
+if(end){
+end = (end - audio.currentTime)*1000
+console.log(end)
+setTimeout(()=>{
+audio.pause();
+},end)
+}
 audio.play();`;
     let event_fo_next_track = ''
     let event_to_next_track2 = 'EVAL'
