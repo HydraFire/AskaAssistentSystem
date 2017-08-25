@@ -9,6 +9,7 @@ const circle = require('./circle')
 const memory_fun = require('./memory_fun');
 const webSearch = require('./webSearch');
 const messenger = require('./messenger');
+const napominalka = require('./napominalka');
 //const ask = require('./ask');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
@@ -75,10 +76,10 @@ exports.commands = function(strx,ws){
       strx = ''
     }
     if(ws.users.input_Array[4] == 'н**** удали этот трек'||
-      ws.users.input_Array[4] == 'н**** удалил этот трек'||
-      ws.users.input_Array[4] == 'н**** выдали этот трек'||
-      ws.users.input_Array[4] == 'удали н**** этот трек'||
-      ws.users.input_Array[4] == 'настя удали этот трек'
+       ws.users.input_Array[4] == 'н**** удалил этот трек'||
+       ws.users.input_Array[4] == 'н**** выдали этот трек'||
+       ws.users.input_Array[4] == 'удали н**** этот трек'||
+       ws.users.input_Array[4] == 'настя удали этот трек'
       ){
       //let text = ws.users.input_Array[4]
       //let textik = 'заканчивай на этом'
@@ -86,7 +87,7 @@ exports.commands = function(strx,ws){
       strx = ''
     }
     if(ws.users.input_Array[4] == 'повтори предыдущий трек'||
-      ws.users.input_Array[4] == 'включи предыдущий трек'){
+       ws.users.input_Array[4] == 'включи предыдущий трек'){
       //let text = ws.users.input_Array[4]
       //let textik = 'заканчивай на этом'
       aska_DJ.replay_last(ws)
@@ -101,16 +102,84 @@ exports.commands = function(strx,ws){
       strx = ''
     }
     if(ws.users.input_Array[4] == 'последний ошибка которая у тебя было'||
-      ws.users.input_Array[4] == 'последний ошибка которая у тебя была'||
-      ws.users.input_Array[4] == 'последняя ошибка которую у тебя было'
+       ws.users.input_Array[4] == 'последний ошибка которая у тебя была'||
+       ws.users.input_Array[4] == 'последняя ошибка которую у тебя было'
       ){
       let arr_err = jetpack.read('./JSON/data/'+ws.users.name+'/err_arr.json','json')
       //let text = ws.users.input_Array[4]
       //let textik = 'заканчивай на этом'
       if(arr_err){
-      strx = arr_err[arr_err.length-1]
+        strx = arr_err[arr_err.length-1]
       }else{
-      strx = 'Пока небыло некаких ошибок'
+        strx = 'Пока небыло некаких ошибок'
+      }
+    }
+    if(ws.users.input_Array[4] == 'давай дальше'){
+      ws.users.new_par = true
+      strx = 'Ладно'
+    }
+    if(ws.users.input_Array[4] == 'моя цель'){
+      let dinamic = jetpack.read('./JSON/data/'+ws.users.name+'/dinamic.json','json')
+      if(dinamic){
+        strx = dinamic[0]
+      }else{
+        strx = ''
+      }
+
+    }
+    if(ws.users.input_Array[4] == 'напоминание'){
+      napominalka.check_time(ws)
+      strx = ''
+    }
+
+    if(ws.users.input_Array[4] == 'привет'){
+      let art = jetpack.read('./JSON/data/'+ws.users.name+'/program.json','json')
+      if(art){
+        let arrprog = art
+        big(ws,arrprog)
+
+        function big(ws,arrprog){
+
+          ws.users.zet = setInterval(()=>{
+            console.log('--> '+ws.users.all_thoughts.length+' <--')
+            if(ws.users.all_thoughts.length == 0){
+              console.log('- '+ws.users.silence+' -')
+              console.log('- '+ws.users.aska_talks+' -')
+              if(ws.users.new_par){
+                if(ws.users.aska_talks){
+                  if(ws.users.attention != 'NO LISTEN'){
+                    arrprog = program(ws,arrprog)
+                    console.log(arrprog)
+                    if(arrprog.length == 0){
+                      let objData = new Date();
+                      let every_day = objData.getDate();
+                      jetpack.write('./JSON/data/'+ws.users.name+'/every_day.json',every_day)
+                      clearInterval(ws.users.zet)
+                      console.log('end interval')
+                    }
+                  }
+                }
+              }
+            }
+          },2000)
+        }
+
+
+        function program(ws,arrprog){
+          console.log('START NEW PROGRAM')
+          if(arrprog[0].includes('ASKA')){
+            arrprog[0] = arrprog[0].substring(4,arrprog[0].length)
+            ws.send(arrprog[0])
+            arrprog.splice(0,1)
+          }else{
+            ws.send('BOOMERANG'+arrprog[0])
+            arrprog.splice(0,1)
+            console.log(arrprog)
+          }
+          return arrprog
+        }
+      }else{
+        strx = ''
       }
     }
     /*

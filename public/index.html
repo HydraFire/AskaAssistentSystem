@@ -276,7 +276,7 @@
     socket.send('заканчивай на этом '+(audio.currentTime|0))
   }
   function coub_animation(adres){
-    
+
     let contentt2 = document.querySelector('.info');
     let zzz = contentt2.querySelector('video')
     console.log(adres)
@@ -634,8 +634,16 @@
 
   socket.onmessage = function(event) {
     console.log("Получены данные " + event.data);
-    if(event.data.includes('NERV')){
-      aska(displayit(event.data))
+    if(event.data.includes('BOOMERANG')){
+      let stry = event.data
+      stry = stry.substring(9,stry.length)
+      //let boome = setInterval(()=>{
+      //  console.log(audioTag.paused)
+       // if(audioTag.paused){
+         socket.send(stry)
+       //  clearInterval(boome)
+       // }
+      //},1000)
     }else if(event.data.includes('SYSTEM')){
       displayit(event.data)
     }else if(event.data.includes('EVAL')){

@@ -172,6 +172,7 @@ wss.on("connection", function(ws){
       if(ws.users.all_thoughts){
         ws.users.all_thoughts.forEach((v)=>{clearInterval(v)})
         clearInterval(ws.users.napomni)
+        clearInterval(ws.users.zet)
         console.log('CLOSE CONNECTION')
         let err_arr = jetpack.read('./JSON/data/'+ws.users.name+'/err_arr.json','json')
         if(!err_arr){
@@ -186,6 +187,7 @@ wss.on("connection", function(ws){
     if(ws.users.all_thoughts){
       ws.users.all_thoughts.forEach((v)=>{clearInterval(v)})
       clearInterval(ws.users.napomni)
+      clearInterval(ws.users.zet)
       console.log('CLOSE CONNECTION')
     }
   });

@@ -95,7 +95,7 @@ const reposition_up = function(answer,effects,onswer,ws){
               }
               if(index == 2){
                 sendToAska(onswer[index],ws)
-                start_quest(ws,i)
+                ws.send(start_quest(ws,i))
                 clearInterval(ws.users.all_thoughts[int_00])
                 ws.users.all_thoughts.splice(int_00,1)
                 console.log('interval close')
@@ -126,10 +126,11 @@ const add_quest = function(ws){
   let n = 0
   console.log('begin interval')
   let int_00 = ws.users.all_thoughts.length
-  ws.users.all_thoughts[int_00]  = setInterval(()=>{
+  console.log(int_00)
+  ws.users.all_thoughts[int_00] = setInterval(()=>{
     n++
     console.log(n)
-
+    console.log(ws.users.all_thoughts[int_00])
     if(text != ws.users.input_Array[4]){
       let x_x
       try{
@@ -149,8 +150,9 @@ const add_quest = function(ws){
         }
         arrx.push(ws.users.input_Array[4])
         jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
-        clearInterval(ws.users.all_thoughts[int_00])
-        ws.users.all_thoughts.splice(int_00,1)
+        clearInterval(ws.users.all_thoughts[0])
+        console.log(ws.users.all_thoughts.length)
+        ws.users.all_thoughts.splice(0,1)
         console.log('interval close')
       }}
     if(n>60){
@@ -164,6 +166,7 @@ const add_quest = function(ws){
 exports.add_quest = add_quest;
 
 const list_quest = function(effects,ws){
+  ws.users.new_par = false
   let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
   if(!arrx){
     return 'Список заданий еще не создан, создай первую запись.Просто скажи, новое задание'
@@ -175,28 +178,42 @@ const list_quest = function(effects,ws){
     n++
     console.log(n)
     let answer = jetpack.read('JSON/data/'+ws.users.name+'/todo.json','json');
+    answer.push('новое задание')
+    answer.push('отмена')
     answer.forEach((v,i)=>{
       if(ws.users.input_Array[4] == v){
-
-        setTimeout(() => {
-          sendToAska('ты выбрал '+i+'-тую строчку в списке',ws)
-          let commands = ["переместить вверх","переместить вниз","выбрать","удалить"];
-          let onsver_com = ["переместила ближе","переместила дальше","время пошло","задание удалено"]
-          reposition_up(commands,v,onsver_com,ws)
-          /*
+        if(v == 'новое задание'){
+          ws.send(add_quest(ws))
+        }else if(v == 'отмена'){
+          //ws.users.new_par = true
+          ws.send('ладно')
+        }else{
+          setTimeout(() => {
+            sendToAska('ты выбрал '+i+'-тую строчку в списке',ws)
+            let commands = ["переместить вверх",
+                            "переместить вниз",
+                            "выбрать",
+                            "удалить"];
+            let onsver_com = ["переместила ближе",
+                              "переместила дальше",
+                              "время пошло",
+                              "задание удалено"]
+            reposition_up(commands,v,onsver_com,ws)
+            /*
           setTimeout(() => {
             sendToAska(effects,ws)
 
           }, 2200);
           */
-        },200);
+          },200);
+        }
         clearInterval(ws.users.all_thoughts[int_id])
         ws.users.all_thoughts.splice(int_id,1)
       }
     })
 
     // },500)
-    if(n>30){  
+    if(n>180){  
       clearInterval(ws.users.all_thoughts[int_id])
       ws.users.all_thoughts.splice(int_id,1)
       console.log('interval close')
@@ -241,7 +258,7 @@ const finish_quest = function(ws){
     arrx.splice(index,1)
     jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
     //NNQ.NNQ_to_train(arrf[0],ws)
- 
+
     let aaa = jetpack.read('./JSON/data/'+ws.users.name+'/quest_finished.json','json');
     if(!aaa){
       aaa = [

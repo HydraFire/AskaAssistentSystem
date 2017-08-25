@@ -60,6 +60,8 @@ const login = function(ws,message){
          ws.users.last_track = []
         ws.users.all_thoughts = []
         ws.users.napomni = ''
+        ws.users.zet = ''
+        ws.users.new_par = true
         ws.users.attention = 'LISTEN'
         ws.users.nn_out_arr = ['null','null','null','null']
         ws.users.silence = false
@@ -68,11 +70,24 @@ const login = function(ws,message){
         get_info(ws)
         setTimeout(()=>{
           if(jetpack.read('./JSON/data/'+ws.users.name+'/arr_napominalka.json','json')){
-            napominalka.check_time(ws)
+            let every_day = jetpack.read('./JSON/data/'+ws.users.name+'/every_day.json','json')
+            if(!every_day){
+             every_day = [0]
+             jetpack.write('./JSON/data/'+ws.users.name+'/every_day.json',every_day)
+            }
+             let objData = new Date();
+             let date = objData.getDate();
+             let hours = objData.getHours();
+            if(every_day != date && hours > 5){
+             ws.send('BOOMERANG'+'привет')
+            }else{
+             napominalka.check_time(ws)
+            }
+            
             ws.users.napomni = setInterval(()=>{
               napominalka.check_time(ws)
               console.log('napominanie')
-            },360000)
+            },660000)
           }
         },1000)
       }
