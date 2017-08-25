@@ -50,22 +50,22 @@ function track_played_plus1(ws,track,arr,num){
 ///////////////////////////////////////////////////////////////////////////
 const replay_last = function(ws){
   if(ws.users.last_track.length > 1){
-    
+
     let last_track = ''
-    
-    
+
+
     ws.users.last_track.forEach((v,i)=>{
       if(v == ws.users.track){
         last_track = ws.users.last_track[i-1]
       }
     })
-  
-    
-        //ws.users.last_track[ws.users.last_track.length-2]
+
+
+    //ws.users.last_track[ws.users.last_track.length-2]
     console.log(last_track)
     ws.send(start(ws,'none',last_track))
   }else{
-  ws.send('я забыла какой там был трек')
+    ws.send('я забыла какой там был трек')
   }
 }
 exports.replay_last = replay_last;
@@ -197,7 +197,7 @@ const add_video = function(ws){
 }
 exports.add_video = add_video;
 
-const start = function(ws,par,track){
+const start = function(ws,par,track,from_what){
   console.log(track)
   let coub
   let start_sec
@@ -225,7 +225,7 @@ const start = function(ws,par,track){
         end_sec = arr_x5[mathrandom][4]
         ws.users.last_track.push(track)
         if(ws.users.last_track.length > 4){
-         ws.users.last_track.splice(0,1)
+          ws.users.last_track.splice(0,1)
         }
         console.log(ws.users.last_track)
         aska_dj2.forEach((v)=>{
@@ -239,8 +239,17 @@ const start = function(ws,par,track){
           console.log(v[1]+''+track)
           if(v[1] == track){
             coub = v[2]
+            if(from_what != undefined){
+              start_sec = v[3]
+              end_sec = v[4]
+            }
           }
         })
+        ws.users.last_track.push(track)
+        if(ws.users.last_track.length > 4){
+          ws.users.last_track.splice(0,1)
+        }
+        console.log(ws.users.last_track)
       }
     }else{
       track = aska_dj2[0][1]
@@ -253,8 +262,9 @@ const start = function(ws,par,track){
     //console.log(ws.users.HydraFire.track)
     //windowManager.sharedData.set('playing_music', track);
     ///////////////////////////////////////////////////////
-
-    track_played_plus1(ws,track,aska_dj2,1)
+    if(from_what == undefined){
+      track_played_plus1(ws,track,aska_dj2,1)
+    }
     ///////////////////////////////////////////////////////////////
 
 

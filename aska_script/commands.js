@@ -50,6 +50,16 @@ exports.commands = function(strx,ws){
       ws.send('EVALreadClipboard()')
       strx = ''
     }
+    if(ws.users.input_Array[4].includes('включи этот трек')){
+      let zty = ws.users.input_Array[4]
+      zty = zty.substring(17,zty.length)
+      if(zty != ''){
+      strx = aska_DJ.start(ws,'none',zty,'some')
+      }else{
+      strx = 'нужно указать полное имя файла'
+      }
+      
+    }
     if(ws.users.input_Array[4].includes('начиная с этого момента')){
       let text = ws.users.input_Array[4]
       let textik = 'начиная с этого момента'
