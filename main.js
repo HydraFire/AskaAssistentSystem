@@ -34,6 +34,7 @@ const set_to_run = require('./aska_script/neural_network').set_to_run;
 //// WebSocketServer ///////////////////////////////////////////////
 const WebSocketServer = require("ws").Server
 const https = require("https")
+const http = require("http")
 const exp = express()
 
 
@@ -50,6 +51,7 @@ var options = {
 };
 
 var server = https.createServer(options,exp).listen(443);
+var server2 = http.createServer(exp).listen(80);
 exp.use(express.static(__dirname + '/public'));
 //server;
 

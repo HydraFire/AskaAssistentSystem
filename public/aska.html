@@ -156,9 +156,9 @@
       audio.play();
     }
     ///////////////////////// WebSocket /////////////////////////////////////
-
-    //var socket = new WebSocket("ws://159.224.183.122:80/aska.html");
-    var socket = new WebSocket("ws://185.25.119.59:80/aska.html");
+    var socket = new WebSocket("wss://nerv.pro/aska.html");
+    //var socket = new WebSocket("wss://159.224.183.122/aska.html");
+   // var socket = new WebSocket("ws://185.25.119.59:80/aska.html");
     socket.onopen = function() {
       socket.send('USER'+'HydraFire'+'||'+'1'+'||'+'0')
       setTimeout(()=>{
@@ -228,6 +228,7 @@
         if(calc > 100){
           mic()
         }else{
+          recognition.stop()
           aska(words.children[1].textContent)
           audio.play();
         }
