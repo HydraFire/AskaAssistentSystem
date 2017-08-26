@@ -39,7 +39,7 @@ const login = function(ws,message){
   console.log(login_data)
 
   let arr_ip_id = [
-    ['HydraFire','1','159.224.183.122'],
+    ['HydraFire','xwarxsexsex','159.224.183.122'],
     ['Noir','1234567890','46.30.41.26'],
     ['undefined','public','46.30.41.26']
   ]

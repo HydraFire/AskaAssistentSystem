@@ -81,7 +81,7 @@ wss.on("connection", function(ws){
   user_ip = user_ip.substring(7,user_ip.length)
   if(user_ip == '159.224.183.122'){
     //ws.send('Доступ розрешон')
-    let login_data = 'USERHydraFire||1||159.224.183.122'
+    let login_data = 'USERHydraFire||xwarxsexsex||159.224.183.122'
     registration.login(ws,login_data)
   }else{
     //ws.send('Доступ в общественую ветку')
