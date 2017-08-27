@@ -81,8 +81,9 @@ wss.on("connection", function(ws){
   user_ip = user_ip.substring(7,user_ip.length)
   if(user_ip == '159.224.183.122'){
     //ws.send('Доступ розрешон')
-    let login_data = 'USERHydraFire||xwarxsexsex||159.224.183.122'
-    registration.login(ws,login_data)
+    
+    let login_data = jetpack.read('./JSON/data/'+ws.users.name+'/auto_login.json','json')
+    registration.login(ws,login_data[0])
   }else{
     //ws.send('Доступ в общественую ветку')
     let login_data = 'USERundefined||public||'+user_ip

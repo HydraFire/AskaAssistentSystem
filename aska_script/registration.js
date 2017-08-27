@@ -37,12 +37,7 @@ const login = function(ws,message){
   message = message.toString().substring(4,message.length);
   let login_data = message.split('||')
   console.log(login_data)
-
-  let arr_ip_id = [
-    ['HydraFire','xwarxsexsex','159.224.183.122'],
-    ['Noir','1234567890','46.30.41.26'],
-    ['undefined','public','46.30.41.26']
-  ]
+ let arr_ip_id = jetpack.read('./JSON/data/users_login.json','json')
   let dont_now_pass = 0
   arr_ip_id.forEach((v)=>{
     if(login_data[0] == v[0]){
