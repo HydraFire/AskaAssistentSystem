@@ -82,7 +82,7 @@ wss.on("connection", function(ws){
   if(user_ip == '159.224.183.122'){
     //ws.send('Доступ розрешон')
     
-    let login_data = jetpack.read('./JSON/data/'+ws.users.name+'/auto_login.json','json')
+    let login_data = jetpack.read('./JSON/data/auto_login.json','json')
     registration.login(ws,login_data[0])
   }else{
     //ws.send('Доступ в общественую ветку')

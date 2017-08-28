@@ -35,7 +35,7 @@ function get_info(ws){
 
 const login = function(ws,message){
   message = message.toString().substring(4,message.length);
-  let login_data = message.split('||')
+  let login_data = message.split('//')
   console.log(login_data)
  let arr_ip_id = jetpack.read('./JSON/data/users_login.json','json')
   let dont_now_pass = 0
