@@ -246,7 +246,7 @@
     document.querySelector('.registration').remove()
     interface.style.fontSize = '130pt'
     interface.style.paddingTop = '0px';
-    socket.send('USER'+login+'||'+password+'||'+'0')
+    socket.send('USER'+login+'//'+password+'//'+'0')
     setTimeout(()=>{
       socket.send('aska_play_music_false')
     },1000)
@@ -512,7 +512,7 @@
          transcript.toLowerCase() == 'авто'){
         //localStorage.wait = 'start';
         p.textContent = 'ASKA';
-        window.color_aska = 180
+        window.color_aska = 205
         window.color_aska_h = 100
         aska('а')
         socket.send('LISTEN')
@@ -614,7 +614,7 @@
     console.log(e)
     socket.send(e);
   }
-   var socket = new WebSocket("wss://nerv.pro/index.html");
+ var socket = new WebSocket("wss://nerv.pro/index.html");
 
   //var socket = new WebSocket("wss://159.224.183.122:443/index.html");
   // var socket = new WebSocket("ws://localhost:80/index.html");
