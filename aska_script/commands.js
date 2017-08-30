@@ -35,7 +35,7 @@ exports.commands = function(strx,ws){
       strx = ''
     }
     if(ws.users.input_Array[4].includes('обучение')){
-      ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
+      //ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
       strx = NNQ.aska_learn_quest_main(ws)
       ws.send(strx)
     }
