@@ -1,7 +1,8 @@
 
 
 const get = require('simple-get')
-exports.post_to_str = function(ws,site,leng,search_text){
+exports.post_to_str = function(ws,site,leng,search_text,plus_text,start_text){
+  ws.users.new_par = false
   get({
     url: site,
     method: 'POST',
@@ -38,11 +39,28 @@ exports.post_to_str = function(ws,site,leng,search_text){
     let sub_v = fghi.substring(jih+d_search.length,jih+d_search.length+na_scolko)
     console.log(sub_v)
     let end_teg = sub_v.search('>')
-    sub_v = sub_v.substring(end_teg+1,sub_v.length)
-    let open_teg = sub_v.search('<')
-    sub_v = sub_v.substring(0,open_teg)
-    console.log(sub_v)
-    ws.send("Сейчас "+sub_v)
+    if(end_teg != -1){
+      sub_v = sub_v.substring(end_teg+1,sub_v.length)
+      let open_teg = sub_v.search('<')
+      sub_v = sub_v.substring(0,open_teg)
+      console.log(sub_v)
+    }
+    if(start_text == undefined){
+      if(plus_text == undefined){
+        ws.send("Сейчас "+sub_v)
+      }else{
+        ws.send("Сейчас "+sub_v+' '+plus_text)
+      }
+    }else{
+      if(plus_text == undefined){
+        ws.send(start_text+' '+sub_v)
+      }else{
+        ws.send(start_text+' '+sub_v+' '+plus_text)
+      }
+    }
+    ws.users.new_par = true
+    ws.users.aska_talks = false
+
     /*
   let ot_kyda = 42950
   let do_kyda = 2000

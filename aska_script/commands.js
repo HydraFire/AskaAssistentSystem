@@ -107,7 +107,10 @@ exports.commands = function(strx,ws){
       //let text = ws.users.input_Array[4]
       //let textik = 'заканчивай на этом'
       let htcode = 'SYSTEM'
-      htcode+= `<button onclick="socket.send('последний ошибка которая у тебя была')">последний ошибка которая у тебя была</button>`
+      htcode+= `<button onclick="socket.send('н**** выдали этот трек')">н**** выдали этот трек</button>
+<button onclick="socket.send('последний ошибка которая у тебя была')">последний ошибка которая у тебя была</button>
+<button onclick="socket.send('удали последний элемент массива')">удали последний элемент массива</button>
+`
       ws.send(htcode)
       strx = ''
     }
@@ -203,20 +206,37 @@ exports.commands = function(strx,ws){
     }
 */
 
-    if(ws.users.input_Array[4].includes('вакансии джаваскрипт')){
+    if(ws.users.input_Array[4].includes('температура на улице') ||
+      ws.users.input_Array[4].includes('градусов на улице')){
+      let site = 'http://meteo.ua/34/kiev';
+      let leng = 3
+      let search_text = `<div class="win_tmp">`
+      let start_text = 'Сейчас на улице '
+      let plus_text = 'градусов'
+      webSearch.post_to_str(ws,site,leng,search_text,plus_text,start_text)
+      strx = ''
+    }
+    
+    if(ws.users.input_Array[4].includes('вакансии джаваскрипт') ||
+      ws.users.input_Array[4].includes('вакансии java script')){
       let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
       let leng = 360
       let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
-      webSearch.post_to_str(ws,site,leng,search_text)
+      let start_text = 'Последняя вакансия по веб разработке'
+      let plus_text = 'и так далие'
+      webSearch.post_to_str(ws,site,leng,search_text,plus_text,start_text)
       strx = ''
     }
     if(ws.users.input_Array[4].includes('вакансии игры')){
       let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=game';
       let leng = 360
+      let start_text = 'Последняя вакансия по компютерным игра'
+      let plus_text = 'и так далие'
       let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
-      webSearch.post_to_str(ws,site,leng,search_text)
+      webSearch.post_to_str(ws,site,leng,search_text,plus_text,start_text)
       strx = ''
     }
+    ////////////////////////////////Сообщения между пользователями /////////
     if(strx.includes('ua0') &&
        strx.includes('ua1') &&
        strx.includes('ua2') &&
@@ -224,7 +244,7 @@ exports.commands = function(strx,ws){
       ws.send('диктуй текст сообщения')
       let userM = ''
       if(ws.users.name == 'HydraFire'){
-        userM = 'Noir'
+        userM = 'Ilya'
       }else{
         userM = 'HydraFire'
       }
@@ -236,7 +256,11 @@ exports.commands = function(strx,ws){
        strx.includes('ub2') &&
        strx.includes('ub3') &&
        strx.includes('ub4')){
-      ws.send('сообщение от пользователя HydraFire')
+      if(ws.users.name == 'HydraFire'){
+       ws.send('сообщение от пользователя Илья')
+      }else{
+       ws.send('сообщение от пользователя HydraFire')
+      }
       setTimeout(()=>{
         messenger.read(ws,'last','all_messege.json')
       },2000)
