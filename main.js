@@ -173,6 +173,16 @@ wss.on("connection", function(ws){
                    desigen.includes('включи этот трек')||
                    desigen.includes('найти трек')){
                   commands.run(desigen,ws)
+                }else if(desigen[0] == 'я'){
+                  commands.run(desigen,ws)
+                }else if(desigen[0] == 'к'||
+                         desigen[1] == 'о'||
+                         desigen[2] == 'г'||
+                         desigen[3] == 'д'||
+                         desigen[4] == 'а'||
+                         desigen[5] == ' '||
+                         desigen[6] == 'я'){
+                  commands.run(desigen,ws)
                 }else if(desigen.includes('то же самое что и')){
                   text_analitic.plus_command(ws,'то же самое что и',desigen)
                 }else if(desigen.includes('тоже самое что и')){
