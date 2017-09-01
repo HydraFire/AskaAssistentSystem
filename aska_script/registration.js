@@ -52,6 +52,7 @@ const login = function(ws,message){
         ws.users.input_Array = ['','','','','']
         ws.users.output_Array = ['','','','']
         ws.users.track = 'none'
+        ws.users.nn = false
          ws.users.last_track = []
         ws.users.all_thoughts = []
         ws.users.napomni = ''

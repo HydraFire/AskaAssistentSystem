@@ -26,9 +26,10 @@ exports.sendToAska = sendToAska;
 const registration = require('./aska_script/registration');
 const napominalka = require('./aska_script/napominalka');
 const askaDJ = require('./aska_script/aska_DJ');
+const text_analitic = require('./aska_script/text_analitic');
 //Подключение функции работаюшей с нейросетью ////////////////////
 const set_to_run = require('./aska_script/neural_network').set_to_run;
-
+const commands = require('./aska_script/commands');
 //global.attention = 'LISTEN'
 //////////////////////////////////////////////////////////////////
 //// WebSocketServer ///////////////////////////////////////////////
@@ -81,7 +82,7 @@ wss.on("connection", function(ws){
   user_ip = user_ip.substring(7,user_ip.length)
   if(user_ip == '159.224.183.122'){
     //ws.send('Доступ розрешон')
-    
+
     let login_data = jetpack.read('./JSON/data/auto_login.json','json')
     registration.login(ws,login_data[0])
   }else{
@@ -162,7 +163,76 @@ wss.on("connection", function(ws){
               ws.users.input_Array.splice(0,1)
             }
             console.log(ws.users.input_Array)
-            set_to_run(ws,message.toString());
+            if(ws.users.nn == true){
+              set_to_run(ws,message.toString());
+            }else{
+              if(ws.users.all_thoughts.length == 0){
+                let arr_des = []
+                let desigen = message.toString()
+                if(desigen.includes('найди трек')||
+                   desigen.includes('включи этот трек')||
+                   desigen.includes('найти трек')){
+                  commands.run(desigen,ws)
+                }else if(desigen.includes('то же самое что и')){
+                  text_analitic.plus_command(ws,'то же самое что и',desigen)
+                }else if(desigen.includes('тоже самое что и')){
+                  text_analitic.plus_command(ws,'тоже самое что и',desigen)
+                }else if(desigen.includes('тоже самое что')){
+                  text_analitic.plus_command(ws,'тоже самое что',desigen)
+                }else{
+                  let arr_commands = jetpack.list('./JSON/data/'+ws.users.name+'/commands')
+                  arr_commands.forEach((v,i)=>{
+                    let m = arr_commands[i]
+                    m = m.substring(0,m.length-5)
+                    arr_commands[i] = m
+                  })
+                  desigen = desigen.split(' ').join('_')
+
+                  arr_commands.forEach((v,i)=>{
+                    arr_des.push([text_analitic.go(desigen,v),v])
+                  })
+                  arr_des.sort(function (a, b) {
+                    if (a[0] > b[0]) {
+                      return 1;
+                    }
+                    if (a[0] < b[0]) {
+                      return -1;
+                    }
+                    // a должно быть равным b
+                    return 0;
+                  })
+                  //arr_des.reverse()
+                  console.log(arr_des)
+                  if(arr_des[arr_des.length-1][0]>99){
+                    desigen = arr_des[arr_des.length-1][1]
+                    let origin = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+desigen+'.json','json')
+
+                    if(origin[0] == 'true'){
+                      desigen = desigen.split('_').join(' ')
+                      console.log(desigen)
+                      commands.run(desigen,ws)
+                    }else{
+                      let xc = origin[0]
+                      xc = xc.split(' ').join('_')
+                      let rrr = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+xc+'.json','json')
+                      if(rrr[0]=='true'){
+                        console.log(desigen)
+                        desigen = origin[0]
+                        desigen = desigen.split('_').join(' ')
+                        console.log(desigen)
+                        commands.run(desigen,ws)
+                      }
+                    }
+                  }else if(arr_des[arr_des.length-1][0]>50){
+                    let k = arr_des[arr_des.length-1][1]
+                    k = k.split('_').join(' ')
+                    ws.send('очень похоже на команду '+k)
+                    text_analitic.ask(ws,desigen,k)
+                  }
+
+                }
+              }
+            }
           }
         }
       }
@@ -179,7 +249,7 @@ wss.on("connection", function(ws){
         console.log('CLOSE CONNECTION')
         let err_arr = jetpack.read('./JSON/data/'+ws.users.name+'/err_arr.json','json')
         if(!err_arr){
-         err_arr = ['пока не было ошибок']
+          err_arr = ['пока не было ошибок']
         }
         err_arr.push(err2)
         jetpack.write('./JSON/data/'+ws.users.name+'/err_arr.json',err_arr)

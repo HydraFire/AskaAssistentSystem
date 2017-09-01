@@ -10,42 +10,42 @@ const memory_fun = require('./memory_fun');
 const webSearch = require('./webSearch');
 const messenger = require('./messenger');
 const napominalka = require('./napominalka');
+const sendToAska = require('../main').sendToAska;
+const text_analitic = require('./text_analitic');
 //const ask = require('./ask');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
 //const this_real_time = require('./aska_script/polival_kystu').this_real_time;
 
 
-exports.commands = function(strx,ws){
+const run = function(strx,ws){
   console.log(global[ws.users.name])
+  ws.users.input_Array[4] = strx
+  strx = ''
   console.log('Ответ нейроной сети |'+strx+'|')
   if(ws.users.all_thoughts.length == 0){
     ///////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
-    if(ws.users.input_Array[4].includes('запом')){
-      let ask = ws.users.input_Array[2]
-      let answer = ws.users.input_Array[3]
-      if(ask == ' ' || answer == ' '){
-        strx = 'я немогу запомнить пустую информацию'
-      }else{
-        strx = memory_fun.save(ask,answer,ws)
-      }
-      ws.send(strx)
-      strx = ''
+    
+    if(ws.users.input_Array[4].includes('нейронная сеть')||
+      ws.users.input_Array[4].includes('переключить в режим нейронной сети')){
+     ws.users.nn = true
+     strx = 'нейроная сеть'
     }
-    if(ws.users.input_Array[4].includes('обучение')){
-      //ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
-      strx = NNQ.aska_learn_quest_main(ws)
-      ws.send(strx)
-    }
+    
+    
     if(ws.users.input_Array[4].includes('заткнись') ||
        ws.users.input_Array[4].includes('помолчи')){
       ws.users.attention = 'NO LISTEN'
       ws.send('EVALwindow.color_aska_h = 20;aska("режим ожидания")')
       strx = ''
     }
-
+    
+    if(ws.users.input_Array[4] == 'зарегистрировать новую команду'){
+     strx = text_analitic.new_command(ws)
+     
+    }
     if(ws.users.input_Array[4].includes('прочитай')){
       ws.send('EVALreadClipboard()')
       strx = ''
@@ -237,10 +237,7 @@ exports.commands = function(strx,ws){
       strx = ''
     }
     ////////////////////////////////Сообщения между пользователями /////////
-    if(strx.includes('ua0') &&
-       strx.includes('ua1') &&
-       strx.includes('ua2') &&
-       strx.includes('ua3')){
+    if(ws.users.input_Array[4] == 'отправить сообщение'){
       ws.send('диктуй текст сообщения')
       let userM = ''
       if(ws.users.name == 'HydraFire'){
@@ -251,11 +248,7 @@ exports.commands = function(strx,ws){
       messenger.rec(ws,'всё','all_messege.json',userM)
       strx = ''
     }
-    if(strx.includes('ub0') &&
-       strx.includes('ub1') &&
-       strx.includes('ub2') &&
-       strx.includes('ub3') &&
-       strx.includes('ub4')){
+    if(ws.users.input_Array[4] == 'мои сообщения'){
       if(ws.users.name == 'HydraFire'){
        ws.send('сообщение от пользователя Илья')
       }else{
@@ -300,10 +293,7 @@ exports.commands = function(strx,ws){
   ///////////////////////////////////////////////////////////////////////////////
   */
 
-    if(strx.includes('fa0') &&
-       strx.includes('fa1') &&
-       strx.includes('fa2') &&
-       strx.includes('fa3')){
+    if(ws.users.input_Array[4] == 'покажи список файлов на сервере'){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name)
       if(arr){
@@ -314,10 +304,7 @@ exports.commands = function(strx,ws){
         strx = 'еще нет некаких файлов, чтобы их добавить переташи файл на DropBox'
       }
     }
-    if(strx.includes('fb0') &&
-       strx.includes('fb1') &&
-       strx.includes('fb2') &&
-       strx.includes('fb3')){
+    if(ws.users.input_Array[4] == 'покажи файлы музыки'){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name+'/music')
       if(arr){
@@ -403,10 +390,7 @@ exports.commands = function(strx,ws){
       ws.send(strx);strx = '';
     }
     */
-    if(strx.includes('bd0') &&
-       strx.includes('bd1') &&
-       strx.includes('bd2') &&
-       strx.includes('bd3')){
+    if(ws.users.input_Array[4] == 'секрет'){
       let mki = jetpack.read('./public/users/'+ws.users.name+'/secred_text.json','text')
       ws.send(mki);strx = '';
     }
@@ -488,65 +472,34 @@ exports.commands = function(strx,ws){
   //                  МУЗЫКАЛЬНЫЙ ПЛЕЕР
   //////////////////////////////////////////////////////////////////////////////
   */
-    if(strx.includes('mb0') &&
-       strx.includes('mb1') &&
-       strx.includes('mb2') &&
-       strx.includes('mb3')){
+    if(ws.users.input_Array[4] == 'выключи музыку'){
       strx = aska_DJ.stop(ws)
-    }else if(strx.includes('ma0') &&
-             strx.includes('ma1') &&
-             strx.includes('ma2') &&
-             strx.includes('ma3') &&
-             strx.includes('ma4')){
+    }else if(ws.users.input_Array[4] == 'включи музыку'){
       strx = aska_DJ.start(ws,'new')
     }
     /////////////////////////////////////////////////////////////////////////
-    if(strx.includes('mc0') &&
-       strx.includes('mc1') &&
-       strx.includes('mc2') &&
-       strx.includes('mc3')){
+    if(ws.users.input_Array[4] == 'следующий трек'){
       strx = aska_DJ.next(ws,2,true)
     }
-    if(strx.includes('md0') &&
-       strx.includes('md1') &&
-       strx.includes('md2') &&
-       strx.includes('md3')){
+    if(ws.users.input_Array[4].includes('найти трек')||ws.users.input_Array[4].includes('найди трек')){
       let axc = ws.users.input_Array[4]
       strx = aska_DJ.searchTrack(ws,axc)
     }
-    if(strx.includes('me0') &&
-       strx.includes('me1') &&
-       strx.includes('me2') &&
-       strx.includes('me3')){
+    if(ws.users.input_Array[4] == 'сделай немного громче'){
       strx = aska_DJ.volume('+',0.2)
-    }else if(strx.includes('mf0') &&
-             strx.includes('mf1') &&
-             strx.includes('mf2') &&
-             strx.includes('mf3')){
+    }else if(ws.users.input_Array[4] == 'сделай громче'){
       strx = aska_DJ.volume('+',0.4)
     }
-    if(strx.includes('mg0') &&
-       strx.includes('mg1') &&
-       strx.includes('mg2') &&
-       strx.includes('mg3')){
+    if(ws.users.input_Array[4] == 'сделай немного тише'){
       strx = aska_DJ.volume('-',0.2)
-    }else if(strx.includes('mi0') &&
-             strx.includes('mi1') &&
-             strx.includes('mi2') &&
-             strx.includes('mi3')){
+    }else if(ws.users.input_Array[4] == 'сделай тише'){
       strx = aska_DJ.volume('-',0.4)
     }
 
-    if(strx.includes('mu0') &&
-       strx.includes('mu1') &&
-       strx.includes('mu2') &&
-       strx.includes('mu3')){
+    if(ws.users.input_Array[4] == 'очень нравится этот трек'){
       strx = aska_DJ.next(ws,-5,false)
     }
-    if(strx.includes('mk0') &&
-       strx.includes('mk1') &&
-       strx.includes('mk2') &&
-       strx.includes('mk3')){
+    if(ws.users.input_Array[4] == 'мне надоел этот трек'){
       strx = aska_DJ.next(ws,5,true)
     }
     ////////////////////////////////////////////////////////////////////////////// 
@@ -563,26 +516,15 @@ exports.commands = function(strx,ws){
 
 
 
-    if(strx.includes('na0') &&
-       strx.includes('na1') &&
-       strx.includes('na2') &&
-       strx.includes('na3') &&
-       strx.includes('na4')){
+    if(ws.users.input_Array[4] == 'новое задание'){
       strx = quest.add_quest(ws)
     }
 
-    if(strx.includes('nb0') &&
-       strx.includes('nb1') &&
-       strx.includes('nb2') &&
-       strx.includes('nb3')){
+    if(ws.users.input_Array[4] == 'список заданий'){
       let effects = 'что с ней сделать?'
       strx = quest.list_quest(effects,ws)
     }
-    if(strx.includes('nc0') &&
-       strx.includes('nc1') &&
-       strx.includes('nc2') &&
-       strx.includes('nc3') &&
-       strx.includes('nc4')){
+    if(ws.users.input_Array[4] == 'дай мне задание'){
       strx = quest.start_quest(ws)
     }
 
@@ -597,11 +539,7 @@ exports.commands = function(strx,ws){
   }
   */
 
-    if(strx.includes('nd0') &&
-       strx.includes('nd1') &&
-       strx.includes('nd2') &&
-       strx.includes('nd3') &&
-       strx.includes('nd4')){
+    if(ws.users.input_Array[4] == 'задание выполнено'){
       strx = quest.finish_quest(ws)
     }
     /*
@@ -613,18 +551,11 @@ exports.commands = function(strx,ws){
     strx = quest.finished_quest(ws)
   }
   */
-    if(strx.includes('nf0') &&
-       strx.includes('nf1') &&
-       strx.includes('nf2') &&
-       strx.includes('nf3')){
+    if(ws.users.input_Array[4] == 'текущее задание'){
       strx = quest.ongoing(ws)
     }
 
-    if(strx.includes('da0') &&
-       strx.includes('da1') &&
-       strx.includes('da2') &&
-       strx.includes('da3') &&
-       strx.includes('da4')){
+    if(ws.users.input_Array[4] == 'электронный дневник'){
       let text0 = ['самое интересное что ты сделал позавчера',
                    'made_yesterday()',
                    'а что интересного было вчера',
@@ -945,5 +876,6 @@ window.myLine = new Chart(ctx2, config);
       strx = NNQ.aska_learn_delete(ws)
     }
   }
-  return strx
+  sendToAska(strx,ws)
 }
+exports.run = run;

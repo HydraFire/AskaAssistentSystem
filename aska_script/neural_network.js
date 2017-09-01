@@ -8,17 +8,20 @@ const jetpack = require('fs-jetpack');
 
 const sendToAska = require('../main').sendToAska;
 const commands = require('./commands').commands;
+const memory_fun = require('./memory_fun');
+const NNQ = require('./NN_quest');
+
 
 const calc_layers = function(ws,way){
   var arr_p = jetpack.read(way,'json');
- // console.log(arr_p)
+  // console.log(arr_p)
   if(!arr_p){
     console.log('WOW')
     jetpack.copy('./public/NN_Train.json', './JSON/data/'+ws.users.name+'/NN_Train.json', { overwrite: true });
     jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.users.name+'/NN_train_buffer.json', { overwrite: true });
     arr_p = jetpack.read(way,'json');
   }
-  
+
   var tyu = _.pairs(arr_p)
   var l_input = 0
   var l_output = 0
@@ -44,8 +47,8 @@ const set_to_run = function(ws,text){
   console.log('NEXT')
   let net_render = jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json')
   if(!net_render){
-   jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.users.name+'/NN_train_buffer.json', { overwrite: true });
-   net_render = jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json')  
+    jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.users.name+'/NN_train_buffer.json', { overwrite: true });
+    net_render = jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json')  
   }
   net.fromJSON(net_render);
   console.log('nn_connect')
@@ -84,19 +87,39 @@ const set_to_run = function(ws,text){
   zex.push(strx)
   zex.splice(0,1)
   ws.users.nn_out_arr = zex
-  
+
   if(ws.users.all_thoughts.length == 0 && ws.users.nn_out_arr[0]==''&&ws.users.nn_out_arr[1]==''&&ws.users.nn_out_arr[2]==''&&ws.users.nn_out_arr[3]==''){
-   ws.users.attention = 'NO LISTEN'
-   ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
+    ws.users.attention = 'NO LISTEN'
+    ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
   }
   console.log(ws.users.nn_out_arr)
-  
-  strx = commands(strx,ws)
-  
+
+  //strx = commands(strx,ws)
+
   if(ws.users.silence){
     strx = '_mute_'
   }
-  
+  if(ws.users.input_Array[4].includes('режим команд')){
+    ws.users.nn = false
+  }
+  if(ws.users.input_Array[4] == 'запомни'){
+    let ask = ws.users.input_Array[2]
+    let answer = ws.users.input_Array[3]
+    if(ask == ' ' || answer == ' '){
+      strx = 'я немогу запомнить пустую информацию'
+    }else{
+      strx = memory_fun.save(ask,answer,ws)
+    }
+    //ws.send(strx)
+    //strx = ''
+  }
+  if(ws.users.input_Array[4] == 'обучение'){
+    //ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
+    strx = NNQ.aska_learn_quest_main(ws)
+    //ws.send(strx)
+  }
+
+
   sendToAska(strx,ws)
 };
 exports.set_to_run = set_to_run;
