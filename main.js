@@ -199,6 +199,13 @@ wss.on("connection", function(ws){
                   commands.run(desigen,ws)
                 }else{
                   let arr_commands = jetpack.list('./JSON/data/'+ws.users.name+'/commands')
+                  if(!arr_commands){
+                   let qw = []
+                   qw.push('true')
+                   jetpack.write('./JSON/data/'+ws.users.name+'/commands/зарегистрировать_новую_команду.json',qw)
+                   arr_commands = jetpack.list('./JSON/data/'+ws.users.name+'/commands')
+                  }
+                  
                   arr_commands.forEach((v,i)=>{
                     let m = arr_commands[i]
                     m = m.substring(0,m.length-5)
