@@ -297,7 +297,7 @@ const run = function(strx,ws){
       let htmlx = ''
       let arr = jetpack.list('./public/users/'+ws.users.name)
       if(arr){
-        arr.forEach(v=>htmlx+=`<p><a href="./public/users/${ws.users.name}/${v}" download>${v}</a></p>`)
+        arr.forEach(v=>htmlx+=`<p><a href="./users/${ws.users.name}/${v}" download>${v}</a></p>`)
         ws.send('SYSTEM'+htmlx)
         strx = ''
       }else{
@@ -310,9 +310,9 @@ const run = function(strx,ws){
       if(arr){
         arr.forEach((v)=>{
           if(ws.users.track == v){
-            htmlx+=`<p><div class="tracks"><a style="color:red;" href="./public/users/${ws.users.name}/music/${v}" download>${v}</a><div class="track_button"><a onclick="play_music('${v}')">►</a> Pause Delete <a onclick="play_from('${v}')"> ☼</a><a onclick="play_to('${v}')"> ☼</a></div></p></div>`
+            htmlx+=`<p><div class="tracks"><a style="color:red;" href="./users/${ws.users.name}/music/${v}" download>${v}</a><div class="track_button"><a onclick="play_music('${v}')">►</a> Pause Delete <a onclick="play_from('${v}')"> ☼</a><a onclick="play_to('${v}')"> ☼</a></div></p></div>`
           }else{
-            htmlx+=`<p><div class="tracks"><a href="./public/users/${ws.users.name}/music/${v}" download>${v}</a><div class="track_button"><a onclick="play_music('${v}')">►</a> Pause Delete ☼ ☼</div></p></div>`
+            htmlx+=`<p><div class="tracks"><a href="./users/${ws.users.name}/music/${v}" download>${v}</a><div class="track_button"><a onclick="play_music('${v}')">►</a> Pause Delete ☼ ☼</div></p></div>`
           }
         })
         ws.send('SYSTEM'+htmlx)
