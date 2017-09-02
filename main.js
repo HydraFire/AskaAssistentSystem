@@ -193,6 +193,10 @@ wss.on("connection", function(ws){
                   text_analitic.plus_command(ws,'тоже самое что и',desigen)
                 }else if(desigen.includes('тоже самое что')){
                   text_analitic.plus_command(ws,'тоже самое что',desigen)
+                }else if(desigen.includes('начиная с этого момента')){
+                  commands.run(desigen,ws)
+                }else if(desigen.includes('заканчивай на этом')){
+                  commands.run(desigen,ws)
                 }else{
                   let arr_commands = jetpack.list('./JSON/data/'+ws.users.name+'/commands')
                   arr_commands.forEach((v,i)=>{
