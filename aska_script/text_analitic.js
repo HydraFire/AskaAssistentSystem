@@ -9,10 +9,10 @@ const plus_command = function(ws,ask,text){
   let text1 = text.substring(text0.length+ask.length+2,text.length)
   console.log(text0+' '+text1)
   let arr_json = []
-  arr_json.push(text1)
+  arr_json.push(text0)
   ws.send('добавила связь, '+text0+' к команде, '+text1)
-  text0 = text0.split(' ').join('_')
-  jetpack.write('./JSON/data/'+ws.users.name+'/commands/'+text0+'.json',arr_json);
+  text1 = text1.split(' ').join('_')
+  jetpack.write('./JSON/data/'+ws.users.name+'/commands/'+text1+'.json',arr_json);
 
 }
 exports.plus_command = plus_command;
@@ -98,8 +98,10 @@ const ask = function(ws,text,v){
               clearInterval(ws.users.all_thoughts[int_id02])
               ws.users.all_thoughts.splice(int_id02,1)
               ws.users.input_Array[4] = "undefined"
-              v=v.split(' ').join('_')
+              console.log(v)
+              //v=v.split(' ').join('_')
               let ryr = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+v+'.json','json')
+              console.log(ryr)
               if(ryr[0]!='true'){
                 let h = ryr[0]
                 h=h.split(' ').join('_')
@@ -111,6 +113,7 @@ const ask = function(ws,text,v){
               v=v.split('_').join(' ')
               let arr_json = []
               arr_json.push(v)
+              text = text.split(' ').join('_')
               jetpack.write('./JSON/data/'+ws.users.name+'/commands/'+text+'.json',arr_json);
               ws.send('хорошо я запомнила')
               setTimeout(()=>{
@@ -146,6 +149,7 @@ const ask = function(ws,text,v){
 }
 exports.ask = ask;
 const go = function(text0,text1){
+  console.log('whats up?')
   let procent0 = 0
   let procent1 = 0
   function procent_string(a,b){
@@ -157,7 +161,7 @@ const go = function(text0,text1){
     }
 
     for(i=0;i<a.length;i++){
-      console.log(a[i]+' '+b[i]+' '+i)
+      //console.log(a[i]+' '+b[i]+' '+i)
       if(a[i] == b[i]){
         num+=1
       }
@@ -184,23 +188,23 @@ const go = function(text0,text1){
       // let s = a.search(a[0])
       if(t == -1){
         a = a.substring(1,a.length)
-        console.log('t= '+t)
-        console.log('a= '+a)
+        //console.log('t= '+t)
+        //console.log('a= '+a)
       }else{
 
-        console.log('a= '+a+' '+t)
+        //console.log('a= '+a+' '+t)
         let s = a.substring(0,t)
-        console.log('s= '+s)
+        //console.log('s= '+s)
         a = a.substring(1,a.length)
 
 
-        console.log('a= '+a+' '+t)
-        console.log('b= '+b)
+        //console.log('a= '+a+' '+t)
+        //console.log('b= '+b)
         let z = b.substring(0,t)
         b = b.substring(t+1,b.length)
         b = z+b
         num+=1
-        console.log('b= '+b)
+        //console.log('b= '+b)
       }
 
     }

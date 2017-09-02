@@ -164,23 +164,27 @@ wss.on("connection", function(ws){
             }
             console.log(ws.users.input_Array)
             if(ws.users.nn == true){
+              console.log('нейроная сеть')
               set_to_run(ws,message.toString());
             }else{
+              console.log('режим команд')
+              console.log(ws.users.all_thoughts.length)
               if(ws.users.all_thoughts.length == 0){
                 let arr_des = []
                 let desigen = message.toString()
+                console.log(desigen)
                 if(desigen.includes('найди трек')||
                    desigen.includes('включи этот трек')||
                    desigen.includes('найти трек')){
                   commands.run(desigen,ws)
                 }else if(desigen[0] == 'я'){
                   commands.run(desigen,ws)
-                }else if(desigen[0] == 'к'||
-                         desigen[1] == 'о'||
-                         desigen[2] == 'г'||
-                         desigen[3] == 'д'||
-                         desigen[4] == 'а'||
-                         desigen[5] == ' '||
+                }else if(desigen[0] == 'к'&&
+                         desigen[1] == 'о'&&
+                         desigen[2] == 'г'&&
+                         desigen[3] == 'д'&&
+                         desigen[4] == 'а'&&
+                         desigen[5] == ' '&&
                          desigen[6] == 'я'){
                   commands.run(desigen,ws)
                 }else if(desigen.includes('то же самое что и')){
@@ -197,10 +201,11 @@ wss.on("connection", function(ws){
                     arr_commands[i] = m
                   })
                   desigen = desigen.split(' ').join('_')
-
+                  console.log('arr_des  '+arr_commands)
                   arr_commands.forEach((v,i)=>{
                     arr_des.push([text_analitic.go(desigen,v),v])
                   })
+                  
                   arr_des.sort(function (a, b) {
                     if (a[0] > b[0]) {
                       return 1;
@@ -212,7 +217,7 @@ wss.on("connection", function(ws){
                     return 0;
                   })
                   //arr_des.reverse()
-                  console.log(arr_des)
+                  console.log('arr_des  '+arr_des)
                   if(arr_des[arr_des.length-1][0]>99){
                     desigen = arr_des[arr_des.length-1][1]
                     let origin = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+desigen+'.json','json')
@@ -237,6 +242,7 @@ wss.on("connection", function(ws){
                     let k = arr_des[arr_des.length-1][1]
                     k = k.split('_').join(' ')
                     ws.send('очень похоже на команду '+k)
+                    k = k.split(' ').join('_')
                     text_analitic.ask(ws,desigen,k)
                   }
 

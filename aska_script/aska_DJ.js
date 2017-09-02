@@ -266,7 +266,9 @@ const start = function(ws,par,track,from_what){
       track_played_plus1(ws,track,aska_dj2,1)
     }
     ///////////////////////////////////////////////////////////////
-
+    if(coub == ''){
+     coub = undefined
+    }
 
     let code_to_eval_on_client_part1 = `
 audio.src = "./users/${ws.users.name}/music/${track}";
