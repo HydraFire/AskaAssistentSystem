@@ -108,7 +108,7 @@ const num_to_text = function(date,hours,minutes){
           if(m > 1&&m < 5){minutes +=' минуты '}else
             if(m >= 5){minutes +=' минут '}
   }else{minutes = ''}
-
+  
   return date+hours+minutes
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,11 @@ const calc_time = function(arr_time){
   let minutes = symaDate%60
   let hours = (symaDate-minutes)/60%24
   let date = ((symaDate-(hours*60)-minutes)/24/60)//
+  if(minutes== 0&&hours==0 &&date==0){
+   date = 'меньше одной минуты'
+  }else{
   date = num_to_text(date,hours,minutes)
+  }
   return date
 }
 exports.calc_time = calc_time;

@@ -517,12 +517,12 @@ const run = function(strx,ws){
 
 
     if(ws.users.input_Array[4] == 'новое задание'){
-      strx = quest.add_quest(ws)
+      strx = quest.add_quest(ws,'список заданий','список заданий')
     }
 
     if(ws.users.input_Array[4] == 'список заданий'){
-      let effects = 'что с ней сделать?'
-      strx = quest.list_quest(effects,ws)
+      let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
+      strx = quest.list_quest('список заданий','список заданий',arrx,ws)
     }
     if(ws.users.input_Array[4] == 'дай мне задание'){
       strx = quest.start_quest(ws)

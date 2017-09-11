@@ -5,6 +5,7 @@ const this_real_time = require('./polival_kystu').this_real_time;
 const calc_time = require('./polival_kystu').calc_time;
 //const NNQ = require('./NN_quest');
 const polival_kystu = require('./polival_kystu');
+const quest_data_base_4D = require('./quest_data_base_4D');
 
 const question = function(ask,answer,effects,ws){
   let promise = new Promise((resolve, reject) => {
@@ -45,6 +46,7 @@ const question = function(ask,answer,effects,ws){
 }                           
 exports.question = question;
 ////////////////////////////////////////////////////////////////////
+/*
 const reposition_up = function(answer,effects,onswer,ws){
 
   function per(a,i,vector){
@@ -76,37 +78,56 @@ const reposition_up = function(answer,effects,onswer,ws){
         }
         if(x_x){
 
-          let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
+          let arrx = answer
           arrx.forEach((m,i)=>{
-            if(m == effects){
-              if(index == 0){
-                per(arrx,i,-1)
+            if(ws.users.input_Array[4] == m){
+              if(m == 'переместить вверх'){
+                // per(arrx,i,-1)
                 sendToAska(onswer[index],ws)
                 clearInterval(ws.users.all_thoughts[int_00])
                 ws.users.all_thoughts.splice(int_00,1)
                 console.log('interval close')
-              }
-              if(index == 1){
-                per(arrx,i,+1)
-                sendToAska(onswer[index],ws)
-                clearInterval(ws.users.all_thoughts[int_00])
-                ws.users.all_thoughts.splice(int_00,1)
-                console.log('interval close')
-              }
-              if(index == 2){
-                sendToAska(onswer[index],ws)
-                ws.send(start_quest(ws,i))
-                clearInterval(ws.users.all_thoughts[int_00])
-                ws.users.all_thoughts.splice(int_00,1)
-                console.log('interval close')
-              }
-              if(index == 3){
-                per(arrx,i,0)
-                sendToAska(onswer[index],ws)
-                clearInterval(ws.users.all_thoughts[int_00])
-                ws.users.all_thoughts.splice(int_00,1)
-                console.log('interval close')
-              }
+              }else
+                if(m == "переместить вниз"){
+                  per(arrx,i,+1)
+                  sendToAska(onswer[index],ws)
+                  clearInterval(ws.users.all_thoughts[int_00])
+                  ws.users.all_thoughts.splice(int_00,1)
+                  console.log('interval close')
+                }else
+                  if(m == 'выбрать'){
+                    sendToAska(onswer[index],ws)
+                    ws.send(start_quest(ws,i))
+                    clearInterval(ws.users.all_thoughts[int_00])
+                    ws.users.all_thoughts.splice(int_00,1)
+                    console.log('interval close')
+                  }else 
+                    if(m == "удалить"){
+                      //per(arrx,i,0)
+                      sendToAska(onswer[index],ws)
+                      clearInterval(ws.users.all_thoughts[int_00])
+                      ws.users.all_thoughts.splice(int_00,1)
+                      console.log('interval close')
+                    }else
+                      if(m == "новое задание"){
+                        ws.send(add_quest(ws,'список заданий',effects))
+                        clearInterval(ws.users.all_thoughts[int_00])
+                        ws.users.all_thoughts.splice(int_00,1)
+                        console.log('interval close')
+                      }else
+                        if(m == "отмена"){
+                          ws.send('очень жаль')
+                          clearInterval(ws.users.all_thoughts[int_00])
+                          ws.users.all_thoughts.splice(int_00,1)
+                          console.log('interval close')
+                        }else{
+                          let arr_z = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
+                          arr_z = quest_data_base_4D.get_list(effects,m,arr_z)
+                          console.log(arr_z)
+                          sendToAska('тест '+arr_z,ws)
+                          clearInterval(ws.users.all_thoughts[int_00])
+                          ws.users.all_thoughts.splice(int_00,1)
+                        }
             }
           })
         }
@@ -120,8 +141,9 @@ const reposition_up = function(answer,effects,onswer,ws){
   },1000)
 }                           
 exports.question = question;
+*/
 /////////////////////////////////////////////////////////////////////////////
-const add_quest = function(ws){
+const add_quest = function(ws,a,b){
   let text = ws.users.input_Array[4];
   let n = 0
   console.log('begin interval')
@@ -143,12 +165,17 @@ const add_quest = function(ws){
       if(x_x){
         let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
         if(!arrx){
-          arrx = [
-            "проверка всех систем"
-          ]
+          arrx = [['345678','список заданий','false','time'],
+                  ['785698','здоровье','false','time'],
+                  ['345678','пропить курс таблеток','false','time'],
+                  ['245648','сходить к врачу','false','time'],
+                  ['165322','прочесть книгу','false','time'],
+                  ['826772','найти сайт с выбором книг который бы понравился','false','time'],
+                  ['455789','найти достойную книгу','false','time'],
+                  ['545678','скачать','false','time']]
           jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
         }
-        arrx.push(ws.users.input_Array[4])
+        arrx = quest_data_base_4D.create_node(arrx,a,b,ws.users.input_Array[4])
         jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
         clearInterval(ws.users.all_thoughts[0])
         console.log(ws.users.all_thoughts.length)
@@ -164,51 +191,158 @@ const add_quest = function(ws){
   return 'записываю';
 }
 exports.add_quest = add_quest;
+const add_list_quest = function(ws,arr,a,b){
+  ws.users.input_Array[4] = 'none'
+  let n = 0
+  let t = 0
+  let k = 0
+  let int_id00 = ws.users.all_thoughts.length
+  ws.send('на маленькие кусочьки')
+  ws.users.all_thoughts[int_id00] = setInterval(()=>{
+    n++
+    console.log(n)
 
-const list_quest = function(effects,ws){
+    if(!ws.users.aska_talks){
+      clearInterval(ws.users.all_thoughts[int_id00])
+      ws.users.all_thoughts.splice(int_id00,1)
+
+      let int_id01 = ws.users.all_thoughts.length
+      ws.users.all_thoughts[int_id01] = setInterval(()=>{
+        t++
+        console.log(t)
+        if(ws.users.aska_talks){
+          console.log('YOU HERE <----------------')
+          clearInterval(ws.users.all_thoughts[int_id01])
+          ws.users.all_thoughts.splice(int_id01,1)
+          let int_id02 = ws.users.all_thoughts.length
+          console.log(int_id02)
+          ws.users.all_thoughts[int_id02] = setInterval(()=>{
+            k++
+            console.log(k)
+            if(ws.users.input_Array[4] == 'всё'){
+              clearInterval(ws.users.all_thoughts[int_id02])
+              console.log(int_id02)
+              ws.users.all_thoughts.splice(int_id02,1)
+              ws.send('отличьно, уже пол дела')
+            }else{
+              let c = ws.users.input_Array[4]
+              if(c!='none'){
+                arr = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json')
+                arr = quest_data_base_4D.create_node(arr,a,b,c)
+                jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arr)
+                ws.users.input_Array[4] = 'none'
+              }
+            }
+            if(k>2000){
+              console.log('clear interval_03')
+              clearInterval(ws.users.all_thoughts[int_id02])
+              ws.users.all_thoughts.splice(int_id02,1)
+            }
+          },500)
+
+        }
+        if(t>100){
+          clearInterval(ws.users.all_thoughts[int_id01])
+          ws.users.all_thoughts.splice(int_id01,1)
+          console.log('Interval Close')
+        }
+      },500)
+    }
+    if(n>100){
+      clearInterval(ws.users.all_thoughts[int_id00])
+      ws.users.all_thoughts.splice(int_id00,1)
+      console.log('Interval Close')
+    }
+  },500)
+  return arr
+}
+const list_quest = function(a,b,arr,ws){
   ws.users.new_par = false
-  let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
-  if(!arrx){
+  if(!arr){
     return 'Список заданий еще не создан, создай первую запись.Просто скажи, новое задание'
   }
-  console.log('interval START')
+  let answer = quest_data_base_4D.get_list(a,b,arr)
+  ws.send('SYSTEM '+answer.join(' ,'))
+  if(answer.length<1){
+    ws.send('выбрала '+b)
+  }else{
+    //ws.send('это задание состоит из, '+answer)
+    ws.send(', '+answer)
+  }
+  answer.push('новое задание')
+  answer.push('отмена')
+  answer.push('удалить')
+  answer.push('начать')
+  answer.push('поделить на части')
+
   let n = 0
   let int_id = ws.users.all_thoughts.length
   ws.users.all_thoughts[int_id] = setInterval(()=>{
     n++
     console.log(n)
-    let answer = jetpack.read('JSON/data/'+ws.users.name+'/todo.json','json');
-    answer.push('новое задание')
-    answer.push('отмена')
+
+
     answer.forEach((v,i)=>{
+      //console.log('ws.users.input_Array[4]='+ws.users.input_Array[4]+'   v='+v)
       if(ws.users.input_Array[4] == v){
+        console.log(ws.users.input_Array[4])
         if(v == 'новое задание'){
-          ws.send(add_quest(ws))
+          console.log(ws.users.all_thoughts[int_id])
+          console.log(ws.users.all_thoughts.length+' <----------')
+          clearInterval(ws.users.all_thoughts[int_id])
+          ws.users.all_thoughts.splice(int_id,1)
+          ws.send(add_quest(ws,a,b))
+
+        }else if(v == 'начать'){
+          //ws.users.new_par = true
+          //ws.send('ладно')
+          clearInterval(ws.users.all_thoughts[int_id])
+          ws.users.all_thoughts.splice(int_id,1)
+
+         
+          ws.users.quest_buffer_a = a
+          ws.users.quest_buffer_b = b
+          console.log('A='+a+' B= '+b)
+          start_quest(ws,a,b)
+          
+        }else if(v == 'поделить на части'){
+
+          //ws.users.new_par = true
+          clearInterval(ws.users.all_thoughts[int_id])
+          ws.users.all_thoughts.splice(int_id,1)
+          arr = add_list_quest(ws,arr,a,b)
+          jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arr)
+        }else if(v == 'удалить'){
+
+          clearInterval(ws.users.all_thoughts[int_id])
+          ws.users.all_thoughts.splice(int_id,1)
+          //ws.users.new_par = true
+          console.log('B= '+b)
+          console.log('ws.users.input_Array[3]= '+ws.users.input_Array[3])
+          ws.send('удалено задание '+ws.users.input_Array[3])
+          arr = quest_data_base_4D.delete_node(arr,a,b,ws)
+          jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arr)
+
         }else if(v == 'отмена'){
+
           //ws.users.new_par = true
           ws.send('ладно')
+          clearInterval(ws.users.all_thoughts[int_id])
+          ws.users.all_thoughts.splice(int_id,1)
         }else{
-          setTimeout(() => {
-            sendToAska('ты выбрал '+i+'-тую строчку в списке',ws)
-            let commands = ["переместить вверх",
-                            "переместить вниз",
-                            "выбрать",
-                            "удалить"];
-            let onsver_com = ["переместила ближе",
-                              "переместила дальше",
-                              "время пошло",
-                              "задание удалено"]
-            reposition_up(commands,v,onsver_com,ws)
-            /*
-          setTimeout(() => {
-            sendToAska(effects,ws)
+          clearInterval(ws.users.all_thoughts[int_id])
+          ws.users.all_thoughts.splice(int_id,1)
 
-          }, 2200);
-          */
-          },200);
+          // answer = quest_data_base_4D.get_list(b,v,arr)
+
+
+          console.log('interval START')
+          console.log('A= '+a+' B='+b)
+          console.log('B= '+b+' C='+v)
+          list_quest(b,v,arr,ws)
+
         }
-        clearInterval(ws.users.all_thoughts[int_id])
-        ws.users.all_thoughts.splice(int_id,1)
+
       }
     })
 
@@ -219,8 +353,8 @@ const list_quest = function(effects,ws){
       console.log('interval close')
     }
   }, 1000);
-  ws.send('SYSTEM '+arrx.join(' ,'))
-  return arrx.join(' ,');
+
+  //return answer.join(' ,');
 }
 exports.list_quest = list_quest;
 
@@ -231,18 +365,23 @@ const finished_quest = function(ws){
 }
 exports.finished_quest = finished_quest;
 
-const start_quest = function(ws,one){
+const start_quest = function(ws,b,c){
   //console.log('YRA')
   let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json');
   //console.log(arrx)
-  if(!one){
-    one = arrx.length-1
-  }
-  let arrs = [arrx[one],this_real_time()];
-  //NNQ.NNQ_to_train(arrx[one].split(' ').join('_'),ws)
-  jetpack.write('./JSON/data/'+ws.users.name+'/quest_ongoing.json',arrs);
+  //let test = quest_data_base_4D.get_list(b,c,arrx)
+  // if(test.length>1){
+  c = quest_data_base_4D.start_node(arrx,b,c,ws)
+  // }else{
+  //  с = quest_data_base_4D.search_i(arrx,с)
+  // c = arrx[с]
+  // }
 
-  return 'я выбрала задание, '+arrx[one];
+  //let arrs = [arrx[one],this_real_time()];
+
+  //jetpack.write('./JSON/data/'+ws.users.name+'/quest_ongoing.json',arrs);
+
+  return 'давай начьнем с, '+c;
   ////////////////////////////////////////////////////////////////////
 }
 exports.start_quest = start_quest;
@@ -252,28 +391,51 @@ const finish_quest = function(ws){
   if(arrf[0] != 'none'){
     let arrrx = ['none']
     jetpack.write('./JSON/data/'+ws.users.name+'/quest_ongoing.json',arrrx);
-
     let arrx = jetpack.read('./JSON/data/'+ws.users.name+'/todo.json','json')
-    let index = arrx.indexOf(arrf[0]);
-    arrx.splice(index,1)
+    arrx = quest_data_base_4D.delete_node(arrx,arrf[0],arrf[1],ws)
     jetpack.write('./JSON/data/'+ws.users.name+'/todo.json',arrx);
-    //NNQ.NNQ_to_train(arrf[0],ws)
+    let timer = calc_time(arrf[2]);
+    ws.send('выполнено задание '+arrf[1]+', на него ушло '+timer)
+    let n = 0
+    let t = 0
+    let k = 0
+    let int_id00 = ws.users.all_thoughts.length
 
-    let aaa = jetpack.read('./JSON/data/'+ws.users.name+'/quest_finished.json','json');
-    if(!aaa){
-      aaa = [
-        [
-          "открыл этот сайт",
-          " , ,  1 секунда"
-        ]
-      ]
-    }
-    let timer = calc_time(arrf[1]);
-    aaa.push([arrf[0],timer]);
-    jetpack.write('./JSON/data/'+ws.users.name+'/quest_finished.json',aaa);
-    return 'выполнено задание '+arrf[0]+', на него ушло '+timer;
+    ws.users.all_thoughts[int_id00] = setInterval(()=>{
+      n++
+      console.log(n)
+      if(!ws.users.aska_talks){
+        clearInterval(ws.users.all_thoughts[int_id00])
+        ws.users.all_thoughts.splice(int_id00,1)
+
+        let int_id01 = ws.users.all_thoughts.length
+        ws.users.all_thoughts[int_id01] = setInterval(()=>{
+          t++
+          console.log(t)
+          if(ws.users.aska_talks){
+            clearInterval(ws.users.all_thoughts[int_id01])
+            ws.users.all_thoughts.splice(int_id01,1)
+            if(arrf[4] == arrf[1]){
+            ws.send('Поздравляю, комплексное задание '+arrf[1]+',выполнено')
+            }else{
+            start_quest(ws,arrf[3],arrf[4])
+            }
+          }
+          if(t>100){
+            clearInterval(ws.users.all_thoughts[int_id01])
+            ws.users.all_thoughts.splice(int_id01,1)
+            console.log('Interval Close')
+          }
+        },500)
+      }
+      if(n>100){
+        clearInterval(ws.users.all_thoughts[int_id00])
+        ws.users.all_thoughts.splice(int_id00,1)
+        console.log('Interval Close')
+      }
+    },500)
   }else{
-    return 'я недавала пока некаких заданий';
+    ws.send('я недавала пока некаких заданий')
   }
 }
 exports.finish_quest = finish_quest;
@@ -282,6 +444,7 @@ const ongoing = function(ws){
   let arr_ongoing = jetpack.read('./JSON/data/'+ws.users.name+'/quest_ongoing.json','json');
   if(!arr_ongoing){
     arr_ongoing = [
+      "cписок заданий",
       "розпросить о других функциях",
       [
         2017,
@@ -294,10 +457,10 @@ const ongoing = function(ws){
     console.log('create new file arr_ongoing.json')
   }
   if(arr_ongoing[0] != 'none'){
-    let timer = calc_time(arr_ongoing[1]);
-    return 'сейчас идет задание '+arr_ongoing[0]+', уже как '+timer;
+    let timer = calc_time(arr_ongoing[2]);
+    ws.send('сейчас идет задание '+arr_ongoing[1]+', уже как '+timer)
   }else{
-    return 'я недавала пока некаких заданий';
+    ws.send('я недавала пока некаких заданий')
   }
 }
 exports.ongoing = ongoing;
