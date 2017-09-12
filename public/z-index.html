@@ -672,6 +672,10 @@
       window.animation = false
       socket.send('SHUT_UP')
       console.log('SHUT_UP')
+      if(localStorage.pause_recog){
+        recognition.start()
+        recognition.addEventListener('end', recognition.start)
+      }
     })
     audioTag.addEventListener('pause',()=>{
       console.log('wait')
