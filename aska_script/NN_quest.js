@@ -289,7 +289,7 @@ const aska_learn_quest_main = function(ws){
   var json_train = net.toJSON();
   jetpack.write(NN_train_buffer,json_train)
   ws.users.attention = 'LISTEN'
-  ws.send('EVALwindow.color_aska = 205;localStorage.pause_recog = false')
+  ws.send('EVALwindow.color_aska = 205;localStorage.pause_recog = true')
   ws.send('обучение завершено, '+circle.calc_math(first_time,'text'))
 }
 exports.aska_learn_quest_main = aska_learn_quest_main;
