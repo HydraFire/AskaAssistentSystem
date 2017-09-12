@@ -102,7 +102,9 @@ const set_to_run = function(ws,text){
   if(ws.users.input_Array[4].includes('режим команд')){
     ws.users.nn = false
   }
-  if(ws.users.input_Array[4] == 'запомни'){
+  if(ws.users.input_Array[4] == 'запомни' ||
+    ws.users.input_Array[4] == 'напомни' ||
+    ws.users.input_Array[4] == 'запомнить'){
     let ask = ws.users.input_Array[2]
     let answer = ws.users.input_Array[3]
     if(ask == ' ' || answer == ' '){
@@ -114,8 +116,14 @@ const set_to_run = function(ws,text){
     //strx = ''
   }
   if(ws.users.input_Array[4] == 'обучение'){
+    ws.users.attention = 'NO LISTEN'
+    ws.send('EVALwindow.color_aska = 20;aska("обучение может занять несколько менут");localStorage.pause_recog = true')
     //ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
-    strx = NNQ.aska_learn_quest_main(ws)
+    setTimeout(()=>{
+     NNQ.aska_learn_quest_main(ws)
+     strx = ''
+    },200)
+    
     //ws.send(strx)
   }
 

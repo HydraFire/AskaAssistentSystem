@@ -280,7 +280,7 @@ const aska_learn_quest_main = function(ws){
   //jetpack.remove(NN_train_buffer);
   var data = jetpack.read(trainFileMain,'json');
   net.train(data, {
-    errorThresh: 0.05,  // error threshold to reach
+    errorThresh: 0.005,  // error threshold to reach
     iterations: 5000,   // maximum training iterations
     log: true,           // console.log() progress periodically
     logPeriod: 10,       // number of iterations between logging
@@ -288,9 +288,9 @@ const aska_learn_quest_main = function(ws){
   })
   var json_train = net.toJSON();
   jetpack.write(NN_train_buffer,json_train)
-
-
-  return 'обучение завершено, '+circle.calc_math(first_time,'text')
+  ws.users.attention = 'LISTEN'
+  ws.send('EVALwindow.color_aska = 205;localStorage.pause_recog = false')
+  ws.send('обучение завершено, '+circle.calc_math(first_time,'text'))
 }
 exports.aska_learn_quest_main = aska_learn_quest_main;
 exports.aska_learn_delete = aska_learn_delete;

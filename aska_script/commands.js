@@ -31,7 +31,7 @@ const run = function(strx,ws){
     if(ws.users.input_Array[4].includes('нейронная сеть')||
       ws.users.input_Array[4].includes('переключить в режим нейронной сети')){
      ws.users.nn = true
-     strx = 'нейроная сеть'
+     strx = 'переключение в режим машинного интеллекта'
     }
     
     

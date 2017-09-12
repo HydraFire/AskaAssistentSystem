@@ -562,7 +562,7 @@
   //recognition.start();
   //recognition.addEventListener('end', console.log('CLOSE'))
   ///////////////////////////// ASKA /////////////////////////////////////
-  function aska(text){
+  function aska(text,p){
 
     console.group('ASKA говорит:');
     console.log(text)
@@ -603,7 +603,12 @@
       audio2.src = url;
       audio2.load();
       audio2.onloadeddata = function () {
+        console.log('localStorage.audioVolume '+localStorage.audioVolume)
+        let ryu = parseFloat(localStorage.audioVolume)+0.2
+        audio2.volume = ryu.toFixed(2)
         audio2.play();
+        recognition.stop();
+        recognition.removeEventListener('end', recognition.start)
         socket.send('SPEECH')
         console.log('SPEECH')
       }
@@ -614,7 +619,7 @@
     console.log(e)
     socket.send(e);
   }
- var socket = new WebSocket("wss://nerv.pro/z-index.html");
+  var socket = new WebSocket("wss://nerv.pro/z-index.html");
 
   //var socket = new WebSocket("wss://159.224.183.122:443/z-index.html");
   // var socket = new WebSocket("ws://localhost:80/index.html");
@@ -639,10 +644,10 @@
       stry = stry.substring(9,stry.length)
       //let boome = setInterval(()=>{
       //  console.log(audioTag.paused)
-       // if(audioTag.paused){
-         socket.send(stry)
-       //  clearInterval(boome)
-       // }
+      // if(audioTag.paused){
+      socket.send(stry)
+      //  clearInterval(boome)
+      // }
       //},1000)
     }else if(event.data.includes('SYSTEM')){
       displayit(event.data)
@@ -661,14 +666,23 @@
   };
   //localStorage.wait = 'wait';
   if(localStorage.wait != 'wait'){
+    audio2.addEventListener('pause',()=>{
+      console.log('wait')
+      console.log('start')
+      window.animation = false
+      socket.send('SHUT_UP')
+      console.log('SHUT_UP')
+    })
     audioTag.addEventListener('pause',()=>{
       console.log('wait')
       console.log('start')
       window.animation = false
       socket.send('SHUT_UP')
       console.log('SHUT_UP')
-      recognition.start()
-      recognition.addEventListener('end', recognition.start)
+      if(!localStorage.pause_recog){
+        recognition.start()
+        recognition.addEventListener('end', recognition.start)
+      }
     })
   }
   /////////////////////////////////////////////////////////////////////////////    

@@ -3,7 +3,47 @@ const jetpack = require('fs-jetpack');
 
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
+
+
 const this_real_time = require('./polival_kystu').this_real_time;
+const num_to_text = function(date,hours,minutes){
+  date+=''
+  if(date != 0){
+    let d = date[date.length-1]
+    let dd = date[date.length-2]
+    if(dd == 1){date +=' дней '}else
+      if(d == 0){date +=' дней '}else
+        if(d == 1){date +=' день '}else 
+          if(d > 1&&d < 5){date +=' дня '}else
+            if(d >= 5){date +=' дней '}
+  }else{date = ''}
+
+  hours+=''
+  if(hours != 0){
+    let h = hours[hours.length-1]
+    let hh = hours[hours.length-2]
+
+    if(hh == 1){hours +=' часов '}else
+      if(h == 0){hours +=' часов '}else
+        if(h == 1){hours +=' час '}else 
+          if(h > 1&&h < 5){hours +=' часа '}else
+            if(h >= 5){hours +=' часов '}
+  }else{hours = ''}
+
+  minutes+=''
+  if(minutes != 0){
+    let m = minutes[minutes.length-1]
+    let mm = minutes[minutes.length-2]
+
+    if(mm == 1){minutes +=' минут '}else
+      if(m == 0){minutes +=' минут '}else
+        if(m == 1){minutes +=' минута '}else 
+          if(m > 1&&m < 5){minutes +=' минуты '}else
+            if(m >= 5){minutes +=' минут '}
+  }else{minutes = ''}
+
+  return date+hours+minutes
+}
 
 var int_day_in_month = function(iu){
   let arr_month = [0,0,31,59,90,120,151,181,212,243,273,304,334,365]
@@ -50,50 +90,17 @@ const calc_math = function(arr_time,par){
 
   let textstr
 
-  if(par != 'minutes'){
-    let minutes = symaDate%60
-    let hours = (symaDate-minutes)/60%24
-    let date = ((symaDate-(hours*60)-minutes)/24/60)//
-    if(hours <= 0){
-      hours=-hours
-    }
-    console.log(minutes)
-    if(minutes <= 0){
-      minutes=-minutes
-    }
-    console.log(minutes)
-    if(date <= 0){
-      date=-date
-    }
-    // month = 
-    // year = 
 
-    if(date>1){date+=' дня,'}else
-      if(date==1){date+=' день,'}else{date = ' ,'}
+  let minutes = symaDate%60
+  let hours = (symaDate-minutes)/60%24
+  let date = ((symaDate-(hours*60)-minutes)/24/60)//
 
-    if(hours==0){hours =', '}else
-      if(hours==1){hours+=' час,'}else
-        if(hours>5){hours+=' часов,'}else{hours += ' часа,'}
-    if(minutes==1){minutes =', одна минута'}else
-      if(minutes==2){minutes =', две минуты'}else
-        if(minutes==3){minutes =', три минуты'}else
-          if(minutes==4){minutes =', четыри минуты'}else
-            if((minutes%10)==1){minutes+=' минута,'}else
-              if((minutes%10)==2){minutes+=' минута'}else
-                if(minutes==22){minutes+=' минуты'}else
-                  if(minutes==13){minutes+=' минут'}else
-                    if((minutes%10)==3){minutes+=' минута'}else
-                      if(minutes==14){minutes+=' минут'}else
-                        if((minutes%10)==4){minutes ='четвертая минута'}else
-                          if(minutes==0){hours ='и ровно'+hours; minutes=', '}else{minutes +=' минут'}
-
-    textstr = date+' '+hours+' '+minutes
+  if(minutes== 0&&hours==0 &&date==0){
+    date = 'меньше одной минуты'
   }else{
-    symaDate=-symaDate
-    textstr = symaDate
+    date = num_to_text(date,hours,minutes)
   }
-  console.log(textstr)
-  return textstr
+  return date
 }
 exports.calc_math = calc_math;
 /////////////////////////////////////////////////////////
@@ -138,114 +145,3 @@ const calc_arr_minus_arr = function(arr,arr2){
   console.log(symaDate+' -- ------------------------- ')
   return symaDate
 }
-///////////////////////////////////////////////////////////////////////////
-exports.sigi_remove = function(resorse_name,rate,ws){
-  let circle_num = [rate]
-  jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
-  return 'Новая неделя пошла, рейты '+rate+' '+resorse_name+' в неделю'
-}
-///////////////////////////////////////////////////////////////////////////
-exports.sigi_minus = function(resorse_name,rate,date,ws){
-  let sxx = sigi(resorse_name,rate,ws)
-  let circle_num = jetpack.read('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json','json')
-  if(!circle_num){
-    circle_num = [rate]
-    jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
-  }
-  let giu = parseFloat(circle_num[0]) -1;
-  circle_num[0] = giu
-  jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
-  let ix
-  let arr_timeX = date;
-  ix = calc_math(arr_timeX,'minutes')
-  ix = ix / parseFloat(circle_num[0])|0
-
-  let arr_ix = []
-  let ki = 0
-  let siple_arr
-  let zzz = parseFloat(circle_num[0])
-  for(i=0;i<zzz;i++){
-    ki +=ix
-    siple_arr = calc_into_time(this_real_time(),ki)
-    if(siple_arr[3] > 8){
-      arr_ix.push(siple_arr)
-    }else{
-      ki +=480
-      siple_arr = calc_into_time(this_real_time(),ki)
-      arr_ix.push(siple_arr)
-    }
-  }
-
-  jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_arr.json',arr_ix)
-  console.log(arr_ix)
-
-  console.log(sxx)
-  if(arr_ix[0] != undefined){
-    if(sxx.includes('не курил')){
-      sxx = 'Спасибо что дождался, только так мы победим '+resorse_name
-    }else{
-      sxx = 'Почему недождался? Нужно держать '+resorse_name+' под контролем'
-    }
-  }else{
-    sxx = 'Всё '+resorse_name+' закончелись, всё отличьно мы справелись, теперь всё по новой, но ставим чуть меньше рэйты'
-  }
-  return sxx
-}
-///////////////////////////////////////////////////////////////////////////
-const sigi = function(resorse_name,rate,ws){
-  console.log('ХУРА')
-
-
-
-
-
-  let circle_num = jetpack.read('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json','json')
-  if(!circle_num){
-    circle_num = [rate]
-    jetpack.write('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_num.json',circle_num)
-  }
-  let circle_arr = jetpack.read('./JSON/data/'+ws.x_user+'/circle_'+resorse_name+'_arr.json','json')
-  if(!circle_arr){
-    circle_arr = [
-      [
-        2017,
-        6,
-        18,
-        22,
-        10
-      ],
-      [
-        2017,
-        6,
-        18,
-        22,
-        30
-      ]
-    ]
-  }
-  let xhx
-  if(circle_arr[0] != undefined){
-    xhx = calc_math(circle_arr[0],'minutes')
-    //xhx = parseFloat(xhx)
-    console.log('dsfsdfsdf xhx '+xhx)
-    if(xhx <= 0){
-      let arr_z = calc_arr_minus_arr(circle_arr[1],circle_arr[0])
-      console.log("----------xxx-----------")
-      console.log(arr_z)
-      let rry = calc_into_time(circle_arr[0],arr_z)
-      console.log(rry)
-      xhx = calc_math(rry,'text')
-      xhx = 'не курил уже '+xhx
-    }else{
-      let minutes = xhx%60
-      let hours = (xhx-minutes)/60%24
-      
-      xhx = hours+' часов '+minutes
-      xhx = 'осталось подождать всего '+xhx+' минут'
-    }
-  }else{
-    xhx = 'Всё '+resorse_name+' закончелись'
-  }
-  return xhx
-}
-exports.sigi = sigi
