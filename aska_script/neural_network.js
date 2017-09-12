@@ -119,12 +119,10 @@ const set_to_run = function(ws,text){
     ws.users.attention = 'NO LISTEN'
     ws.send('EVALwindow.color_aska = 20;aska("обучение может занять несколько менут");localStorage.pause_recog = false')
     //ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
+    strx = ''
     setTimeout(()=>{
      NNQ.aska_learn_quest_main(ws)
-     strx = ''
     },200)
-    
-    //ws.send(strx)
   }
 
 
