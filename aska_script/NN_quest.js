@@ -280,7 +280,7 @@ const aska_learn_quest_main = function(ws){
   //jetpack.remove(NN_train_buffer);
   var data = jetpack.read(trainFileMain,'json');
   net.train(data, {
-    errorThresh: 0.0005,  // error threshold to reach
+    errorThresh: 0.05,  // error threshold to reach
     iterations: 5000,   // maximum training iterations
     log: true,           // console.log() progress periodically
     logPeriod: 10,       // number of iterations between logging
