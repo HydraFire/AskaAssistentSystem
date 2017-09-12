@@ -117,7 +117,7 @@ const set_to_run = function(ws,text){
   }
   if(ws.users.input_Array[4] == 'обучение'){
     ws.users.attention = 'NO LISTEN'
-    ws.send('EVALwindow.color_aska = 20;aska("обучение может занять несколько менут");localStorage.pause_recog = true')
+    ws.send('EVALwindow.color_aska = 20;aska("обучение может занять несколько менут");localStorage.pause_recog = false')
     //ws.send('Инициализована процедура переобучения нейроной сети, может занять несколько минут')
     setTimeout(()=>{
      NNQ.aska_learn_quest_main(ws)

@@ -469,7 +469,7 @@
   speed.addEventListener('mouseup',handleClickUp)
   ///////////////////////////////////////////////////////////////////////////
   var audioTag = document.getElementById('audio');
-
+  localStorage.pause_recog = true
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   const recognition = new SpeechRecognition();
@@ -621,7 +621,7 @@
   }
   var socket = new WebSocket("wss://nerv.pro/z-index.html");
 
-  //var socket = new WebSocket("wss://159.224.183.122:443/z-index.html");
+ //var socket = new WebSocket("wss://159.224.183.122:443/z-index.html");
   // var socket = new WebSocket("ws://localhost:80/index.html");
 
   // Всё первоначальные стейты при подключении
@@ -679,7 +679,7 @@
       window.animation = false
       socket.send('SHUT_UP')
       console.log('SHUT_UP')
-      if(!localStorage.pause_recog){
+      if(localStorage.pause_recog){
         recognition.start()
         recognition.addEventListener('end', recognition.start)
       }
