@@ -1,49 +1,6 @@
 
 const jetpack = require('fs-jetpack');
-
-//const when_watered = require('./aska_script/polival_kystu').when_watered;
-//const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
-
-
-const this_real_time = require('./polival_kystu').this_real_time;
-const num_to_text = function(date,hours,minutes){
-  date+=''
-  if(date != 0){
-    let d = date[date.length-1]
-    let dd = date[date.length-2]
-    if(dd == 1){date +=' дней '}else
-      if(d == 0){date +=' дней '}else
-        if(d == 1){date +=' день '}else 
-          if(d > 1&&d < 5){date +=' дня '}else
-            if(d >= 5){date +=' дней '}
-  }else{date = ''}
-
-  hours+=''
-  if(hours != 0){
-    let h = hours[hours.length-1]
-    let hh = hours[hours.length-2]
-
-    if(hh == 1){hours +=' часов '}else
-      if(h == 0){hours +=' часов '}else
-        if(h == 1){hours +=' час '}else 
-          if(h > 1&&h < 5){hours +=' часа '}else
-            if(h >= 5){hours +=' часов '}
-  }else{hours = ''}
-
-  minutes+=''
-  if(minutes != 0){
-    let m = minutes[minutes.length-1]
-    let mm = minutes[minutes.length-2]
-
-    if(mm == 1){minutes +=' минут '}else
-      if(m == 0){minutes +=' минут '}else
-        if(m == 1){minutes +=' минута '}else 
-          if(m > 1&&m < 5){minutes +=' минуты '}else
-            if(m >= 5){minutes +=' минут '}
-  }else{minutes = ''}
-
-  return date+hours+minutes
-}
+const polival_kystu = require('./polival_kystu')
 
 var int_day_in_month = function(iu){
   let arr_month = [0,0,31,59,90,120,151,181,212,243,273,304,334,365]
@@ -77,7 +34,7 @@ const calc_math = function(arr_time,par){
   // alert(arr_time[0]+' '+arr_time[1])
   let the_magic_begin = (arr_time[0]*24*60)+(arr_time[1]*24*60)+(arr_time[2]*24*60)+(arr_time[3]*60)+arr_time[4];
   // alert(the_magic_begin)
-  var real_time = this_real_time()
+  var real_time = polival_kystu.this_real_time()
   // alert(real_time)
   real_time[1] = int_day_in_month(real_time[1])
   real_time[0] = int_day_in_year(real_time[0])
@@ -98,7 +55,7 @@ const calc_math = function(arr_time,par){
   if(minutes== 0&&hours==0 &&date==0){
     date = 'меньше одной минуты'
   }else{
-    date = num_to_text(date,hours,minutes)
+    date = polival_kystu.num_to_text(date,hours,minutes)
   }
   return date
 }

@@ -6,72 +6,29 @@ const ask = require('./ask');
 const napominalka = require('./napominalka');
 
 const count_to_text = function(v){
-  let date = v
-  let date2 = ''
-  date+=''
-  if(date != 0){
-    let z = date[date.length-1]
-    let zz = date[date.length-2]
-    let zzz = date[date.length-3]
-    if(zzz == 1 ){date2 +='сто '}else
-      if(zzz == 2 ){date2 +='двести '}else
-        if(zzz == 3 ){date2 +='триста '}else
-          if(zzz == 4 ){date2 +='четыреста '}else
-            if(zzz == 5 ){date2 +='пятьсот '}else
-              if(zzz == 6 ){date2 +='шестьсот '}else
-                if(zzz == 7 ){date2 +='семьсот '}else
-                  if(zzz == 8 ){date2 +='восемьсот '}else
-                    if(zzz == 9 ){date2 +='девятьсот '}
-    if(zz == 1 && z == 0){date2 +='десятый '}else
-      if(zz == 1 && z == 1){date2 +='одиннадцатый '}else
-        if(zz == 1 && z == 2){date2 +='двенадцатый '}else
-          if(zz == 1 && z == 3){date2 +='тринадцатый '}else
-            if(zz == 1 && z == 4){date2 +='четырнадцатый '}else
-              if(zz == 1 && z == 5){date2 +='пятнадцатый '}else
-                if(zz == 1 && z == 6){date2 +='шестнадцатый '}else
-                  if(zz == 1 && z == 7){date2 +='семнадцатый '}else
-                    if(zz == 1 && z == 8){date2 +='восемнадцатый '}else
-                      if(zz == 1 && z == 9){date2 +='девятнадцатый '}
-    if(zz == 2 && z == 0){date2 +='двадцатый '}else
-      if(zz == 3 && z == 0){date2 +='тридцатый '}else
-        if(zz == 4 && z == 0){date2 +='сороковой '}else
-          if(zz == 5 && z == 0){date2 +='пятидесятый '}else
-            if(zz == 6 && z == 0){date2 +='шестидесятый '}else
-              if(zz == 7 && z == 0){date2 +='семидесятый '}else
-                if(zz == 8 && z == 0){date2 +='восьмидесятый '}else
-                  if(zz == 9 && z == 0){date2 +='девяностый '}else
-                    if(zz == 2){date2 +='двадцать '}else
-                      if(zz == 3){date2 +='тридцать '}else
-                        if(zz == 4){date2 +='сорок '}else
-                          if(zz == 5){date2 +='пятьдесят '}else
-                            if(zz == 6){date2 +='шестьдесят '}else
-                              if(zz == 7){date2 +='семьдесят '}else
-                                if(zz == 8){date2 +='восемьдесят '}else
-                                  if(zz == 9){date2 +='девяносто '}
-    if(zz != 1 && z == 1){date2 +='первый '}else 
-      if(zz != 1 && z == 2){date2 +='второй '}else 
-        if(zz != 1 && z == 3){date2 +='третий '}else 
-          if(zz != 1 && z == 4){date2 +='четвертый '}else 
-            if(zz != 1 && z == 5){date2 +='пятый '}else 
-              if(zz != 1 && z == 6){date2 +='шестой '}else 
-                if(zz != 1 && z == 7){date2 +='седьмой '}else 
-                  if(zz != 1 && z == 8){date2 +='восьмой '}else 
-                    if(zz != 1 && z == 9){date2 +='девятый '}
-    if(zzz == 1 && zz == 0 && z == 0){date2 +='юбелейный сотый '}
-    if(zzz == 2 && zz == 0 && z == 0){date2 +='двухсотый '}
-    if(zzz == 3 && zz == 0 && z == 0){date2 +='трехсотый '}
-    if(zzz == 4 && zz == 0 && z == 0){date2 +='четырехсотый '}
-    if(zzz == 5 && zz == 0 && z == 0){date2 +='пятисотый '}
-    if(zzz == 6 && zz == 0 && z == 0){date2 +='шестисотый '}
-    if(zzz == 7 && zz == 0 && z == 0){date2 +='семисотый '}
-    if(zzz == 8 && zz == 0 && z == 0){date2 +='восьмисотый '}
-    if(zzz == 9 && zz == 0 && z == 0){date2 +='девятисотый '}
+  let arr_100_900 = ['сто ','двести ','триста ','четыреста ','пятьсот ','шестьсот ','семьсот ','восемьсот ','девятьсот ']
+  let arr_100_900b = ['юбелейный сотый ','двухсотый ','трехсотый ','четырехсотый ','пятисотый ','шестисотый ','семисотый ','восьмисотый ','девятисотый ']
+  let arr_20_90 = ['двадцатый ','тридцатый ','сороковой ','пятидесятый ','шестидесятый ','семидесятый ','восьмидесятый ','девяностый ']
+  let arr_20_90b = ['двадцать ','тридцать ','сорок ','пятьдесят ','шестьдесят ','семьдесят ','восемьдесят ','девяносто ']
+  let arr_11_19 = ['десятый ','одиннадцатый ','двенадцатый ','тринадцатый ','четырнадцатый ','пятнадцатый ','шестнадцатый ','семнадцатый ','восемнадцатый ','девятнадцатый ']
+  let arr_1_9 = ['первый ','второй ','третий ','четвертый ','пятый ','шестой ','седьмой ','восьмой ','девятый ']
 
-  }else{date2 += 'не разу'}
-  if(date != 0){
-    date2 +='раз '
-  }else{date2 += ''}
-  return date2
+  v+=''
+  let z = v[v.length-1]
+  let zz = v[v.length-2]
+  let zzz = v[v.length-3]
+  v=''
+  
+  zzz&&zz!=0&&z!=0?v +=arr_100_900[zzz-1]:'';
+  zz==1?v +=arr_11_19[z]:'';
+  zz>1&&z==0?v +=arr_20_90[zz-2]:'';
+  zz>1&&z!=0?v +=arr_20_90b[zz-2]:'';
+  zz!=1&&z!=0?v +=arr_1_9[z-1]:'';
+  zzz&&zz==0&&z==0?v +=arr_100_900b[zzz-1]:'';
+  !zzz&&!zz&&z==0?v +='не разу':'';
+  zzz||zz||z!=0?v +='раз ':''
+  
+  return v
 }
 const num_to_text = function(date,hours,minutes){
   date+=''
@@ -111,6 +68,7 @@ const num_to_text = function(date,hours,minutes){
   
   return date+hours+minutes
 }
+exports.num_to_text = num_to_text;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 const calc_time = function(arr_time){
   int_day_in_month = function(iu){
