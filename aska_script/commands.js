@@ -205,7 +205,15 @@ const run = function(strx,ws){
      strx = ''
     }
 */
-
+    if(ws.users.input_Array[4].includes('какая завтра будет погода')){
+      let site = 'https://sinoptik.ua/%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0-%D0%BA%D0%B8%D0%B5%D0%B2';
+      let leng = 600
+      let search_text = `<div class="main " id="bd2">`
+      let start_text = ' '
+      let plus_text = 'градусов'
+      webSearch.post_to_str(ws,site,leng,search_text,true,plus_text,start_text)
+      strx = ''
+    }
     if(ws.users.input_Array[4].includes('температура на улице') ||
       ws.users.input_Array[4].includes('градусов на улице')){
       let site = 'http://meteo.ua/34/kiev';
@@ -213,7 +221,7 @@ const run = function(strx,ws){
       let search_text = `<div class="win_tmp">`
       let start_text = 'Сейчас на улице '
       let plus_text = 'градусов'
-      webSearch.post_to_str(ws,site,leng,search_text,plus_text,start_text)
+      webSearch.post_to_str(ws,site,leng,search_text,false,plus_text,start_text)
       strx = ''
     }
     
@@ -222,18 +230,18 @@ const run = function(strx,ws){
       let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=JavaScript';
       let leng = 360
       let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
-      let start_text = 'Последняя вакансия по веб разработке'
-      let plus_text = 'и так далие'
-      webSearch.post_to_str(ws,site,leng,search_text,plus_text,start_text)
+      let start_text = 'Последняя вакансия по веб разработке ,'
+      let plus_text = ' и так далие.'
+      webSearch.post_to_str(ws,site,leng,search_text,false,plus_text,start_text)
       strx = ''
     }
     if(ws.users.input_Array[4].includes('вакансии игры')){
       let site = 'https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=game';
       let leng = 360
-      let start_text = 'Последняя вакансия по компютерным игра'
-      let plus_text = 'и так далие'
+      let start_text = 'Последняя вакансия по компютерным играм ,'
+      let plus_text = ' и так далие.'
       let search_text = `<p style="cursor: pointer;" onclick="javascript: window.location =`
-      webSearch.post_to_str(ws,site,leng,search_text,plus_text,start_text)
+      webSearch.post_to_str(ws,site,leng,search_text,false,plus_text,start_text)
       strx = ''
     }
     ////////////////////////////////Сообщения между пользователями /////////
