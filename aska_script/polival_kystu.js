@@ -19,12 +19,11 @@ const count_to_text = function(v){
   let zzz = v[v.length-3]
   v=''
   
-  zzz&&zz!=0&&z!=0?v +=arr_100_900[zzz-1]:'';
+  zzz&&zz==0&&z==0?v +=arr_100_900b[zzz-1]:zzz?v+=arr_100_900[zzz-1]:''
   zz==1?v +=arr_11_19[z]:'';
   zz>1&&z==0?v +=arr_20_90[zz-2]:'';
   zz>1&&z!=0?v +=arr_20_90b[zz-2]:'';
   zz!=1&&z!=0?v +=arr_1_9[z-1]:'';
-  zzz&&zz==0&&z==0?v +=arr_100_900b[zzz-1]:'';
   !zzz&&!zz&&z==0?v +='не разу':'';
   zzz||zz||z!=0?v +='раз ':''
   
