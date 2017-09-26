@@ -74,11 +74,11 @@ const login = function(ws,message){
              let objData = new Date();
              let date = objData.getDate();
              let hours = objData.getHours();
-            if(every_day != date && hours > 5){
-             ws.send('BOOMERANG'+'привет')
-            }else{
+            //if(every_day != date && hours > 5){
+            // ws.send('BOOMERANG'+'привет')
+           // }else{
              napominalka.check_time(ws)
-            }
+            //}
             
             ws.users.napomni = setInterval(()=>{
               napominalka.check_time(ws)
