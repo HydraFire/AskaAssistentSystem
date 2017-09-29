@@ -54,14 +54,14 @@ exports.post_to_str = function(ws,site,leng,search_text,par,plus_text,start_text
     */
 
       function del_teg(v){
-        console.log(v)
+       // console.log(v)
         let a = v.search('<')
-        console.log('a= '+a)
+       // console.log('a= '+a)
         let b = v.search('>')
-        console.log('b= '+b)
+      //  console.log('b= '+b)
         if(b== -1&&a!=-1){
           v = v.substring(0,a)
-          console.log('v= '+v)
+      //    console.log('v= '+v)
         }
         if(a>b){
           v = v.substring(b+1,v.length)
@@ -76,11 +76,18 @@ exports.post_to_str = function(ws,site,leng,search_text,par,plus_text,start_text
       }
       function del_simvol(v,s,e){
         let a = v.search(s)
+       // console.log(a)
+       // console.log(v)
+       // console.log('-----------')
         let j
         if(a!= -1){
           let b = v.substring(0,a)
-          let c = v.substring(a,v.length)
-          e?j = c.search(e):j = c.search(' ')
+         // console.log('////'+v)
+          let c = v.substring(a+1,v.length)
+          
+          j = c.search(e);
+          j==-1?j = c.search(' '):'';
+         // console.log('//j '+c.search(" "))
           let d = c.substring(j+1,c.length)
           v = b+' '+d
           v = del_simvol(v,s,e)

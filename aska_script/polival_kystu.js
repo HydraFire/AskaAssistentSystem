@@ -149,7 +149,7 @@ const A4DName_json = function(ws,adress,v,textik){
         jetpack.write('./JSON/data/'+ws.users.name+'/graphics_data/'+adress+'.json',arr_json);
         let perm = count_to_text(arr_json.length)
         ws.send(textik+' '+perm+' , перерыв составляет '+calc_time(arr_json_last))
-        let napom = napominalka.calc_arr_timers(ws)
+        let napom = napominalka.calc_arr_timers(ws,adress)
         jetpack.write('./JSON/data/'+ws.users.name+'/arr_napominalka.json',napom);
       }
     }

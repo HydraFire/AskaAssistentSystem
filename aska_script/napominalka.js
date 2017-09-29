@@ -35,8 +35,10 @@ const check_time = function(ws){
   let symaDate4 = (real_time2[0]*24*60)+(real_time2[1]*24*60)+(real_time2[2]*24*60)+(real_time2[3]*60)+real_time2[4]
   let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/arr_napominalka.json','json');
   let text_speech = ''
+
   arr_json.forEach((v)=>{
     if(v[1]<= symaDate4){
+      console.log(' '+v[0]+' '+v[1]+' '+symaDate4)
       text_speech += ', '+v[0]
     }
   })
@@ -44,16 +46,17 @@ const check_time = function(ws){
     try{
       ws.send('рекомендовано к выполнению, '+text_speech)
     }catch(err){
-     console.log(err)
+      console.log(err)
     }
   }
 }
 exports.check_time = check_time;
 
 
-const calc_arr_timers = function(ws){
+const calc_arr_timers = function(ws,adress){
+  console.log('Считаем')
+  const nnn = function(ws,adrees){
 
-  const nnn = function(ws,adrees){ 
     let arr_time_arr = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+adrees+'.json','json');
 
     var arr_time_pre = arr_time_arr[arr_time_arr.length-2]
@@ -76,6 +79,7 @@ const calc_arr_timers = function(ws){
       //symaDate = symaDate2 - the_magic_begin;
       let sup = symaDate1 - symaDate2
       let konec = symaDate3 + sup
+      console.log(konec)
       return konec
     }else{
       return 99999999
@@ -83,6 +87,8 @@ const calc_arr_timers = function(ws){
   }
 
   let arr_list = jetpack.list('./JSON/data/'+ws.users.name+'/graphics_data')
+  let gra_list = jetpack.read('./JSON/data/'+ws.users.name+'/arr_napominalka.json','json')
+
   let poxoj = []
 
   arr_list.forEach((v)=>{
@@ -93,15 +99,33 @@ const calc_arr_timers = function(ws){
       poxoj.push(v)
     }
   })
-  var obj = {}
+  console.log(poxoj)
+  //var obj = {}
 
   let arr_arr = []
 
   poxoj.forEach((v,i)=>{
     arr_arr.push([v,nnn(ws,v)])
   })
-
-  return arr_arr
+  if(gra_list){
+    console.log(arr_arr)
+    arr_arr.forEach((v)=>{
+      console.log(adress+'  '+v[0])
+      if(adress == v[0]){
+        gra_list.forEach((t,i)=>{
+          console.log(adress+'  '+t[0])
+          if(adress == t[0]){
+            console.log(gra_list[i][1]+'  ++'+v)
+            gra_list[i][1] = v[1]
+            console.log(gra_list[i][1]+'  ++'+arr_arr[1])
+          }
+        })
+      }
+    })
+  }else{
+  gra_list = arr_arr
+  }
+  return gra_list
 
 }
 exports.calc_arr_timers = calc_arr_timers;

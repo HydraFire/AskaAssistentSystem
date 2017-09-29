@@ -101,6 +101,7 @@ const set_to_run = function(ws,text){
   }
   if(ws.users.input_Array[4].includes('режим команд')){
     ws.users.nn = false
+    ws.send('EVALaska("окей")')
   }
   if(ws.users.input_Array[4] == 'запомни' ||
     ws.users.input_Array[4] == 'напомни' ||
