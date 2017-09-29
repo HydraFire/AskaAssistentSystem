@@ -21,8 +21,9 @@
 })
 ({1:[function(require,module,exports){
   const Analyser = require('web-audio-analyser')
-  var audio = document.getElementById('audio');
   
+  const audio = document.getElementById('audio');
+  const audio2 = document.getElementById('audio2');
     
     
  
@@ -45,7 +46,7 @@
   //audio.crossOrigin = 'Anonymous'
   //audio.loop = false
   function pause(){
-    let audio = document.getElementById('audio');
+    
     audio.stop()
   }
 
@@ -70,6 +71,9 @@
         waveform = analyser.waveform();
         if(audio.volume != localStorage.audioVolume){
           audio.volume = localStorage.audioVolume
+        }
+        if(audio2.volume != localStorage.audioVolume2){
+          audio2.volume = localStorage.audioVolume2
         }
         //localStorage.aaaa = 'play';
         //console.log(localStorage.aaaa)
