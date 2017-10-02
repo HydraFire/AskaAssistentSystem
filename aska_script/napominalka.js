@@ -44,7 +44,7 @@ const check_time = function(ws){
   })
   if(text_speech != ''){
     try{
-      text_speech.split('_').join(' ')
+      text_speech = text_speech.split('_').join(' ')
       ws.send('рекомендовано к выполнению, '+text_speech)
     }catch(err){
       console.log(err)
