@@ -410,13 +410,29 @@ const run = function(strx,ws){
 ////////////////////////////
 ///ALL//INTERVAL//CLEAR/////
 ////////////////////////////`)
-
+    if(ws.users.input_Array[4].charAt(0) == 'я'){
+      let arr_test = ws.users.input_Array[4].split(' ')
+      if(arr_test[0] == 'не' &&
+         arr_test[1] == 'хочу' &&
+         arr_test.length == 4||arr_test.length == 5
+        ){
+        arr_test.splice(0,1)
+        arr_test.splice(0,1)
+        arr_test.splice(0,1)
+        
+        let x_name = arr_test.join('_')
+        console.log(x_name)
+        strx = polival_kystu.event_close(ws,x_name,'последний раз , '+arr_test[0]+' '+arr_test[1]+' ',ws)
+        ws.send(strx);strx = 'SYSTEM x_name = '+x_name;
+        
+      }
+    }
     if(ws.users.input_Array[4].charAt(0) == 'я'){
       let arr_test = ws.users.input_Array[4].split(' ')
       if(arr_test.length == 3||arr_test.length == 4){
         arr_test.splice(0,1)
         let x_name = arr_test.join('_')
-        let textik = ["Ясно","Хорошо","Наконецьто","Отличьно","Замечательно","Умничька"]
+        let textik = ["Ясно","Хорошо","Наконецьто","Просто ахуенно","Заебись","Отличьно","Замечательно","Умничька"]
         let random = Math.random()*textik.length-1|0
         strx = polival_kystu.event_doing(ws,x_name,textik[random]+', на моей памяти , '+arr_test[0]+' '+arr_test[1]+' это уже получаеться',ws)
         ws.send(strx);strx = '';

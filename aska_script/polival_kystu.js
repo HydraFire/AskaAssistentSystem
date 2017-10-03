@@ -191,6 +191,33 @@ const then_event_bin = function(ws,this_name,textik){
 }
 exports.then_event_bin = then_event_bin
 ////////////////////////////////////////////////////////////////////////////
+const event_close = function(ws,this_name,textik){
+  let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+this_name+'.json','json');
+  if(arr_json){
+  if(_.isString(arr_json[0])){ //Проверка на сылку в файле
+      this_name = arr_json[0]
+      ws.send('SYSTEMnew_adress '+this_name)
+      console.log("new_adress "+this_name)
+      arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+this_name+'.json','json');
+    }
+  let arr_all_json = jetpack.read('./JSON/data/'+ws.users.name+'/arr_napominalka.json','json');
+  arr_all_json = arr_all_json.map(v=>{
+    ws.send('SYSTEM'+v[0]+' = '+this_name)
+  if(v[0]==this_name){
+   v[1] = 999999999
+  }
+    return v
+  })
+  ws.send('SYSTEM'+arr_all_json)
+  console.log(arr_all_json)
+  jetpack.write('./JSON/data/'+ws.users.name+'/arr_napominalka.json',arr_all_json);
+  this_name = this_name.split('_')
+  return 'Ну да и хуй с ним, с тем '+this_name[1]
+  }else{
+  return 'не могу найти это событие'
+  }
+}
+exports.event_close = event_close
 ////////////////////////////////////////////////////////////////////////////
 const event_doing = function(ws,this_name,textik){
   let a = this_real_time()
