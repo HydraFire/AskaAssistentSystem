@@ -299,12 +299,12 @@ const list_quest = function(a,b,arr,ws){
           clearInterval(ws.users.all_thoughts[int_id])
           ws.users.all_thoughts.splice(int_id,1)
 
-         
+
           ws.users.quest_buffer_a = a
           ws.users.quest_buffer_b = b
           console.log('A='+a+' B= '+b)
           start_quest(ws,a,b)
-          
+
         }else if(v == 'поделить на части'){
 
           //ws.users.new_par = true
@@ -416,9 +416,9 @@ const finish_quest = function(ws){
             clearInterval(ws.users.all_thoughts[int_id01])
             ws.users.all_thoughts.splice(int_id01,1)
             if(arrf[4] == arrf[1]){
-            ws.send('Поздравляю, комплексное задание '+arrf[1]+',выполнено')
+              ws.send('Поздравляю, комплексное задание '+arrf[1]+',выполнено')
             }else{
-            start_quest(ws,arrf[3],arrf[4])
+              start_quest(ws,arrf[3],arrf[4])
             }
           }
           if(t>100){
@@ -469,18 +469,63 @@ exports.ongoing = ongoing;
 //
 //
 //
-const made_yesterday = function(adres,ws){
+const made_yesterday = function(adres,ws,index){
+  let x = 0
+  if(adres == 'Dreams.json'){
+    x = 0
+  }else{
+    x = 1
+  }
+  adres = 'NewAge28.json'
   let arr_made = jetpack.read('./JSON/data/'+ws.users.name+'/'+adres,'json')
   if(!arr_made){
     arr_made = [
+     [
       [
-        "написала тебе интересную функцию",
-        "но очень мало поела",
-        "всё"
+        "none",
+        "none"
+      ],
+      [
+        "none",
+        "none"
+      ],
+      [
+        2017,
+        8,
+        8,
+        7,
+        19
+      ]
+    ],[
+      [
+        "none",
+        "none"
+      ],
+      [
+        "none",
+        "none"
+      ],
+      [
+        2017,
+        8,
+        8,
+        7,
+        19
       ]
     ]
+  ]
+    
   }
-  let arr_x = arr_made[arr_made.length-1].join(' , ')
+  if(arr_made[arr_made.length-1][x] == 'none'){
+   var arr_x = arr_made[arr_made.length-2][x].join(' , ')
+  }else{
+    console.log(index)
+    if(index){
+     var arr_x = arr_made[index][x].join(' , ')
+    }else{
+     var arr_x = arr_made[arr_made.length-1][x].join(' , ')
+     }
+   }
   arr_x = ', ты ответил ,' + arr_x
   return arr_x;
 }
@@ -491,16 +536,44 @@ const remind = function(answer,adres,ws){
   console.log('REC')
   ws.users.silence = true
   //console.log('HERE <---------------')
-  let dreems = jetpack.read('./JSON/data/'+ws.users.name+'/'+adres,'json')
+  let dreems = jetpack.read('./JSON/data/'+ws.users.name+'/'+'NewAge28.json','json')
 
   if(!dreems){
     dreems = [
+     [
       [
-        "написала тебе интересную функцию",
-        "но очень мало поела",
-        "всё"
+        "none",
+        "none"
+      ],
+      [
+        "none",
+        "none"
+      ],
+      [
+        2017,
+        8,
+        8,
+        7,
+        19
+      ]
+    ],[
+      [
+        "none",
+        "none"
+      ],
+      [
+        "none",
+        "none"
+      ],
+      [
+        2017,
+        8,
+        8,
+        7,
+        19
       ]
     ]
+  ]
   }
   let buffer_interval = ws.users.input_Array[4];
   let arr_interval = []
@@ -516,11 +589,17 @@ const remind = function(answer,adres,ws){
       if(ws.users.input_Array[4] == answer){  
         ws.send('я всё окуратно записала')
         console.log('я всё окуратно записала')
-        dreems.push(arr_interval)
-
+        var time = this_real_time()
+        if(adres == 'Dreams.json'){
+          var arr_z = [arr_interval,['none'],time]
+          dreems.push(arr_z)
+        }else{
+          dreems[dreems.length-1][1] = arr_interval
+        }
+        
         //sendToAska('SYSTEM '+JSON.stringify(arr_interval),ws)
         ws.users.int_end = 'END';
-        jetpack.write('./JSON/data/'+ws.users.name+'/'+adres,dreems);
+        jetpack.write('./JSON/data/'+ws.users.name+'/'+'NewAge28.json',dreems);
         clearInterval(ws.users.all_thoughts[int_id]);
         ws.users.all_thoughts.splice(int_id,1)
         console.log('silence false')
@@ -570,7 +649,7 @@ exports.dreamsCome_true = dreamsCome_true;
 /////////////////////////////////////////////////////////////////////
 ///////////////////// Разработка новых возможностей /////////////////
 /////////////////////////////////////////////////////////////////////
-const listener_of_end = function(arr_command,ws){
+const listener_of_end = function(arr_command,ws,index){
   let n = 0
   let t = 0
   let k = 0
@@ -678,9 +757,9 @@ const listener_of_end = function(arr_command,ws){
 
   let xx 
   if(arr_command[0].includes('wanted_yesterday()')){
-    xx = made_yesterday('dreamsCome_true.json',ws);
+    xx = made_yesterday('dreamsCome_true.json',ws,index);
   }else if(arr_command[0].includes('made_yesterday()')){
-    xx = made_yesterday('Dreams.json',ws);
+    xx = made_yesterday('Dreams.json',ws,index);
   }else if(arr_command[0].includes('()')){
     xx = '';
   }else{

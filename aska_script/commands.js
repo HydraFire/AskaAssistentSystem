@@ -593,6 +593,20 @@ const run = function(strx,ws){
 
       strx = quest.listener_of_end(text0,ws)
     }
+   if(ws.users.input_Array[4].includes('дневник страница')){
+     let text_v = 'дневник страница'
+     text_v = text_v.length
+     console.log(text_v)
+     let index = ws.users.input_Array[4]
+     index = index.substring(text_v,index.length)
+     console.log(index)
+     index = parseFloat(index)
+     let text0 = ['made_yesterday()',
+                  'вторая часть',
+                  'wanted_yesterday()']
+     strx = quest.listener_of_end(text0,ws,index)
+     //strx = quest.made_yesterday('Dreams.json',ws,index)
+   }
 
     /*
   //  if(text_do.includes('вчера')){
@@ -653,24 +667,41 @@ video.currentTime = (3*60)+24;
       let arr = jetpack.list('./JSON/data/'+ws.users.name+'/graphics_data')
       if(arr != null){
         let arr_i = []
-
+        
         arr.forEach((v)=>{
           let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v,'json');
           if(_.isString(arr_json[0])){
-            console.log(v)
+            //console.log(v)
           }else{
             v = v.substring(0,v.length-5)
             arr_i.push(v)
           }
         })
-        console.log('adress '+arr_i)
+        //console.log('adress '+arr_i)
         strx = ""
         ///////////////// 2 Задание ////// фор ич для масиива адресов
         let arr_array = []
+        let tty = jetpack.read('./JSON/data/'+ws.users.name+'/'+'NewAge28.json','json')
+        console.log(tty)
+        let zzz = []
+        tty.forEach((v,i)=>{
+          console.log(v[2]) 
+          
+          zzz[i] = v[2]
+          
+         //zzz.splice(zzz.length,1,v[1])
+        })
+        //zzz=zzz.toString()
+        
+        
+        console.log(arr_array) 
         arr_i.forEach((v)=>{
           arr_array.push(jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v+'.json','text'))
         })
-
+        arr_i.push('дневник')
+        arr_array.push(JSON.stringify(zzz))
+        console.log('///////////////////////////////////////') 
+        console.log(arr_array) 
 
         //let arr_json = jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+adress+'.json','json');
 
@@ -849,6 +880,19 @@ var ctx2 = document.getElementById("myChart").getContext("2d");
 window.myLine = new Chart(ctx2, config);
 
 // window.myLine.update();
+
+document.getElementById("myChart").onclick = function(evt){   
+    var activePoints = window.myLine.getElementsAtEvent(evt);
+	  if(activePoints.length > 0){
+      var clickedElementindex = activePoints[0]["_index"];
+	    var label = window.myLine.getDatasetAtEvent(evt);
+		  console.log(clickedElementindex)
+      console.log(label[clickedElementindex])
+      if(label[clickedElementindex]._datasetIndex == 9){
+        socket.send('дневник страница '+label[clickedElementindex]._index)
+      }
+   }  
+}
 
 `;
         ws.send(htmlx);
