@@ -516,16 +516,17 @@ const made_yesterday = function(adres,ws,index){
   ]
     
   }
-  if(arr_made[arr_made.length-1][x] == 'none'){
-   var arr_x = arr_made[arr_made.length-2][x].join(' , ')
-  }else{
+  var arr_x
+  //if(arr_made[arr_made.length-1][x] == 'none'){
+  // arr_x = arr_made[arr_made.length-2][x].join(' , ')
+  //}else{
     console.log(index)
     if(index){
-     var arr_x = arr_made[index][x].join(' , ')
+     arr_x = arr_made[index][x].join(' , ')
     }else{
-     var arr_x = arr_made[arr_made.length-1][x].join(' , ')
+     arr_x = arr_made[arr_made.length-1][x].join(' , ')
      }
-   }
+ //  }
   arr_x = ', ты ответил ,' + arr_x
   return arr_x;
 }
@@ -688,7 +689,7 @@ const listener_of_end = function(arr_command,ws,index){
                   arr_re.splice(0,1)
                   console.log('ZDESSSS')
                   console.log(ws.users.all_thoughts)
-                  let text1 = listener_of_end(arr_re,ws)
+                  let text1 = listener_of_end(arr_re,ws,index)
                   try{
                     sendToAska(text1,ws)
                   }catch(err){
@@ -715,7 +716,7 @@ const listener_of_end = function(arr_command,ws,index){
                   arr_re.splice(0,1)
                   //console.log('ZDESSSS')
                   console.log(ws.users.all_thoughts)
-                  let text1 = listener_of_end(arr_re,ws)
+                  let text1 = listener_of_end(arr_re,ws,index)
                   try{
                     sendToAska(text1,ws)
                   }catch(err){
@@ -731,7 +732,7 @@ const listener_of_end = function(arr_command,ws,index){
             }else{
               let arr_re = Array.from(arr_command)
               arr_re.splice(0,1)
-              let text1 = listener_of_end(arr_re,ws)
+              let text1 = listener_of_end(arr_re,ws,index)
               try{
                 sendToAska(text1,ws)
               }catch(err){

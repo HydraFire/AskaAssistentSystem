@@ -699,6 +699,7 @@ video.currentTime = (3*60)+24;
           arr_array.push(jetpack.read('./JSON/data/'+ws.users.name+'/graphics_data/'+v+'.json','text'))
         })
         arr_i.push('дневник')
+        var zxz = arr_i.length-1
         arr_array.push(JSON.stringify(zzz))
         console.log('///////////////////////////////////////') 
         console.log(arr_array) 
@@ -888,7 +889,8 @@ document.getElementById("myChart").onclick = function(evt){
 	    var label = window.myLine.getDatasetAtEvent(evt);
 		  console.log(clickedElementindex)
       console.log(label[clickedElementindex])
-      if(label[clickedElementindex]._datasetIndex == 9){
+      console.log('${zxz}')
+      if(label[clickedElementindex]._datasetIndex == ${zxz}){
         socket.send('дневник страница '+label[clickedElementindex]._index)
       }
    }  
