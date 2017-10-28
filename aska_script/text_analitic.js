@@ -89,7 +89,10 @@ const ask = function(ws,text,v){
               clearInterval(ws.users.all_thoughts[int_id02])
               ws.users.all_thoughts.splice(int_id02,1)
               ws.users.input_Array[4] = "undefined"
-              ws.send('прости за эту глупость')
+              let answer = ["прости за эту глупость","охрана отмена","а что тогда ты пытался сказать?","окей","ага","я не поняла"]
+              let random = Math.random()*answer.length |0
+              console.log('random'+random)
+              ws.send(answer[random])
               //ask_arr(ws,adress,arr_command,date)
             }
             if(ws.users.input_Array[4] == "да"){
