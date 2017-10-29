@@ -272,7 +272,13 @@
   </body>
 
 <script>
-
+  function test_test(){
+   var socket2 = new WebSocket("ws://159.224.183.122:83/index.html");
+    socket2.onopen = function() {
+      socket2.send('lol')
+      console.log('SOCKET2 CONNECT')
+    };
+  }
   function login(e){
     e.preventDefault()
     let login = (this.querySelector('[name=login]')).value;
@@ -322,7 +328,10 @@
       if(zzz){
         contentt2.removeChild(contentt2.lastChild)
       }
-      contentt2.innerHTML += '<video class="player__video viewer" src="'+adres+'" autoplay loop></video>';
+      contentt2.innerHTML +=
+`<video width="0" height="0" autoplay controls loop>
+<source src="${adres}" type=video/mp4>
+</video>`;
     }else{
       if(zzz){
         contentt2.removeChild(contentt2.lastChild)
@@ -721,8 +730,8 @@
     }else if(event.data.includes('EVAL')){
       run_code(event.data)
 
-      let calc_hue = (new Date().getHours()*15)+0
-      displayit(event.data,`hsl(${180},${window.color_aska_h}%,25%)`)
+      //let calc_hue = (new Date().getHours()*15)+0
+      //displayit(event.data,`hsl(${180},${window.color_aska_h}%,25%)`)
     }else{
       aska(event.data);
     }
@@ -812,6 +821,81 @@
     // ctx.stroke();
     // ctx.restore();
   };
+  
+  function weve(pixels,waveform,width){
+    let y = 0
+    let n = 0
+    let x = 0
+    let f = 0
+    //console.log(frequencies[0])
+    for(let i = 0; i < pixels.data.length; i++){
+      if(x>3){
+        x = 0
+        y++
+        f++
+      }
+      if(y>width-1){
+        y = 0
+        n++
+      }
+      x++
+      
+      //pixels.data[i + 0] = pixels.data[i + 0] + 100;
+      //pixels.data[i + 1] = pixels.data[i + 1] - 50;
+      //pixels.data[i + 2] = pixels.data[i + 2] *0.5;
+      
+      
+      if(n>(waveform[(y/3|0)]*2)+260){
+       pixels.data[i + 3] = 0;
+      }
+      
+      if(f>1){
+        pixels.data[i + 3] = 0;
+       f=0;
+      }
+      
+    }
+
+
+    return pixels
+  }
+  function redEffect(pixels){
+    for(let i = 0; i < pixels.data.length; i +=4){
+      var avg = (pixels.data[i] + pixels.data[i + 1] + pixels.data[i + 2]) / 3;
+      pixels.data[i + 0] = avg
+      pixels.data[i + 1] = avg
+      pixels.data[i + 2] = avg+20
+    }
+    return pixels
+  }
+
+  function draw_video(waveform,fre,video){
+    //console.log(video)
+    const width = video.videoWidth;
+    const height = video.videoHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+  
+    ctx.drawImage(video, 0, 0, width, height);
+    let pixels = ctx.getImageData(0, 0, width, height);
+    //greenScreen
+    //pixels = rgbSplit(pixels);
+    //pixels = redEffect(pixels);
+    //console.log(pixels)
+    //pixels.data = mywork(pixels.data,width,height)
+    pixels = weve(pixels,waveform,width)
+
+    ctx.putImageData(pixels, 0, 0);
+    
+    //ctx.globalAlpha = 0.1;
+  
+}
+/*
+if(video){
+  video.addEventListener('canplay',paintToCanvas)
+}
+*/
   ///////////////////////////////////////////////////////////////////
   //////////////////////FORM//LOGIN///////////////////////////////////
   ///////////////////////////////////////////////////////////////////

@@ -376,6 +376,9 @@ const stop = function(ws){
   return `EVAL
 audio.removeEventListener('pause',once_replay)
 audio.pause();
+if(document.querySelector('video')){
+  document.querySelector('video').remove()
+}
 `;
 }
 const volume = function(znak,v){

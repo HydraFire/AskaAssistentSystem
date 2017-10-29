@@ -46,7 +46,6 @@
   //audio.crossOrigin = 'Anonymous'
   //audio.loop = false
   function pause(){
-    
     audio.stop()
   }
 
@@ -55,7 +54,6 @@
   canplay (audio)
   function canplay (audio) {
 
-    // audio.removeEventListener('canplay', canplay, false)
     audio.play()
 
     setTimeout(function () {
@@ -65,6 +63,7 @@
 
     var frequencies
     var waveform
+    let m = false
     setInterval(()=>{
       if(analyser){
         frequencies = analyser.frequencies();
@@ -82,10 +81,22 @@
         }else{
           //audio.play()
         }
-        draw(waveform,frequencies);
+        let video = document.querySelector('video')
+          
+        if(video){
+            video.onloadeddata = function() {
+              m = true
+            }
+            if(m){
+            draw_video(waveform,frequencies,video);
+            }
+        }else{
+          m = false
+          draw(waveform,frequencies)
+        }
         //////////////////////////////////////////////////////////////
       }
-    },15)
+    },5)
   }
 
 
