@@ -42,9 +42,9 @@
   <div class="info">
     <div id="drop_zone">Drop files here</div>
     <output id="list"></output>
-    <canvas id="myChart" width="600" height="100"></canvas>
+    
   </div>
-
+  <canvas id="myChart" width="600" height="200"></canvas>
 
 
   <canvas id="draw" width="1024" height="300"></canvas>   
@@ -160,7 +160,7 @@
       position: absolute;
     }
     #myChart{
-      padding: 80px 0px 0px 0px;
+      padding: 380px 0px 0px 0px;
       z-index: 5;
       position: absolute;
     }
@@ -329,7 +329,7 @@
         contentt2.removeChild(contentt2.lastChild)
       }
       contentt2.innerHTML +=
-`<video width="0" height="0" autoplay controls loop>
+`<video width="0" height="0" autoplay loop>
 <source src="${adres}" type=video/mp4>
 </video>`;
     }else{
@@ -829,27 +829,34 @@
     let f = 0
     //console.log(frequencies[0])
     for(let i = 0; i < pixels.data.length; i++){
+      
       if(x>3){
         x = 0
         y++
         f++
       }
+      /*
       if(y>width-1){
         y = 0
         n++
       }
+      */
       x++
       
       //pixels.data[i + 0] = pixels.data[i + 0] + 100;
       //pixels.data[i + 1] = pixels.data[i + 1] - 50;
       //pixels.data[i + 2] = pixels.data[i + 2] *0.5;
       
-      
-      if(n>(waveform[(y/3|0)]*2)+260){
+      /*
+      if(n>(waveform[(y/20|0)]*2)+260){
        pixels.data[i + 3] = 0;
       }
+      */
       
       if(f>1){
+        pixels.data[i + 0] = 0;
+        pixels.data[i + 1] = 0;
+        pixels.data[i + 2] = 0;
         pixels.data[i + 3] = 0;
        f=0;
       }
@@ -868,23 +875,41 @@
     }
     return pixels
   }
-
-  function draw_video(waveform,fre,video){
+  function splitW(pixels){
+    for(let i = 0; i < pixels.data.length; i +=4){
+      if(i>1920*4*600){
+      pixels.data[i + 0] = 0
+      pixels.data[i + 1] = 0
+      pixels.data[i + 2] = 0
+      pixels.data[i + 3] = 0
+      }
+    }
+   return pixels
+  }
+  function draw_video(waveform,video){
     //console.log(video)
     const width = video.videoWidth;
     const height = video.videoHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-  
-    ctx.drawImage(video, 0, 0, width, height);
-    let pixels = ctx.getImageData(0, 0, width, height);
+    //canvas.width = width;
+    
+    ctx.drawImage(video, 0, 0, 1920, 1080);
+    waveform.forEach((v,index)=>{
+      //calc_hue = window.color_aska -(arr_fre[index]/8)
+      //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
+      //(120, 100%, 75%);
+      ctx.fillStyle=`hsl(${220},${0}%,15%)`;
+      
+      //ctx.fillStyle=`hsl(220,100%,55%)`;
+      ctx.fillRect(index*2,350+v*3,1,600)
+    })
+    let pixels = ctx.getImageData(0, 200, 1920, 1080);
     //greenScreen
     //pixels = rgbSplit(pixels);
     //pixels = redEffect(pixels);
     //console.log(pixels)
     //pixels.data = mywork(pixels.data,width,height)
-    pixels = weve(pixels,waveform,width)
+    pixels = splitW(pixels)
+    //pixels = weve(pixels,waveform,1920)
 
     ctx.putImageData(pixels, 0, 0);
     

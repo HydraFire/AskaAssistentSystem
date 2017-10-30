@@ -82,13 +82,22 @@
           //audio.play()
         }
         let video = document.querySelector('video')
-          
+        
         if(video){
             video.onloadeddata = function() {
               m = true
             }
+            
             if(m){
-            draw_video(waveform,frequencies,video);
+              /*
+              let arr = []
+              for(i=0;i<1920;i++){
+                if(i<1920){
+                    arr.push(waveform[i])
+                  }
+                }
+                */
+            draw_video(waveform,video);
             }
         }else{
           m = false
@@ -96,7 +105,7 @@
         }
         //////////////////////////////////////////////////////////////
       }
-    },5)
+    },15)
   }
 
 

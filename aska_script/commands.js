@@ -878,6 +878,8 @@ labelString: 'value',
 };
 
 var ctx2 = document.getElementById("myChart").getContext("2d");
+ctx2.width = 1920
+ctx2.height = 1080
 window.myLine = new Chart(ctx2, config);
 
 // window.myLine.update();
