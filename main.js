@@ -234,21 +234,27 @@ wss.on("connection", function(ws){
                   if(arr_des[arr_des.length-1][0]>99){
                     desigen = arr_des[arr_des.length-1][1]
                     let origin = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+desigen+'.json','json')
-
+                    
                     if(origin[0] == 'true'){
                       desigen = desigen.split('_').join(' ')
                       console.log(desigen)
                       commands.run(desigen,ws)
                     }else{
+                      console.log('///origin[0]///')
+                      console.log(origin[0])
                       let xc = origin[0]
                       xc = xc.split(' ').join('_')
                       let rrr = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+xc+'.json','json')
+                      console.log('///rrr///')
+                      console.log(rrr)
+                      if(rrr){
                       if(rrr[0]=='true'){
                         console.log(desigen)
                         desigen = origin[0]
                         desigen = desigen.split('_').join(' ')
                         console.log(desigen)
                         commands.run(desigen,ws)
+                      }
                       }
                     }
                   }else if(arr_des[arr_des.length-1][0]>50){

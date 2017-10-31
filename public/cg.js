@@ -97,7 +97,7 @@
                   }
                 }
                 */
-            draw_video(waveform,video);
+            draw_video(video);
             }
         }else{
           m = false

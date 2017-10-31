@@ -520,11 +520,17 @@ const made_yesterday = function(adres,ws,index){
   //if(arr_made[arr_made.length-1][x] == 'none'){
   // arr_x = arr_made[arr_made.length-2][x].join(' , ')
   //}else{
+  console.log('/////////////---<'+index)
     console.log(index)
+    console.log(arr_made[arr_made.length-1])
     if(index){
      arr_x = arr_made[index][x].join(' , ')
     }else{
-     arr_x = arr_made[arr_made.length-1][x].join(' , ')
+      if(arr_made[arr_made.length-1][x] == 'none'){
+     arr_x = arr_made[arr_made.length-2][x].join(' , ')
+      }else{
+      arr_x = arr_made[arr_made.length-1][x].join(' , ')
+      }
      }
  //  }
   arr_x = ', ты ответил ,' + arr_x
