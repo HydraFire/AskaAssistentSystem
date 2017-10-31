@@ -383,7 +383,7 @@
       evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
 
-    function handleFileSelect(evt) {
+  function handleFileSelect(evt) {
       evt.stopPropagation();
       evt.preventDefault();
 
@@ -790,10 +790,6 @@
 
   function draw(waveform,frequencies){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //ctx.fillRect(0,0,10,arr[0]);
-    //ctx.fillRect(15,0,10,arr[1]);
-    //console.log(frequencies[10])
-    //ctx.fillStyle='#FFFFFF';
     let calc_hue
     let arr_fre = []
     console.log(window.color_aska)
@@ -805,67 +801,11 @@
     }
     waveform.forEach((v,index)=>{
       calc_hue = window.color_aska -(arr_fre[index]/8)
-      //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
-      //(120, 100%, 75%);
       ctx.fillStyle=`hsl(${calc_hue},${window.color_aska_h}%,55%)`;
-
-      //ctx.fillStyle=`hsl(220,100%,55%)`;
       ctx.fillRect(index*2,0,1,v*3)
     })
-
-    //ctx.fillStyle="#FF0000";
-    //frequencies.forEach((v,index)=>{ctx.fillRect(index,0,1,v)})
-    //ctx.beginPath()
-    //ctx.moveTo(0,0)
-    //ctx.lineTo(0,arr[0])
-    // ctx.stroke();
-    // ctx.restore();
   };
   
-  function weve(pixels,waveform,width){
-    let y = 0
-    let n = 0
-    let x = 0
-    let f = 0
-    //console.log(frequencies[0])
-    for(let i = 0; i < pixels.data.length; i++){
-      
-      if(x>3){
-        x = 0
-        y++
-        f++
-      }
-      /*
-      if(y>width-1){
-        y = 0
-        n++
-      }
-      */
-      x++
-      
-      //pixels.data[i + 0] = pixels.data[i + 0] + 100;
-      //pixels.data[i + 1] = pixels.data[i + 1] - 50;
-      //pixels.data[i + 2] = pixels.data[i + 2] *0.5;
-      
-      /*
-      if(n>(waveform[(y/20|0)]*2)+260){
-       pixels.data[i + 3] = 0;
-      }
-      */
-      
-      if(f>1){
-        pixels.data[i + 0] = 0;
-        pixels.data[i + 1] = 0;
-        pixels.data[i + 2] = 0;
-        pixels.data[i + 3] = 0;
-       f=0;
-      }
-      
-    }
-
-
-    return pixels
-  }
   function redEffect(pixels){
     for(let i = 0; i < pixels.data.length; i +=4){
       var avg = (pixels.data[i] + pixels.data[i + 1] + pixels.data[i + 2]) / 3;
@@ -886,13 +826,14 @@
     }
    return pixels
   }
-  function draw_video(waveform,video){
+  function draw_video(video){
     //console.log(video)
     const width = video.videoWidth;
     const height = video.videoHeight;
     //canvas.width = width;
     
     ctx.drawImage(video, 0, 0, 1920, 1080);
+    /*
     waveform.forEach((v,index)=>{
       //calc_hue = window.color_aska -(arr_fre[index]/8)
       //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
@@ -902,13 +843,14 @@
       //ctx.fillStyle=`hsl(220,100%,55%)`;
       ctx.fillRect(index*2,350+v*3,1,600)
     })
-    let pixels = ctx.getImageData(0, 200, 1920, 1080);
+    */
+    let pixels = ctx.getImageData(0, 0, 1920, 1080);
     //greenScreen
     //pixels = rgbSplit(pixels);
     //pixels = redEffect(pixels);
     //console.log(pixels)
     //pixels.data = mywork(pixels.data,width,height)
-    pixels = splitW(pixels)
+    //pixels = splitW(pixels)
     //pixels = weve(pixels,waveform,1920)
 
     ctx.putImageData(pixels, 0, 0);
