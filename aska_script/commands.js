@@ -586,7 +586,7 @@ const run = function(strx,ws){
                    'remind()',
                    'о чем думаешь?',
                    'wanted_yesterday()',
-                   'что будешь делать сегодня?',
+                   'что хочешь делать сегодня?',
                    'dreamsCome_true()',
                    'всё супер'
                    ]

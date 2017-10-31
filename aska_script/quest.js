@@ -708,7 +708,7 @@ const listener_of_end = function(arr_command,ws,index){
                   ws.users.all_thoughts.splice(int_id02,1)
                 }
               },500)
-            }else if(arr_command[0].includes('что собираешься делать сегодня')){
+            }else if(arr_command[0].includes('что хочешь делать сегодня?')){
               remind('всё','dreamsCome_true.json',ws)
 
               let int_id02 = ws.users.all_thoughts.length
