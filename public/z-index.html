@@ -17,7 +17,7 @@
         <input  id="" name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
         <input  id="" name="password" type="password" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Password"/>
         <input type="submit" value="GO">
-        <strong style="padding-left:600px;font-size:12pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;В этом веб приложении работает авторегистрация!</strong>
+        <strong style="padding-left:600px;font-size:12pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Регистрация по приглашениям!</strong>
       </form>
     </div>
     <!-- <video id="video" loop autoplay src="files/Comp 2.mp4"></video>
@@ -272,13 +272,6 @@
   </body>
 
 <script>
-  function test_test(){
-   var socket2 = new WebSocket("ws://159.224.183.122:83/index.html");
-    socket2.onopen = function() {
-      socket2.send('lol')
-      console.log('SOCKET2 CONNECT')
-    };
-  }
   function login(e){
     e.preventDefault()
     let login = (this.querySelector('[name=login]')).value;
