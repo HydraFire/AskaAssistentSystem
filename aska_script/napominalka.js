@@ -79,6 +79,7 @@ const calc_arr_timers = function(ws,adress){
       var symaDate3 = (real_time[0]*24*60)+(real_time[1]*24*60)+(real_time[2]*24*60)+(real_time[3]*60)+real_time[4]
       //symaDate = symaDate2 - the_magic_begin;
       let sup = symaDate1 - symaDate2
+      sup = (sup/5)*4|0
       let konec = symaDate3 + sup
       console.log(konec)
       return konec
