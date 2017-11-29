@@ -12,6 +12,7 @@ const messenger = require('./messenger');
 const napominalka = require('./napominalka');
 const sendToAska = require('../main').sendToAska;
 const text_analitic = require('./text_analitic');
+const one_time_napominanie = require('./one_time_napominanie')
 //const ask = require('./ask');
 //const when_watered = require('./aska_script/polival_kystu').when_watered;
 //const poured_flowers = require('./aska_script/polival_kystu').poured_flowers;
@@ -456,6 +457,26 @@ const run = function(strx,ws){
           strx = polival_kystu.then_event_bin(ws,x_name,'последний раз , '+arr_test[0]+' '+arr_test[1]+' ',ws)
           ws.send(strx);strx = '';
         }
+      }
+    }
+    ////////////////////////////Зделай напоминание///////////////////////////
+    console.log('*****************')
+    console.log(ws.users.input_Array[4])
+    if(ws.users.input_Array[4].charAt(0) == 'с'){
+      let arr_test = ws.users.input_Array[4].split(' ')
+      if(arr_test[0] == 'cделай' &&
+         arr_test[1] == 'напоминание' &&
+         arr_test[2] == 'на' &&
+         arr_test.length == 3||arr_test.length == 4
+        ){
+        arr_test.splice(0,1)
+        arr_test.splice(0,1)
+        arr_test.splice(0,1)
+        
+        let x_time = arr_test.join(' ')
+        console.log(x_time)
+        strx = one_time_napominanie.create(ws,x_time)
+        ws.send(strx);strx = '';
       }
     }
     /*

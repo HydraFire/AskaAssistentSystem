@@ -86,6 +86,33 @@ const login = function(ws,message){
             },660000)
           }
         },1000)
+        setTimeout(()=>{
+              var m = setInterval(()=>{
+                //console.log('yo')
+                if(ws.users.aska_talks){
+                  let arr = jetpack.read('./JSON/data/'+ws.users.name+'/one_time_napominanie.json','json')
+                  if(arr){
+                  let n_arr = []
+                  let arr_k = ''
+                  let t = new Date()
+                  t = Date.parse(t)
+                  arr.forEach((v,i)=>{
+                   let f = new Date(v[0])
+                   f = Date.parse(f)
+                   console.log('t='+t+' f='+f)
+                   if(t>f){
+                     arr_k+=v[1]+', '
+                   }else{
+                     n_arr.push(v)
+                   }
+                  })
+                  ws.send(arr_k)
+                  jetpack.write('./JSON/data/'+ws.users.name+'/one_time_napominanie.json',n_arr)
+                  }
+                  clearInterval(m)
+                }
+              },1000)
+        },5000)
       }
     }
   })

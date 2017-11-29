@@ -199,6 +199,8 @@ wss.on("connection", function(ws){
                   commands.run(desigen,ws)
                 }else if(desigen.includes('дневник страница')){
                   commands.run(desigen,ws)
+                }else if(desigen.includes('сделай напоминание')){
+                  commands.run(desigen,ws)
                 }else{
                   let arr_commands = jetpack.list('./JSON/data/'+ws.users.name+'/commands')
                   if(!arr_commands){
