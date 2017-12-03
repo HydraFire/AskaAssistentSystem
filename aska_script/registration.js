@@ -62,6 +62,10 @@ const login = function(ws,message){
         ws.users.nn_out_arr = ['null','null','null','null']
         ws.users.silence = false
         ws.users.aska_talks = false
+        ws.sendlog = function(text){
+          text = JSON.stringify(text)
+        ws.send('SYSTEM'+text)
+        }
         console.log('CONECTION '+ws.users.name)
         get_info(ws)
         setTimeout(()=>{

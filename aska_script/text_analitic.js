@@ -65,7 +65,9 @@ const ask = function(ws,text,v){
     n++
     //console.log(n)
     console.log("n= "+n)
+     ws.sendlog("n= "+n)
     console.log(ws.users.aska_talks)
+     ws.sendlog(ws.users.aska_talks)
     if(!ws.users.aska_talks){
       clearInterval(ws.users.all_thoughts[int_id00])
       ws.users.all_thoughts.splice(int_id00,1)
@@ -74,15 +76,20 @@ const ask = function(ws,text,v){
       ws.users.all_thoughts[int_id01] = setInterval(()=>{
         t++
         console.log("t= "+t)
+         ws.sendlog("t= "+t)
         console.log(ws.users.aska_talks)
+         ws.sendlog(ws.users.aska_talks)
+        
         if(ws.users.aska_talks){
           console.log('YOU HERE <----------------')
+           ws.sendlog('YOU HERE <----------------')
           clearInterval(ws.users.all_thoughts[int_id01])
           ws.users.all_thoughts.splice(int_id01,1)
           let int_id02 = ws.users.all_thoughts.length
           ws.users.all_thoughts[int_id02] = setInterval(()=>{
             k++
-            console.log(k)
+            console.log(k+'--')
+            ws.sendlog('wait your answer '+k+'...')
             if(ws.users.input_Array[4] == "нет" ||ws.users.input_Array[4] == "отмена"){
               //arr_command.splice(0,1)
               console.log('clear interval_03+')
@@ -151,7 +158,7 @@ const ask = function(ws,text,v){
   },500)
 }
 exports.ask = ask;
-const go = function(text0,text1){
+const go = function(text0,text1,ws){
   console.log('whats up?')
   let procent0 = 0
   let procent1 = 0
@@ -176,6 +183,9 @@ const go = function(text0,text1){
   procent0 = procent_string(text0,text1)
   procent0 = parseFloat(procent0)
   console.log('-------------')
+  if(ws.sendlog){
+   ws.sendlog('-------------')
+  }
   function includes_test(a,b){
 
     if(a.length < b.length){
@@ -218,6 +228,9 @@ const go = function(text0,text1){
   procent1 = includes_test(text0,text1)
   procent1 = parseFloat(procent1)
   console.log('/////////////'+procent0+'  '+procent1)
+  if(ws.sendlog){
+   ws.sendlog('//// '+procent0+'  '+procent1)
+  }
   let sym = (procent0+procent1+procent1)/3
   return sym
 }

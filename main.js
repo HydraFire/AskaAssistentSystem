@@ -218,7 +218,7 @@ wss.on("connection", function(ws){
                   desigen = desigen.split(' ').join('_')
                   console.log('arr_des  '+arr_commands)
                   arr_commands.forEach((v,i)=>{
-                    arr_des.push([text_analitic.go(desigen,v),v])
+                    arr_des.push([text_analitic.go(desigen,v,ws),v])
                   })
                   
                   arr_des.sort(function (a, b) {
@@ -233,6 +233,7 @@ wss.on("connection", function(ws){
                   })
                   //arr_des.reverse()
                   console.log('arr_des  '+arr_des)
+                  
                   if(arr_des[arr_des.length-1][0]>99){
                     desigen = arr_des[arr_des.length-1][1]
                     let origin = jetpack.read('./JSON/data/'+ws.users.name+'/commands/'+desigen+'.json','json')
@@ -255,6 +256,7 @@ wss.on("connection", function(ws){
                         desigen = origin[0]
                         desigen = desigen.split('_').join(' ')
                         console.log(desigen)
+                        ws.sendlog(desigen)
                         commands.run(desigen,ws)
                       }
                       }

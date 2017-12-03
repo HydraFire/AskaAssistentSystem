@@ -39,12 +39,16 @@ const calc_layers = function(ws,way){
 
 const set_to_run = function(ws,text){
   console.log('NN')
+   ws.sendlog('NN')
   console.log(ws.users.name)
+   ws.sendlog(ws.users.name)
   console.log('NN')
+   ws.sendlog('NN')
   let net = new brain.NeuralNetwork({
     hiddenLayers: calc_layers(ws,'./JSON/data/'+ws.users.name+'/NN_Train.json') // global learning rate, useful when training using streams
   });
   console.log('NEXT')
+   ws.sendlog('NEXT')
   let net_render = jetpack.read('./JSON/data/'+ws.users.name+'/NN_train_buffer.json','json')
   if(!net_render){
     jetpack.copy('./public/NN_train_buffer.json', './JSON/data/'+ws.users.name+'/NN_train_buffer.json', { overwrite: true });
@@ -52,12 +56,14 @@ const set_to_run = function(ws,text){
   }
   net.fromJSON(net_render);
   console.log('nn_connect')
+  ws.sendlog('nn_connect')
   //windowManager.sharedData.set('buffer_text', text);
 
 
   var yui = {};
   text.split(' ').map((v,i)=>{yui[v] = (99-i)/100})
   console.log(yui)
+   ws.sendlog(yui)
   var output = net.run(yui);
 
   var arr_v = _.values(output)
@@ -76,6 +82,7 @@ const set_to_run = function(ws,text){
     return (number[0]*10|0) > 4;
   });
   console.log(arr_x)
+  ws.sendlog(arr_x)
   const arrzet = Array.from(arr_x)
   let strx = ''
   arr_x.sort().reverse()
@@ -93,7 +100,7 @@ const set_to_run = function(ws,text){
     ws.send('EVALwindow.color_aska = 20;aska("режим ожидания")')
   }
   console.log(ws.users.nn_out_arr)
-
+  ws.sendlog(ws.users.nn_out_arr)
   //strx = commands(strx,ws)
 
   if(ws.users.silence){

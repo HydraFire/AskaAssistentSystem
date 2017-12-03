@@ -40,236 +40,264 @@
     </div>
   </div>
   <div class="info">
-    <div id="drop_zone">Drop files here</div>
-    <output id="list"></output>
-    
+
+    <div id="contact"><h1>Какая завтра будет погода?</h1></div>
+    <img class="float_left" src="./users/HydraFire/martz90-circle-weather.ico"></img>
+  <div >
+    <h3>"эта команда берет информацию о погоде из интернета</h3>
+    <h3>"эта команда берет информацию о погоде из интернета</h3>
+    <h3>"эта команда берет информацию о погоде из интернета</h3>
   </div>
-  <canvas id="myChart" width="600" height="200"></canvas>
+  <div id="contact"><h1>Температура на улице?</h1></div>
+  <img class="float_left" src="./users/HydraFire/sun_weather_13170.png"></img>
+<h3>"эта команда берет информацию о погоде из интернета</h3>
+<h3>"эта команда берет информацию о погоде из интернета</h3>
+<h3>"эта команда берет информацию о погоде из интернета</h3>
+<h3>"эта команда берет информацию о погоде из интернета</h3>
+<h3>"эта команда берет информацию о погоде из интернета</h3>
+<div id="drop_zone">Drop files here</div>
+<output id="list"></output>
+
+</div>
+<canvas id="myChart" width="600" height="200"></canvas>
 
 
-  <canvas id="draw" width="1024" height="300"></canvas>   
+<canvas id="draw" width="1024" height="300"></canvas>   
 
-  <audio src="" id="audio"></audio>
-  <audio src="" id="audio2"></audio>
+<audio src="" id="audio"></audio>
+<audio src="" id="audio2"></audio>
 
-  <style>
-    ::-webkit-input-placeholder {color:#45DAB1;}
-    ::-webkit-scrollbar { width: 0 !important }
-    html {
-      font-size: 10px;
-    }
+<style>
+  ::-webkit-input-placeholder {color:#45DAB1;}
+  ::-webkit-scrollbar { width: 0 !important }
+  html {
+    font-size: 10px;
+  }
 
-    body {
-      background:
-        radial-gradient(black 15%, transparent 16%) 0 0,
-        radial-gradient(black 15%, transparent 16%) 8px 8px,
-        radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
-        radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
-      background-color:#282828;
-      background-size:16px 16px;
-      background-attachment: fixed;
-      font-family: 'helvetica neue';
-      font-weight: 200;
-      font-size: 30px;
-      padding:0px;
-      margin: 0px;
-    }
-    #list li {
-      margin-left:200px;
-    }
-    a {
-      color:#fff;
-    }
-    video {
-      padding-top:384px;
-      z-index: -5;
-      position: absolute;
-    }
-    .registration {
-      padding-left:70px;
-      margin:0 0% 0% 0%;
-      width: 100%;
-      height: 45px;
-      z-index: 1000;
-      color:#abc;
-      background:rgba(22,22,22,0.65);
-      position: fixed;
-    }
-    .tracks {
-      width: 100%;
-      float: left;
-      background:rgba(22,22,22,0.65);
-    }
-    .track_button {
-      width: 150px;
-      float: left;
-      background:rgba(22,22,22,0.65);
-    }
-    #video {
-      z-index: -5;
-    }
-    #video2 {
-      z-index: -1;
-    }
-    #drop_zone {
-      border-bottom-color:rgb(187, 187, 187);
-      border-bottom-left-radius:5px;
-      border-bottom-right-radius:5px;
-      border-bottom-style:dashed;
-      border-bottom-width:2px;
-      border-image-outset:0px;
-      border-image-repeat:stretch;
-      border-image-slice:100%;
-      border-image-source:none;
-      border-image-width:1;
-      border-left-color:rgb(187, 187, 187);
-      border-left-style:dashed;
-      border-left-width:2px;
-      border-right-color:rgb(187, 187, 187);
-      border-right-style:dashed;
-      border-right-width:2px;
-      border-top-color:rgb(187, 187, 187);
-      border-top-left-radius:5px;
-      border-top-right-radius:5px;
-      border-top-style:dashed;
-      border-top-width:2px;
-      color:rgb(187, 187, 187);
-      display:block;
-      font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size:12px;
-      height:25px;
-      line-height:25.5px;
-      padding-bottom:25px;
-      padding-left:25px;
-      padding-right:25px;
-      padding-top:25px;
-      text-align:center;
-      text-size-adjust:100%;
-      width:155px;
-      word-wrap:break-word;
-      position: absolute;
-      z-index: 100;
-      -webkit-font-smoothing:antialiased;
-    } 
+  body {
+    background:
+      radial-gradient(black 15%, transparent 16%) 0 0,
+      radial-gradient(black 15%, transparent 16%) 8px 8px,
+      radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+      radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+    background-color:#282828;
+    background-size:16px 16px;
+    background-attachment: fixed;
+    font-family: 'helvetica neue';
+    font-weight: 200;
+    font-size: 30px;
+    padding:0px;
+    margin: 0px;
+  }
+  #list li {
+    margin-left:200px;
+  }
+  a {
+    color:#fff;
+  }
+  .float_left {
+    float: left;
+    width: 100px;
+    padding: 20px;
+  }
+  #contact {
+    display: flex;
+    align-items: center;
+    font-family: sans-serif;
+    width: 100%;
+    padding: 5px;
+    border-bottom: 1px dotted grey;
+  }
+  video {
+    padding-top:384px;
+    z-index: -5;
+    position: absolute;
+  }
+  .registration {
+    padding-left:70px;
+    margin:0 0% 0% 0%;
+    width: 100%;
+    height: 45px;
+    z-index: 1000;
+    color:#abc;
+    background:rgba(22,22,22,0.65);
+    position: fixed;
+  }
+  .tracks {
+    width: 100%;
+    float: left;
+    background:rgba(22,22,22,0.65);
+  }
+  .track_button {
+    width: 150px;
+    float: left;
+    background:rgba(22,22,22,0.65);
+  }
+  #video {
+    z-index: -5;
+  }
+  #video2 {
+    z-index: -1;
+  }
+  #drop_zone {
+    border-bottom-color:rgb(187, 187, 187);
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    border-bottom-style:dashed;
+    border-bottom-width:2px;
+    border-image-outset:0px;
+    border-image-repeat:stretch;
+    border-image-slice:100%;
+    border-image-source:none;
+    border-image-width:1;
+    border-left-color:rgb(187, 187, 187);
+    border-left-style:dashed;
+    border-left-width:2px;
+    border-right-color:rgb(187, 187, 187);
+    border-right-style:dashed;
+    border-right-width:2px;
+    border-top-color:rgb(187, 187, 187);
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-top-style:dashed;
+    border-top-width:2px;
+    color:rgb(187, 187, 187);
+    display:block;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:25px;
+    line-height:25.5px;
+    padding-bottom:25px;
+    padding-left:25px;
+    padding-right:25px;
+    padding-top:25px;
+    text-align:center;
+    text-size-adjust:100%;
+    width:155px;
+    word-wrap:break-word;
+    position: absolute;
+    z-index: 100;
+    -webkit-font-smoothing:antialiased;
+  } 
 
-    #main_container{
-      text-align: center;
-      width: 100%;
-      margin: 0px 0px 0px 0px;
-      z-index: 5;
-      position: absolute;
-    }
-    #myChart{
-      padding: 380px 0px 0px 0px;
-      z-index: 5;
-      position: absolute;
-    }
-    #inter{
-      -moz-user-select: none;
-      -khtml-user-select: none;
-      -webkit-user-select: none;
-      user-select: none;
-      height:180px;
-      padding-top:50px;
-      color:#333;
-      font-size: 110pt;
-    }
-    .info{
-      margin: 400px 0px 0px 5%;
-      z-index: 1;
-      position: absolute;
-      color:#888;
-      font-size: 10px;
-      font-family: 'Exo 2', sans-serif;
-    }
-    .wrapper {
-      z-index: 100;
-      padding: 0px 0px 0px 0px;
-      margin: 60px 0px 0px 0px;
-      position:absolute;
-      width:45px;
-      height:135px;
-      display:flex;
-    }
-    .wrapper2 {
-      z-index: 100;
-      padding: 0px 0px 0px 0px;
-      margin: 60px 0px 0px 45px;
-      position:absolute;
-      width:45px;
-      height:135px;
-      display:flex;
-    }
-    .speed {
-      background:#666;
-      flex:1;
-      display:flex;
-      align-items:flex-start;
-      margin:10px;
-      border-radius:30px;
-      box-shadow:0 0 1px 3px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    .speed2 {
-      background:#ffc04c;
-      flex:1;
-      display:flex;
-      align-items:flex-start;
-      margin:10px;
-      border-radius:30px;
-      box-shadow:0 0 1px 3px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    .speed-bar {
-      font-size: 10px;
-      width:100%;
-      background:#333;
-      text-shadow:1px 1px 0 rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding:2px;
-      color:white;
-      height:10%;
-    }
-    .speed-bar2 {
-      font-size: 10px;
-      width:100%;
-      background:#333;
-      text-shadow:1px 1px 0 rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding:2px;
-      color:white;
-      height:10%;
-    }
-    .words {
-      font-family: 'Exo 2', sans-serif;
-      width:100%;
-      /* margin:50px 50px 50px 0px;*/
-      /* padding:1rem 2rem 1rem 5rem;*/
-      /*background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
-      */
-      line-height:3rem;
-    }
-    p {
-      margin: 0 0 1rem;
-    }
+  #main_container{
+    text-align: center;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    z-index: 5;
+    position: absolute;
+  }
+  #myChart{
+    padding: 380px 0px 0px 0px;
+    z-index: 5;
+    position: absolute;
+  }
+  #inter{
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    height:180px;
+    padding-top:50px;
+    color:#333;
+    font-size: 110pt;
+  }
+  .info{
+    margin: 400px 0px 0px 5%;
+    z-index: 1;
+    position: absolute;
+    color:#888;
+    font-size: 10px;
+    font-family: 'Exo 2', sans-serif;
+  }
+  .wrapper {
+    z-index: 100;
+    padding: 0px 0px 0px 0px;
+    margin: 60px 0px 0px 0px;
+    position:absolute;
+    width:45px;
+    height:135px;
+    display:flex;
+  }
+  .wrapper2 {
+    z-index: 100;
+    padding: 0px 0px 0px 0px;
+    margin: 190px 0px 100px 00px;
+    position:absolute;
+    width:45px;
+    height:135px;
+    display:flex;
+  }
+  .speed {
+    background:#666;
+    flex:1;
+    display:flex;
+    align-items:flex-start;
+    margin:10px;
+    border-radius:30px;
+    box-shadow:0 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .speed2 {
+    background:#ffc04c;
+    flex:1;
+    display:flex;
+    align-items:flex-start;
+    margin:10px;
+    border-radius:30px;
+    box-shadow:0 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .speed-bar {
+    font-size: 10px;
+    width:100%;
+    background:#333;
+    text-shadow:1px 1px 0 rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:2px;
+    color:white;
+    height:10%;
+  }
+  .speed-bar2 {
+    font-size: 10px;
+    width:100%;
+    background:#333;
+    text-shadow:1px 1px 0 rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:2px;
+    color:white;
+    height:10%;
+  }
+  .words {
+    font-family: 'Exo 2', sans-serif;
+    width:100%;
+    /* margin:50px 50px 50px 0px;*/
+    /* padding:1rem 2rem 1rem 5rem;*/
+    /*background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+    */
+    line-height:3rem;
+  }
+  p {
+    margin: 0 0 1rem;
+  }
 
-    .words:before {
-      content: '';
-      position: absolute;
-      width: 4px;
-      top: 0;
-      left: 30px;
-      bottom: 0;
-      /*border: 1px solid;*/
-      /*border-color: transparent #efe4e4;*/
-    }
-  </style>
+  .words:before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    top: 0;
+    left: 30px;
+    bottom: 0;
+    /*border: 1px solid;*/
+    /*border-color: transparent #efe4e4;*/
+  }
+</style>
 
-  </body>
+</body>
 
 <script>
   function login(e){
@@ -322,9 +350,9 @@
         contentt2.removeChild(contentt2.lastChild)
       }
       contentt2.innerHTML +=
-`<video width="0" height="0" autoplay loop>
+        `<video width="0" height="0" autoplay loop>
 <source src="${adres}" type=video/mp4>
-</video>`;
+  </video>`;
     }else{
       if(zzz){
         contentt2.removeChild(contentt2.lastChild)
@@ -376,7 +404,7 @@
       evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
 
-  function handleFileSelect(evt) {
+    function handleFileSelect(evt) {
       evt.stopPropagation();
       evt.preventDefault();
 
@@ -416,7 +444,7 @@
   function displayit(data,color){
     let dataUpdate = data;
 
-    const info = document.querySelector('.info')
+    //const info = document.querySelector('.info')
 
     data = data.toString();
     data.includes('SYSTEM') ? data = data.substring(6,data.length) : '';
@@ -424,29 +452,24 @@
     data.includes('EVAL') ? data = data.substring(4,data.length) : '';
     //console.log(dataUpdate)
     //info.textContent = data;
-    if(color == undefined){
-      z = document.createElement('p');
-      info.insertBefore(z,info.children[0]);
-      z.innerHTML = data;
-    }else{
-      z = document.createElement('p');
-      info.insertBefore(z,info.children[0]);
-      z.textContent = data;
-      z.style.color = color;
-    }
+
     let aqq = []
-    if(data.includes('КБ')){
-      let ayy = dataUpdate[2].split('КБ')
-      let azz = []
-      ayy.forEach(v=> azz.push(v.substring(0,v.length - 4)))
-      azz.forEach(v=> aqq.push(v.substring(34,v.length)))
-      console.log(aqq)
-      aqq = aqq.join(' ')
+    if(data.includes('<br>')){
+      let ayy = dataUpdate.split('<br>')
+
+      ayy.forEach(v=> arr_server_log.push(v))
+
+      //console.log(aqq)
+      //data = ayy.join(' ')
       //info.textContent = data;
     }else{
-      aqq = data
+      arr_server_log.push(data)
     }
-    return aqq.substring(0,450);
+    arr_server_log.length > 20? arr_server_log.splice(0,1):''
+    //arr_server_log.push(data)
+    //arr_client_log.push(data)
+
+    //return aqq.substring(0,450);
   }
   function pause(e,ti){
     e.preventDefault();
@@ -780,7 +803,8 @@
       }
     }
   }
-
+  var arr_server_log = []
+  var arr_client_log = []
   function draw(waveform,frequencies){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let calc_hue
@@ -797,8 +821,18 @@
       ctx.fillStyle=`hsl(${calc_hue},${window.color_aska_h}%,55%)`;
       ctx.fillRect(index*2,0,1,v*3)
     })
+    ctx.font = "10px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "left";
+    arr_server_log.forEach((v,i)=>{
+      ctx.fillText(arr_server_log[i],50,70+(i*15));
+    })
+    ctx.textAlign = "right";
+    arr_client_log.forEach((v,i)=>{
+      ctx.fillText(arr_client_log[i],1900,70+(i*15));
+    })
   };
-  
+
   function redEffect(pixels){
     for(let i = 0; i < pixels.data.length; i +=4){
       var avg = (pixels.data[i] + pixels.data[i + 1] + pixels.data[i + 2]) / 3;
@@ -811,20 +845,20 @@
   function splitW(pixels){
     for(let i = 0; i < pixels.data.length; i +=4){
       if(i>1920*4*600){
-      pixels.data[i + 0] = 0
-      pixels.data[i + 1] = 0
-      pixels.data[i + 2] = 0
-      pixels.data[i + 3] = 0
+        pixels.data[i + 0] = 0
+        pixels.data[i + 1] = 0
+        pixels.data[i + 2] = 0
+        pixels.data[i + 3] = 0
       }
     }
-   return pixels
+    return pixels
   }
   function draw_video(video){
     //console.log(video)
     const width = video.videoWidth;
     const height = video.videoHeight;
     //canvas.width = width;
-    
+
     ctx.drawImage(video, 0, 0, 1920, 1080);
     /*
     waveform.forEach((v,index)=>{
@@ -832,7 +866,7 @@
       //ctx.fillStyle=`rgba(0,${calc_hue},0,1)`;
       //(120, 100%, 75%);
       ctx.fillStyle=`hsl(${220},${0}%,15%)`;
-      
+
       //ctx.fillStyle=`hsl(220,100%,55%)`;
       ctx.fillRect(index*2,350+v*3,1,600)
     })
@@ -847,11 +881,11 @@
     //pixels = weve(pixels,waveform,1920)
 
     ctx.putImageData(pixels, 0, 0);
-    
+
     //ctx.globalAlpha = 0.1;
-  
-}
-/*
+
+  }
+  /*
 if(video){
   video.addEventListener('canplay',paintToCanvas)
 }

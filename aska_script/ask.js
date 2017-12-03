@@ -19,7 +19,9 @@ const ask_arr = function(ws,adress,arr_command,date){
       n++
       //console.log(n)
       console.log("n= "+n)
+      ws.sendlog("n= "+n)
       console.log(ws.users.aska_talks)
+      ws.sendlog(ws.users.aska_talks)
       if(!ws.users.aska_talks){
         clearInterval(ws.users.all_thoughts[int_id00])
         ws.users.all_thoughts.splice(int_id00,1)
@@ -28,9 +30,12 @@ const ask_arr = function(ws,adress,arr_command,date){
         ws.users.all_thoughts[int_id01] = setInterval(()=>{
           t++
           console.log("t= "+t)
+          ws.sendlog("t= "+t)
           console.log(ws.users.aska_talks)
           if(ws.users.aska_talks){
             console.log('YOU HERE <----------------')
+             console.log('ВОТ ЭТО МЕСТО2')
+            ws.sendlog('YOU HERE <----------------')
             clearInterval(ws.users.all_thoughts[int_id01])
             ws.users.all_thoughts.splice(int_id01,1)
 
@@ -155,9 +160,12 @@ const one = function(ws,text,v){
           ws.users.all_thoughts[int_id02] = setInterval(()=>{
             k++
             console.log(k)
+            ws.sendlog(k)
+            console.log('ВОТ ЭТО МЕСТО')
             if(ws.users.input_Array[4] == "нет" ||ws.users.input_Array[4] == "отмена"){
               //arr_command.splice(0,1)
               console.log('clear interval_03+')
+              ws.sendlog('clear interval_03+')
               clearInterval(ws.users.all_thoughts[int_id02])
               ws.users.all_thoughts.splice(int_id02,1)
               ws.users.input_Array[4] = "undefined"
