@@ -87,10 +87,11 @@ wss.on("connection", function(ws){
     registration.login(ws,login_data[0])
   }else{
     //ws.send('Доступ в общественую ветку')
-    let login_data = 'USERundefined||public||'+user_ip
+    let login_data = 'USERundefined//public//'+user_ip
     registration.login(ws,login_data)
   }
   console.log(user_ip)
+  ws.sendlog('CONNECT ip:'+user_ip)
 
 
   ws.on('message', function(message) {
