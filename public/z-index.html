@@ -17,8 +17,7 @@
         <input  id="" name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
         <input  id="" name="password" type="password" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Password"/>
         <input type="submit" value="GO">
-        <strong style="padding-left:600px;font-size:12pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Регистрация по приглашениям!</strong>
-      </form>
+        </form>
     </div>
     <!-- <video id="video" loop autoplay src="files/Comp 2.mp4"></video>
 <video id="video2" src="files/Comp 3.mp4"></video>
@@ -810,11 +809,24 @@
   /////////////////////////////////////////////////////////////////////////////      
   const canvas = document.querySelector('#draw')
   const ctx = canvas.getContext('2d')
-  canvas.width = 1920;
-  canvas.height = 1080;
+  window.canvas_width = window.innerWidth
+  canvas.width = window.canvas_width;
+  canvas.height = 600
   init()
   window.color_aska = 205
   window.color_aska_h = 100
+
+  function resizeCanvas(canvas, ctx, width, height) {
+        var tempCanvas = document.createElement('canvas');;
+        tempCanvas.width = ctx.canvas.width;
+        tempCanvas.height = ctx.canvas.height;
+        var tempContext = tempCanvas.getContext("2d");
+    
+        tempContext.drawImage(ctx.canvas, 0, 0);
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(tempContext.canvas, 0, 0);
+    };
   //video_animation()
   window.onload = function(){
     var inpElelement = document.getElementById('stringOftext')
@@ -833,18 +845,31 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let calc_hue
     let arr_fre = []
-    console.log(window.color_aska)
+    
     frequencies.forEach((v)=>{arr_fre.push(v)})
     arr_fre.reverse()
     frequencies.forEach((v)=>{arr_fre.push(v)})
     for(i=0;i<550;i++){
       arr_fre.splice(0,1)
     }
+    for(i=0;i<window.canvas_width;i++){
+
+      calc_hue = window.color_aska -(arr_fre[i]/8)
+      ctx.fillStyle=`hsl(${calc_hue},${window.color_aska_h}%,55%)`;
+      let o = i
+      if(o>=waveform.length-1){
+        o = i%waveform.length
+        o = waveform.length-1 - o
+      }
+      ctx.fillRect(i*2,0,1,waveform[o]*3)
+    }
+    /*
     waveform.forEach((v,index)=>{
       calc_hue = window.color_aska -(arr_fre[index]/8)
       ctx.fillStyle=`hsl(${calc_hue},${window.color_aska_h}%,55%)`;
       ctx.fillRect(index*2,0,1,v*3)
     })
+    */
     ctx.font = "10px Arial";
     ctx.fillStyle = "black";
     ctx.textAlign = "left";
@@ -884,6 +909,7 @@
     //canvas.width = width;
 
     ctx.drawImage(video, 0, 0, 1920, 1080);
+
     /*
     waveform.forEach((v,index)=>{
       //calc_hue = window.color_aska -(arr_fre[index]/8)
@@ -914,6 +940,12 @@ if(video){
   video.addEventListener('canplay',paintToCanvas)
 }
 */
+  window.onresize = (e)=>{
+    console.log(window.canvas_width);
+    window.canvas_width = e.currentTarget.innerWidth
+    resizeCanvas(canvas,ctx,window.canvas_width, 600)
+  }
+     
   ///////////////////////////////////////////////////////////////////
   //////////////////////FORM//LOGIN///////////////////////////////////
   ///////////////////////////////////////////////////////////////////
