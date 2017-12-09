@@ -18,7 +18,7 @@ const create = function(ws,x_time){
     sym<=0?sym = 7 + sym:'';
     sym = sym * 86400000
     let ggg = fff.getDate()
-    ggg<9?ggg='0'+ggg:'';
+    ggg<10?ggg='0'+ggg:'';
     let y = new Date(fff.getFullYear()+'-'+(fff.getMonth()+1)+'-'+ggg+'T00:00:00.000Z')
     y = Date.parse(y)
     y+=sym
