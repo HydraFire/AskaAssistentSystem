@@ -205,7 +205,7 @@
 
   #main_container{
     text-align: center;
-    width: 100%;
+    width: 105%;
     margin: 0px 0px 0px 0px;
     z-index: 5;
     position: absolute;
@@ -809,9 +809,11 @@
   /////////////////////////////////////////////////////////////////////////////      
   const canvas = document.querySelector('#draw')
   const ctx = canvas.getContext('2d')
+  var div_info = document.querySelector('.info')
   window.canvas_width = window.innerWidth
+  window.canvas_height = window.innerHeight
   canvas.width = window.canvas_width;
-  canvas.height = 600
+  canvas.height = window.canvas_height;
   init()
   window.color_aska = 205
   window.color_aska_h = 100
@@ -876,10 +878,12 @@
     arr_server_log.forEach((v,i)=>{
       ctx.fillText(arr_server_log[i],50,70+(i*15));
     })
+    /*
     ctx.textAlign = "right";
     arr_client_log.forEach((v,i)=>{
-      ctx.fillText(arr_client_log[i],1900,70+(i*15));
+      ctx.fillText(arr_client_log[i],1100,70+(i*15));
     })
+    */
   };
 
   function redEffect(pixels){
@@ -904,12 +908,21 @@
   }
   function draw_video(video){
     //console.log(video)
-    const width = video.videoWidth;
-    const height = video.videoHeight;
+    
+    var width = video.videoWidth;
+    var height = video.videoHeight;
     //canvas.width = width;
-
-    ctx.drawImage(video, 0, 0, 1920, 1080);
-
+    var proportion = height/width
+    var p_height = proportion*window.canvas_width|0
+    ctx.clearRect(0, 0, window.canvas_width, window.canvas_height);
+    ctx.drawImage(video, 0, 0, window.canvas_width, p_height);
+    
+    ctx.font = "10px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "left";
+    arr_server_log.forEach((v,i)=>{
+      ctx.fillText(arr_server_log[i],50,70+(i*15));
+    })
     /*
     waveform.forEach((v,index)=>{
       //calc_hue = window.color_aska -(arr_fre[index]/8)
@@ -921,7 +934,7 @@
       ctx.fillRect(index*2,350+v*3,1,600)
     })
     */
-    let pixels = ctx.getImageData(0, 0, 1920, 1080);
+    //let pixels = ctx.getImageData(0, 0, 1920, 1080);
     //greenScreen
     //pixels = rgbSplit(pixels);
     //pixels = redEffect(pixels);
@@ -930,7 +943,7 @@
     //pixels = splitW(pixels)
     //pixels = weve(pixels,waveform,1920)
 
-    ctx.putImageData(pixels, 0, 0);
+    //ctx.putImageData(pixels, 0, 0);
 
     //ctx.globalAlpha = 0.1;
 
@@ -940,10 +953,13 @@ if(video){
   video.addEventListener('canplay',paintToCanvas)
 }
 */
+  
   window.onresize = (e)=>{
     console.log(window.canvas_width);
+    div_info.style.paddingTop = e.currentTarget.innerHeight - 750+'px'
     window.canvas_width = e.currentTarget.innerWidth
-    resizeCanvas(canvas,ctx,window.canvas_width, 600)
+    window.canvas_height = e.currentTarget.innerHeight
+    resizeCanvas(canvas,ctx,window.canvas_width,window.canvas_height)
   }
      
   ///////////////////////////////////////////////////////////////////
