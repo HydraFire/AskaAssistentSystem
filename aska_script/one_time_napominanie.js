@@ -24,15 +24,18 @@ const create = function(ws,x_time){
     y+=sym
     x_time = new Date(y)
   }else{
-    let nn = 1
     let fff = new Date()
+    let year = fff.getFullYear()
+    let nn = 1
     let zzz = fff.getDate()
     let sym = proverka - zzz
-    console.log(sym)
     sym<=0?nn += 1:'';
+    let month = fff.getMonth()+nn
+    if(month>12){month=1;year+=1}
     let ddd =fff.getDate()+sym
     ddd < 10?ddd='0'+ddd:'';
-    x_time = new Date(fff.getFullYear()+'-'+(fff.getMonth()+nn)+'-'+ddd+'T00:00:00.000Z')
+    month < 10?month='0'+month:'';
+    x_time = new Date(year+'-'+month+'-'+ddd+'T00:00:00.000Z')
   }
   arr = text_napominaniya(ws,arr,x_time)
 }
