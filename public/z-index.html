@@ -17,7 +17,7 @@
         <input  id="" name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
         <input  id="" name="password" type="password" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Password"/>
         <input type="submit" value="GO">
-        </form>
+      </form>
     </div>
     <!-- <video id="video" loop autoplay src="files/Comp 2.mp4"></video>
 <video id="video2" src="files/Comp 3.mp4"></video>
@@ -39,24 +39,24 @@
     </div>
   </div>
   <div class="info">
+    <div class="block_help">
+      <div id="contact"><h1>Какая завтра будет погода?</h1></div>
+      <img class="float_left" src="./users/HydraFire/martz90-circle-weather.ico"></img>
+    <div >
+      <h3>"эта команда берет информацию о погоде из интернета</h3>
+      <h3>"эта команда берет информацию о погоде из интернета</h3>
+      <h3>"эта команда берет информацию о погоде из интернета</h3>
+    </div>
+  </div>
   <div class="block_help">
-    <div id="contact"><h1>Какая завтра будет погода?</h1></div>
-    <img class="float_left" src="./users/HydraFire/martz90-circle-weather.ico"></img>
-  <div >
-    <h3>"эта команда берет информацию о погоде из интернета</h3>
-    <h3>"эта команда берет информацию о погоде из интернета</h3>
-    <h3>"эта команда берет информацию о погоде из интернета</h3>
+    <div id="contact"><h1>Температура на улице?</h1></div>
+    <img class="float_left" src="./users/HydraFire/sun_weather_13170.png"></img>
+  <h3>"эта команда берет информацию о погоде из интернета</h3>
+  <h3>"эта команда берет информацию о погоде из интернета</h3>
+  <h3>"эта команда берет информацию о погоде из интернета</h3>
+  <h3>"эта команда берет информацию о погоде из интернета</h3>
+  <h3>"эта команда берет информацию о погоде из интернета</h3>
   </div>
-  </div>
-<div class="block_help">
-  <div id="contact"><h1>Температура на улице?</h1></div>
-  <img class="float_left" src="./users/HydraFire/sun_weather_13170.png"></img>
-<h3>"эта команда берет информацию о погоде из интернета</h3>
-<h3>"эта команда берет информацию о погоде из интернета</h3>
-<h3>"эта команда берет информацию о погоде из интернета</h3>
-<h3>"эта команда берет информацию о погоде из интернета</h3>
-<h3>"эта команда берет информацию о погоде из интернета</h3>
-</div>
 <div class="block_help">
   <div id="contact"><h1>Температура на улице?</h1></div>
   <img class="float_left" src="./users/HydraFire/sun_weather_13170.png"></img>
@@ -346,6 +346,22 @@
       function(response){
         aska(response);
         console.log('extension getClipboard response', response);
+      }
+    );
+  }
+  function readClipboard_and_translate(){
+    let extensionId = "jaolhkfjhkkakocggfihkelgobjbclol";
+    chrome.runtime.sendMessage(
+      extensionId,
+      { method: 'getClipboard' },
+      function(response){
+        let x = new XMLHttpRequest();
+        x.open("GET", 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q='+encodeURI(response), true);
+        x.onload = function (){
+          let n = JSON.parse(x.responseText)
+           aska(n[0][0][0])
+        }
+        x.send(null);
       }
     );
   }
@@ -734,7 +750,7 @@
     console.log(e)
     socket.send(e);
   }
-   var socket = new WebSocket("wss://nerv.pro/z-index.html");
+  var socket = new WebSocket("wss://nerv.pro/z-index.html");
 
   //var socket = new WebSocket("wss://159.224.183.122:443/z-index.html");
   // var socket = new WebSocket("ws://localhost:80/index.html");
@@ -819,16 +835,16 @@
   window.color_aska_h = 100
 
   function resizeCanvas(canvas, ctx, width, height) {
-        var tempCanvas = document.createElement('canvas');;
-        tempCanvas.width = ctx.canvas.width;
-        tempCanvas.height = ctx.canvas.height;
-        var tempContext = tempCanvas.getContext("2d");
-    
-        tempContext.drawImage(ctx.canvas, 0, 0);
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(tempContext.canvas, 0, 0);
-    };
+    var tempCanvas = document.createElement('canvas');;
+    tempCanvas.width = ctx.canvas.width;
+    tempCanvas.height = ctx.canvas.height;
+    var tempContext = tempCanvas.getContext("2d");
+
+    tempContext.drawImage(ctx.canvas, 0, 0);
+    canvas.width = width;
+    canvas.height = height;
+    ctx.drawImage(tempContext.canvas, 0, 0);
+  };
   //video_animation()
   window.onload = function(){
     var inpElelement = document.getElementById('stringOftext')
@@ -847,7 +863,7 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let calc_hue
     let arr_fre = []
-    
+
     frequencies.forEach((v)=>{arr_fre.push(v)})
     arr_fre.reverse()
     frequencies.forEach((v)=>{arr_fre.push(v)})
@@ -908,7 +924,7 @@
   }
   function draw_video(video){
     //console.log(video)
-    
+
     var width = video.videoWidth;
     var height = video.videoHeight;
     //canvas.width = width;
@@ -916,7 +932,7 @@
     var p_height = proportion*window.canvas_width|0
     ctx.clearRect(0, 0, window.canvas_width, window.canvas_height);
     ctx.drawImage(video, 0, 0, window.canvas_width, p_height);
-    
+
     ctx.font = "10px Arial";
     ctx.fillStyle = "black";
     ctx.textAlign = "left";
@@ -953,7 +969,7 @@ if(video){
   video.addEventListener('canplay',paintToCanvas)
 }
 */
-  
+
   window.onresize = (e)=>{
     console.log(window.canvas_width);
     div_info.style.paddingTop = e.currentTarget.innerHeight - 750+'px'
@@ -961,7 +977,7 @@ if(video){
     window.canvas_height = e.currentTarget.innerHeight
     resizeCanvas(canvas,ctx,window.canvas_width,window.canvas_height)
   }
-     
+
   ///////////////////////////////////////////////////////////////////
   //////////////////////FORM//LOGIN///////////////////////////////////
   ///////////////////////////////////////////////////////////////////

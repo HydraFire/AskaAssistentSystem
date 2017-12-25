@@ -51,6 +51,11 @@ const run = function(strx,ws){
       ws.send('EVALreadClipboard()')
       strx = ''
     }
+    if(ws.users.input_Array[4].includes('переведи')){
+      ws.send('EVALreadClipboard_and_translate()')
+      strx = ''
+    }
+    
     if(ws.users.input_Array[4].includes('включи этот трек')){
       let zty = ws.users.input_Array[4]
       zty = zty.substring(17,zty.length)
