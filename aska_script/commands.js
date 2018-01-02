@@ -421,7 +421,7 @@ const run = function(strx,ws){
       ws.send('SYSTEM '+JSON.stringify(arr_test))
       if(arr_test[0] == 'не' &&
          arr_test[1] == 'хочу' &&
-         arr_test.length == 4||arr_test.length == 5
+         arr_test.length == 5||arr_test.length == 6
         ){
         arr_test.splice(0,1)
         arr_test.splice(0,1)
