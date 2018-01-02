@@ -419,9 +419,9 @@ const run = function(strx,ws){
     if(ws.users.input_Array[4].charAt(0) == 'я'){
       let arr_test = ws.users.input_Array[4].split(' ')
       ws.send('SYSTEM '+JSON.stringify(arr_test))
-      if(arr_test[0] == 'не' &&
-         arr_test[1] == 'хочу' &&
-         arr_test.length == 5||arr_test.length == 6
+      if(arr_test[1] == 'не' &&
+         arr_test[2] == 'хочу' &&
+         arr_test.length >= 5
         ){
         arr_test.splice(0,1)
         arr_test.splice(0,1)
