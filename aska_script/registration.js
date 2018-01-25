@@ -87,7 +87,7 @@ const login = function(ws,message){
             ws.users.napomni = setInterval(()=>{
               napominalka.check_time(ws)
               console.log('napominanie')
-            },660000)
+            },16*60000)
           }
         },1000)
         setTimeout(()=>{
