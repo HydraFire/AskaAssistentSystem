@@ -359,7 +359,7 @@
         x.open("GET", 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q='+encodeURI(response), true);
         x.onload = function (){
           let n = JSON.parse(x.responseText)
-           aska(n[0][0][0])
+          aska(n[0][0][0])
         }
         x.send(null);
       }
@@ -694,56 +694,64 @@
   //recognition.addEventListener('end', console.log('CLOSE'))
   ///////////////////////////// ASKA /////////////////////////////////////
   function aska(text,p){
-
     console.group('ASKA говорит:');
     console.log(text)
     console.groupEnd('ASKA говорит:');
-    if(localStorage.aska_time_out == undefined){
-      localStorage.aska_time_out = 40;
+    function choseAudioTag(text,audioTag,num){
+      function playAudio(text){
+        let url = 'https://tts.voicetech.yandex.net/generate?'+
+            'key=222499e2-1e45-4b6d-aaaa-70b53b87c2ec'+
+            '&text='+encodeURI(text)+
+            '&format=mp3'+
+            '&lang=ru-RU'+
+            '&topic=queries'+
+            '&speaker=oksana'+
+            '&speed=1'+
+            '&robot=1'+
+            '&emotion=evil';//evil
+
+        audioTag.src = url;
+        audioTag.onloadeddata = function(){
+          audioTag.play();
+          recognition.stop();
+          recognition.removeEventListener('end', recognition.start)
+          socket.send('SPEECH')
+          console.log('SPEECH')
+          if(num==2){
+            let v = parseFloat(localStorage.audioVolume)+0.2
+            audioTag.volume = v.toFixed(2)
+          }
+        }
+      }; 
+      function splitOnParts(text){
+        let part = text.slice(0,1000);
+        let m = [...part].reverse().join('').indexOf('.');
+        let chankStart = part.slice(0,1000-m);
+        let chankEnd = text.slice(1000-m);
+        return [chankStart,chankEnd]
+      };
+      function splitAndPlay(text){
+        console.log(text.length)
+        let playText = '';
+        [playText,text] = splitOnParts(text);
+        playAudio(playText);
+        return text
+      }
+
+      text = splitAndPlay(text)
+
+      if(text.length>0){
+        const p = new Promise((resolve) =>{
+          audioTag.addEventListener('ended',()=>text.length>0?text=splitAndPlay(text):resolve('d'));
+        });
+        p.then((data)=>{
+          console.log(data)
+          audioTag.removeEventListener('ended',()=>text.length>0?text=splitAndPlay(text):resolve('d'));
+        });
+      }
     }
 
-    let calc = parseFloat(localStorage.aska_time_out);
-    calc += 10;
-    localStorage.aska_time_out = calc;
-
-    console.log('ASKA говорит: ')
-
-    var audio = document.getElementById('audio');
-    var audio2 = document.getElementById('audio2');
-    var url = 'https://tts.voicetech.yandex.net/generate?'+
-        'key=222499e2-1e45-4b6d-aaaa-70b53b87c2ec'+
-        '&text='+encodeURI(text)+
-        '&format=mp3'+
-        '&lang=ru-RU'+
-        '&topic=queries'+
-        '&speaker=oksana'+
-        '&speed=1'+
-        '&robot=1'+
-        '&emotion=evil';//evil
-    if(audio.paused){
-      audio.src = url;
-      audio.load();
-      audio.onloadeddata = function () {
-        audio.play();
-        recognition.stop();
-        recognition.removeEventListener('end', recognition.start)
-        socket.send('SPEECH')
-        console.log('SPEECH')
-      }
-    }else{
-      audio2.src = url;
-      audio2.load();
-      audio2.onloadeddata = function () {
-        console.log('localStorage.audioVolume '+localStorage.audioVolume)
-        let ryu = parseFloat(localStorage.audioVolume)+0.2
-        audio2.volume = ryu.toFixed(2)
-        audio2.play();
-        recognition.stop();
-        recognition.removeEventListener('end', recognition.start)
-        socket.send('SPEECH')
-        console.log('SPEECH')
-      }
-    }
+    audio.paused?choseAudioTag(text,audio,1):choseAudioTag(text,audio2,2);
   }
   ///////////////////////// WebSocket /////////////////////////////////////
   function test(e){
