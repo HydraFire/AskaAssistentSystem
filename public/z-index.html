@@ -14,8 +14,8 @@
     <div class="registration">
       <form>
         <strong style="font-size:14pt;">NERV.PRO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-        <input  id="" name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
-        <input  id="" name="password" type="password" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Password"/>
+        <input  name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
+        <input  name="password" type="password" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Password"/>
         <input type="submit" value="GO">
       </form>
     </div>
@@ -358,8 +358,8 @@
         let x = new XMLHttpRequest();
         x.open("GET", 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q='+encodeURI(response), true);
         x.onload = function (){
-          let n = JSON.parse(x.responseText)
-          aska(n[0][0][0])
+          let n = JSON.parse(x.responseText)[0].map(v=>v[0]).join(',');
+          aska(n)
         }
         x.send(null);
       }
