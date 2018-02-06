@@ -735,6 +735,15 @@
         let playText = '';
         [playText,text] = splitOnParts(text);
         playAudio(playText);
+        if(text.length==0){
+          audioTag.addEventListener('pause',()=>{
+            console.log('SHUT_UP')
+            socket.send('SHUT_UP')
+            recognition.start()
+            recognition.addEventListener('end', recognition.start)
+          },{once:true})
+
+        }
         return text
       }
 
@@ -751,7 +760,7 @@
       }
     }
     if(text.length > 0){
-    audio.paused?choseAudioTag(text,audio,1):choseAudioTag(text,audio2,2);
+      audio.paused?choseAudioTag(text,audio,1):choseAudioTag(text,audio2,2);
     }
   }
   ///////////////////////// WebSocket /////////////////////////////////////
@@ -805,30 +814,6 @@
     // alert("Ошибка " + error.message);
   };
   //localStorage.wait = 'wait';
-  if(localStorage.wait != 'wait'){
-    audio2.addEventListener('pause',()=>{
-      console.log('wait')
-      console.log('start')
-      window.animation = false
-      socket.send('SHUT_UP')
-      console.log('SHUT_UP')
-      if(localStorage.pause_recog){
-        recognition.start()
-        recognition.addEventListener('end', recognition.start)
-      }
-    })
-    audio.addEventListener('pause',()=>{
-      console.log('wait')
-      console.log('start')
-      window.animation = false
-      socket.send('SHUT_UP')
-      console.log('SHUT_UP')
-      if(localStorage.pause_recog){
-        recognition.start()
-        recognition.addEventListener('end', recognition.start)
-      }
-    })
-  }
   /////////////////////////////////////////////////////////////////////////////    
   /////////////////////////////////////////////////////////////////////////////     
   /////////////////////////////////////////////////////////////////////////////      
