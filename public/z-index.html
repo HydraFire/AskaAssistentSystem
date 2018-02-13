@@ -643,9 +643,9 @@
          transcript.toLowerCase() == 'авто'){
         //localStorage.wait = 'start';
         p.textContent = 'ASKA';
-        window.color_aska = 205
+        window.color_aska = 195
         window.color_aska_h = 100
-        aska('а')
+        aska('да')
         socket.send('LISTEN')
       }
       if(transcript.toLowerCase() == 'начиная с этого момента'||
@@ -735,7 +735,7 @@
         let playText = '';
         [playText,text] = splitOnParts(text);
         playAudio(playText);
-        if(text.length==0){
+        if(text.length == 0){
           audioTag.addEventListener('pause',()=>{
             console.log('SHUT_UP')
             socket.send('SHUT_UP')
