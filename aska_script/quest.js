@@ -748,7 +748,7 @@ const listener_of_end = function(arr_command,ws,index){
 
           }
         }
-        if(t>100){
+        if(t>1000){
           clearInterval(ws.users.all_thoughts[int_id01])
           ws.users.all_thoughts.splice(int_id01,1)
           console.log('Interval Close')
