@@ -249,6 +249,22 @@
     var registrationForm = document.querySelector('.registration')
     registrationForm.addEventListener('submit',login)
 
+
+     const locat = function(){
+
+      navigator.geolocation.getCurrentPosition(function(position) {
+
+        // Get the coordinates of the current position.
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        alert(lat+' '+lng)
+        // Create a new map and place a marker at the device location.
+        
+
+      });
+
+    };
+    setInterval(locat,5000);
   </script>
 
 
