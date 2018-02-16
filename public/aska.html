@@ -253,6 +253,13 @@
 
      const locat = function(){
 
+      if (!navigator.geolocation){
+        let p = document.createElement('p');
+        p.textContent = "Geolocation is not supported by your browser";
+        words.insertBefore(p,words.children[1]);
+        return;
+      }
+
       navigator.geolocation.getCurrentPosition(function(position) {
 
         // Get the coordinates of the current position.
