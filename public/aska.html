@@ -258,10 +258,17 @@
         p.textContent = "Geolocation is not supported by your browser";
         words.insertBefore(p,words.children[1]);
         return;
+      }else{
+        let p = document.createElement('p');
+        p.textContent = "navigator ok";
+        words.insertBefore(p,words.children[1]);
       }
 
       navigator.geolocation.getCurrentPosition(function(position) {
 
+         let xp = document.createElement('p');
+         xp.textContent = 'есть запрос';
+         words.insertBefore(xp,words.children[1]);
         // Get the coordinates of the current position.
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
