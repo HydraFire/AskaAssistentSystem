@@ -257,7 +257,10 @@
         // Get the coordinates of the current position.
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
-        alert(lat+' '+lng)
+
+        let p = document.createElement('p');
+        p.textContent = lat+' '+lng;
+        words.insertBefore(p,words.children[1]);
         // Create a new map and place a marker at the device location.
         
 
