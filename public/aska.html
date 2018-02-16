@@ -71,6 +71,7 @@
         <input  id="" name="login" type="text" style="font-size: 14px; color: #ddd; border: 0px;background: rgba(200, 200, 200, 0.3); height: 22px; width: 640;" value="" placeholder=" Login"/>
       </form>
     </div>
+    <button id="location">Get Location</button>
     <div class="wrapper">
       <div class="speed">
         <div class="speed-bar">0.2</div>
@@ -248,7 +249,8 @@
     speed.addEventListener('touchend',handleUp)
     var registrationForm = document.querySelector('.registration')
     registrationForm.addEventListener('submit',login)
-
+    var location = document.querySelector('#location')
+    location.addEventListener('click',locat)
 
      const locat = function(){
 
@@ -259,7 +261,7 @@
         var lng = position.coords.longitude;
 
         let p = document.createElement('p');
-        p.textContent = lat+' '+lng;
+        p.textContent = lat+' '+lng+' про';
         words.insertBefore(p,words.children[1]);
         // Create a new map and place a marker at the device location.
         
