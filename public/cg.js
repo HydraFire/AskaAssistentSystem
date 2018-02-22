@@ -85,7 +85,7 @@
         
          iAudio = ((frequencies[5]+frequencies[10]+frequencies[15]+frequencies[20]+frequencies[25]+frequencies[30]+frequencies[35])/2000)+0.2;
 
-         console.log(iAudio)
+         //console.log(iAudio)
         /*
         let video = document.querySelector('video')
         
