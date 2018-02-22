@@ -67,42 +67,42 @@
     setInterval(()=>{
       if(analyser){
         frequencies = analyser.frequencies();
-        waveform = analyser.waveform();
+        //waveform = analyser.waveform();
         if(audio.volume != localStorage.audioVolume){
           audio.volume = localStorage.audioVolume
         }
         if(audio2.volume != localStorage.audioVolume2){
           audio2.volume = localStorage.audioVolume2
         }
-        //localStorage.aaaa = 'play';
-        //console.log(localStorage.aaaa)
+   
         if(localStorage.aaaa == 'pause'){
           audio.pause()
-        }else{
-          //audio.play()
         }
+        
+        
+          
+        
+        
+         iAudio = ((frequencies[5]+frequencies[10]+frequencies[15]+frequencies[20]+frequencies[25]+frequencies[30]+frequencies[35])/2000)+0.2;
+
+         console.log(iAudio)
+        /*
         let video = document.querySelector('video')
         
-        if(video){
+        if(video){/
             video.onloadeddata = function() {
               m = true
             }
             
             if(m){
-              /*
-              let arr = []
-              for(i=0;i<1920;i++){
-                if(i<1920){
-                    arr.push(waveform[i])
-                  }
-                }
-                */
-            draw_video(video);
+              draw_video(video);
             }
         }else{
+          
           m = false
           draw(waveform,frequencies)
         }
+        */
         //////////////////////////////////////////////////////////////
       }
     },15)
