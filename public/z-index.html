@@ -13,6 +13,7 @@
 
         uniform float iTime;
         uniform vec2 iResolution;
+        uniform float iAudio;
 
 
         const float NoiseIsoline = 0.319;
@@ -167,7 +168,7 @@ vec4 render( in vec3 ro, in vec3 rd, in ivec2 px )
     col = col*(1.0-res.w) + res.xyz;
     
     // sun glare    
-    col += 0.2*vec3(1.0,0.4,0.2)*pow( sun, 3.0 );
+    col += iAudio*vec3(1.0,0.4,0.2)*pow( sun, 3.0 );
 
     return vec4( col, 1.0 );
 }
@@ -1128,6 +1129,8 @@ void main(){
         let vertexPositionLocation;
         let timeLocation, time;
         let resolutionLocation, resolution;
+        var iAudioLocation, iAudio = 0.5;
+        
         let startTime;
         let vertices = [
             -1.0, -1.0,
@@ -1150,6 +1153,7 @@ void main(){
               canvas.height = (window.innerHeight / 100) * 57 |0;
             }
             gl.viewport(0, 0, canvas.width, canvas.height);
+
         }
 
         function compileShader(shaderSource, shaderType){
@@ -1199,6 +1203,7 @@ void main(){
         function drawScene(){
 
             gl.uniform1f(timeLocation, time);
+            gl.uniform1f(iAudioLocation, iAudio);
             gl.uniform2fv(resolutionLocation, resolution);
             gl.drawArrays(gl.TRIANGLES, 0, 6);
         }
@@ -1238,6 +1243,7 @@ void main(){
 
             resolutionLocation = gl.getUniformLocation(shaderProgram, "iResolution");
             timeLocation = gl.getUniformLocation(shaderProgram, "iTime");
+            iAudioLocation = gl.getUniformLocation(shaderProgram, "iAudio");
 
             vertexPositionLocation = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 
@@ -1259,7 +1265,7 @@ void main(){
   registrationForm.addEventListener('submit',login)
   bootstrap();
 </script>
-<!--
+
 <script type="text/javascript" src="cg.js"></script>
--->
+
 </html>
