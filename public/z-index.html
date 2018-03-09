@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
     <title>Speech Detection</title>
     <script id="shader-fs" type="x-shader/x-fragment">
-    
+
         precision mediump float;
 
         const float pi = 3.14159265359;
@@ -20,10 +20,10 @@
         const float NoiseScale = 0.9980001;
         const float TunnelSmoothFactor = 0.0;
         const float TunnelRadius = 0.85660005;
-        
+
         #define M_NONE -1.0
         #define M_NOISE 0.1
-        
+
         float hash(float h) {
             return fract(sin(h) * 43758.5453123);
         }
@@ -121,11 +121,11 @@ vec3 sundir = normalize( vec3(-1.0,0.0,-1.0) );
 vec4 integrate( in vec4 sum, in float dif, in float den, in vec3 bgcol, in float t )
 {
     // lighting
-    vec3 lin = vec3(0.65,0.7,0.75)*1.4 + vec3(1.0, 0.6, 0.3)*dif;        
+    vec3 lin = vec3(0.65,0.7,0.75)*1.4 + vec3(1.0, 0.6, 0.3)*dif;
     vec4 col = vec4( mix( vec3(1.0,0.95,0.8), vec3(0.25,0.3,0.35), den ), den );
     col.xyz *= lin;
     col.xyz = mix( col.xyz, bgcol, 1.0-exp(-0.003*t*t) );
-    // front to back blending    
+    // front to back blending
     col.a *= 0.4;
     col.rgb *= col.a;
     return sum + col*(1.0-sum.a);
@@ -158,16 +158,16 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
 
 vec4 render( in vec3 ro, in vec3 rd, in ivec2 px )
 {
-    // background sky     
+    // background sky
     float sun = clamp( dot(sundir,rd), 0.0, 1.0 );
     vec3 col = vec3(0.6,0.71,0.75) - rd.y*0.2*vec3(1.0,0.5,1.0) + 0.15*0.5;
     col += 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 );
 
-    // clouds    
+    // clouds
     vec4 res = raymarch( ro, rd, col, px );
     col = col*(1.0-res.w) + res.xyz;
-    
-    // sun glare    
+
+    // sun glare
     col += iAudio*vec3(1.0,0.4,0.2)*pow( sun, 3.0 );
 
     return vec4( col, 1.0 );
@@ -178,7 +178,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 p = (-iResolution.xy + 2.0*fragCoord.xy)/ iResolution.y;
 
     //vec2 m = iMouse.xy/iResolution.xy;
-    
+
     // camera
     //vec3 ro = 4.0*normalize(vec3(sin(3.0*m.x), 0.4*m.y, cos(3.0*m.x)));
     vec3 ro = vec3(0.0, 0.0, 9.0);
@@ -186,7 +186,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     mat3 ca = setCamera( ro, ta, 0.0 );
     // ray
     vec3 rd = ca * normalize( vec3(p.xy,1.5));
-    
+
     fragColor = render( ro, rd, ivec2(fragCoord-0.5) );
 }
 void main(){
@@ -194,8 +194,8 @@ void main(){
 }
     </script>
     <script id="shader-vs" type="x-shader/x-vertex">
-        
-        
+
+
         attribute vec3 aVertexPosition;
 
         void main() {
@@ -227,7 +227,7 @@ void main(){
       </input>
     <div class="words" contenteditable></div>
     </div>
-    
+
   <div class="wrapper">
     <div class="speed">
       <div class="speed-bar">0.2</div>
@@ -282,7 +282,7 @@ void main(){
 <canvas id="myChart" width="600" height="200"></canvas>
 
 
-<canvas id="draw" width="1024" height="300"></canvas>   
+<canvas id="draw" width="1024" height="300"></canvas>
 
 <audio src="" id="audio"></audio>
 <audio src="" id="audio2"></audio>
@@ -402,7 +402,7 @@ void main(){
     position: absolute;
     z-index: 100;
     -webkit-font-smoothing:antialiased;
-  } 
+  }
 
   #main_container{
     text-align: center;
@@ -427,14 +427,14 @@ void main(){
     font-size: 110pt;
   }
   .info{
-    margin: 400px 0px 0px 5%;
+    margin: 500px 0px 0px 5%;
     z-index: 1;
     position: absolute;
     color:#888;
     font-size: 10px;
     font-family: 'Exo 2', sans-serif;
   }
- 
+
   .wrapper {
     z-index: 100;
     padding: 0px 0px 0px 0px;
@@ -703,7 +703,7 @@ void main(){
     if(info.childNodes.length > 14){
       info.childNodes[0].remove();
     }
-    
+
     let elem = document.createElement('p');
     elem.innerHTML = data;
     info.appendChild(elem);
@@ -848,6 +848,7 @@ void main(){
          transcript.toLowerCase() == 'аско' ||
          transcript.toLowerCase() == 'аркан' ||
          transcript.toLowerCase() == 'аха' ||
+         transcript.toLowerCase() == 'зайка' ||
          transcript.toLowerCase() == 'авто'){
         //localStorage.wait = 'start';
         p.textContent = 'ASKA';
@@ -930,7 +931,7 @@ void main(){
             audioTag.volume = v.toFixed(2)
           }
         }
-      }; 
+      };
       function splitOnParts(text){
         let part = text.slice(0,1000);
         let m = [...part].reverse().join('').indexOf('.');
@@ -1028,23 +1029,23 @@ void main(){
         if(this.value != ''){
           socket.send(this.value)
           this.value =""
-        } 
+        }
       }
     }
   }
-  /////////////////////////////////////////////////////////////////////////////    
-  /////////////////////////////////////////////////////////////////////////////     
-  /////////////////////////////////////////////////////////////////////////////   
+  /////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
   var arr_server_log = [];
   var arr_client_log = [];
 
-  var div_info = document.querySelector('.info');   
+  var div_info = document.querySelector('.info');
   /*
   const canvas = document.querySelector('#draw')
-  
+
   const ctx = canvas.getContext('2d')
 
-  
+
   window.canvas_width = window.innerWidth
   window.canvas_height = window.innerHeight
   canvas.width = window.canvas_width;
@@ -1052,7 +1053,7 @@ void main(){
   init()
   window.color_aska = 205
   window.color_aska_h = 100
- 
+
   function resizeCanvas(canvas, ctx, width, height) {
     var tempCanvas = document.createElement('canvas');;
     tempCanvas.width = ctx.canvas.width;
@@ -1065,9 +1066,9 @@ void main(){
     ctx.drawImage(tempContext.canvas, 0, 0);
   };
   //video_animation()
-  
-  
-  
+
+
+
 
   function draw(waveform,frequencies){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1115,7 +1116,7 @@ void main(){
     arr_server_log.forEach((v,i)=>{
       ctx.fillText(arr_server_log[i],50,70+(i*15));
     })
-    
+
 
   window.onresize = (e)=>{
     console.log(window.canvas_width);
@@ -1130,7 +1131,7 @@ void main(){
         let timeLocation, time;
         let resolutionLocation, resolution;
         var iAudioLocation, iAudio = 0.5;
-        
+
         let startTime;
         let vertices = [
             -1.0, -1.0,
