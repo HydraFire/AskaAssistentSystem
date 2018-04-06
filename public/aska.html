@@ -146,11 +146,11 @@
           '&robot=1'+
           '&emotion=evil';//evil
 
-      if(window.last_url != url){
+      //if(window.last_url != url){
         audio.src = url
         audio.load();
         audio.onloadeddata = function () {
-          words.children[1].style.color = '#fff'
+         // words.children[1].style.color = '#fff'
           /*
           setTimeout(()=>{
             document.querySelector('#load').style.color = '#111'
@@ -158,8 +158,8 @@
           */
           audio.play();
         }
-      }
-      window.last_url = url
+      //}
+      // window.last_url = url
     }
     function voice(){
       aska(words.children[1].textContent)
