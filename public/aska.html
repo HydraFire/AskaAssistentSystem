@@ -175,8 +175,13 @@
         socket.send('aska_play_music_false')
       },1000)
       document.querySelector('#connect').style.color = '#fff'
+      setInterval(() => {
+        aska('прошла еще минута');
+      }, 60000)
+
     };
     socket.onclose = function(event) {
+      aska('Соединение потеряно');
       document.querySelector('#connect').style.color = '#111'
       if (event.wasClean) {
         //alert('Соединение закрыто чисто');
