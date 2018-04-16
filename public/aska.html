@@ -175,10 +175,6 @@
         socket.send('aska_play_music_false')
       },1000)
       document.querySelector('#connect').style.color = '#fff'
-      setInterval(() => {
-        aska('еще');
-      }, 6000)
-
     };
     socket.onclose = function(event) {
       aska('Соединение потеряно');
