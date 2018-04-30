@@ -73,7 +73,11 @@ global.aska_play_music = false /// < ------------------------
 var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(ws){
-
+  
+  ws.sendlog = function(text){
+    text = JSON.stringify(text)
+    ws.send('SYSTEM'+text)
+  }
   ws.users = []
   ws.users.aska_play_music = false
 
