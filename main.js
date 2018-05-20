@@ -41,9 +41,9 @@ const exp = express()
 
 var fs = require('fs');
 
-var key = fs.readFileSync('./public/users/Noir/privkey.pem');
-var cert = fs.readFileSync( './public/users/Noir/cert.pem' );
-var ca = fs.readFileSync( './public/users/Noir/fullchain.pem' );
+var key = fs.readFileSync('./privkey.pem');
+var cert = fs.readFileSync( './cert.pem');
+var ca = fs.readFileSync( './fullchain.pem');
 
 var options = {
   key: key,
